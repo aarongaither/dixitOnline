@@ -1,15 +1,3 @@
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyBY_Xzums7MHPwKGLdSQ_uR9q3nTq76E5w",
-    authDomain: "dixit-e12e5.firebaseapp.com",
-    databaseURL: "https://dixit-e12e5.firebaseio.com",
-    projectId: "dixit-e12e5",
-    storageBucket: "dixit-e12e5.appspot.com",
-    messagingSenderId: "225414607503"
-};
-
-firebase.initializeApp(config);
-
 $.cloudinary.config({ cloud_name: 'dymlxkpuq', api_key: '136738843422229' })
 
 let players = {
@@ -17,7 +5,6 @@ let players = {
     currScore: 0,
     currHand: [],
     currSelection: "",
-    role: "" //storyTeller||player
 }
 
 let pTestArray = [{
@@ -60,9 +47,15 @@ let cards = {
 
         for (i = 1; i < 99; i++) {
             if (i < 10) {
-                array.push($.cloudinary.image('card_0000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
+
+                array.push("card_0000"+i);
+
+               // array.push($.cloudinary.image('card_0000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
             } else {
-                array.push($.cloudinary.image('card_000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
+                
+                array.push("card_000"+i);
+
+                //array.push($.cloudinary.image('card_000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
             }
         }
         this.oDeck = array;
@@ -75,7 +68,7 @@ let cards = {
         let j = 0;
         let temp = null;
         let tArray = $.extend(true, [], array);
-        console.log("this is before the for loop");
+        // console.log("this is before the for loop");
 
         for (i = tArray.length - 1; i > 0; i -= 1) {
             j = Math.floor(Math.random() * (i + 1));
@@ -83,26 +76,27 @@ let cards = {
             tArray[i] = tArray[j];
             tArray[j] = temp;
 
-            console.log("this is inside the for loop ", i, j)
+            // console.log("this is inside the for loop ", i, j)
         }
         this.sDeck = tArray;
         return tArray;
     },
 
-    displaySpecifcCard: function(div, array, pos) {
-        $(div).append(array[pos]);
+    displaySpecificCard: function(div, array, pos) {
+        $(div).append($.cloudinary.image(array[pos]+'.jpg', { width: 200, height: 300, crop: 'fill' }));
     },
 
     testCards: function(div, array) {
         $(div).empty();
-        for (let i = 0; i < 99; i++) {
-            $(div).append(array[i]);
+        for (let i = 0; i < 98; i++) {
+            $(div).append($.cloudinary.image(array[i]+'.jpg', { width: 200, height: 300, crop: 'fill' }));
         }
     }
 }
 
 let game = {
     cardsCountedArray: [],
+    //roles and players stored here.
 
     scoring: function() {
         // counting instances of an object
