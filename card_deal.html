@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<style>
+	.card_box {
+		width: 60px;
+		height: 100px;
+		border: 1px solid #000;
+		display: inline-block;
+		margin-right: 20px;
+	}
+
+	.card0 {
+
+	}
+	.card1 {
+		
+	}
+	.card2 {
+		
+	}
+	.card3 {
+		
+	}
+	.card4 {
+		
+	}
+	.card5 {
+		
+	}
+	
+</style>
+<body>
+	<!-- Deal player cards -->
+	<div id="player-cards"></div>
+	<script type="text/javascript">
+		var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+
+		for (var i = 0; i < cardValues.length; i++) {
+			var newCard = $('<div>').attr('data', cardValues[i]).attr('class', 'card_box animated fadeInRight').html(cardValues[i]);
+			$().append(newCard);
+		}
+
+		// var timer = setInterval(function(){  }, 1000);
+		// function stopTimer() {
+		// 	clearInterval(timer);
+		// }
+
+	</script>
+</body>
+</html>
+

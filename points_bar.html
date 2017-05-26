@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<style>
+	#player-score-div {
+		height: 300px;
+		margin-bottom: 20px;
+	}
+	#player-one-bar {
+	    width: 30px;
+	    height: 100%;
+	    background-color: grey;
+	}
+	#player-one-progress {
+	    width: 30px;
+	    height: 48px;
+	    background-color: green;
+	}
+</style>
+<body>
+
+
+<!-- Progress bar on click -->
+
+<div id="player-score-div">
+	<div id="player-one-bar">
+	  <div id="player-one-progress">
+	  </div>
+	</div>
+
+<button onclick="move()">Click Me</button> 
+</div>
+
+<script type="text/javascript">
+	function move() {
+	    var elem = $('#player-one-progress'); 
+	    var height = elem.height();
+	    // var id = setInterval(frame, 10);
+	    height++
+		$('#player-one-progress').height(height);
+		console.log(height);
+	}
+</script>
+
+
+</body>
+</html>
