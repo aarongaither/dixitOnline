@@ -2,58 +2,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!--    <script src="assets/javascript/api.js"></script> -->
+    <div class="card-div"></div>
 </head>
 
 <style>
-	.card_box {
-		width: 60px;
-		height: 100px;
-		border: 1px solid #000;
-		display: inline-block;
-		margin-right: 20px;
-	}
+    .example_card {
+        width: 60px;
+        height: 100px;
+        border: 1px solid #000;
+        display: inline-block;
+        margin-right: 20px;
 
-	.card0 {
+    }
+    
+    #example {
+        position: relative;
+        animation: move 5s;
+        animation-fill-mode: forwards;  
+    }
 
-	}
-	.card1 {
-		
-	}
-	.card2 {
-		
-	}
-	.card3 {
-		
-	}
-	.card4 {
-		
-	}
-	.card5 {
-		
-	}
-	
+    #card0 {
+        width: 16%;
+        display: inline-block;
+        animation-timing-function: linear;
+    }
+    #card1 {
+        width: 16%;
+        display: inline-block;
+    }
+    #card2 {
+        width: 16%;
+        display: inline-block;
+    }
+    #card3 {
+        width: 16%;
+        display: inline-block;
+    }
+    #card4 {
+        width: 16%;
+        display: inline-block;
+    }
+    #card5 {
+        width: 16%;
+        display: inline-block;
+    }
+
+    @keyframes move {
+        from {right: -100px;}
+        to {right: 0px;}
+    }
+
+    
 </style>
 <body>
-	<!-- Deal player cards -->
-	<div id="player-cards"></div>
-	<script type="text/javascript">
-		var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+    <!-- Deal player cards -->
+    <div id="player-cards"></div>
+    <script type="text/javascript">
+        var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
 
-		for (var i = 0; i < cardValues.length; i++) {
-			var newCard = $('<div>').attr('data', cardValues[i]).attr('class', 'card_box animated fadeInRight').html(cardValues[i]);
-			$().append(newCard);
-		}
+        function dealing() {
+            for (let i = 0; i < cardValues.length; i++) {
+                
+                var delay = i * 100;
+                
 
-		// var timer = setInterval(function(){  }, 1000);
-		// function stopTimer() {
-		// 	clearInterval(timer);
-		// }
+                setTimeout(function() {
+                    var cardBox = $('<div>').attr('id', 'card' + i);
+                    var newCard = $('<div>').attr('data', cardValues[i]);
+                    var cards = cardBox.append(newCard);
 
-	</script>
+                    $('#player-cards').append(cards);
+                    newCard.attr('class', 'example_card animated fadeInRight').html(cardValues[i]);
+                }, delay);
+            }
+        }       
+
+        dealing();
+
+
+        // function vDealing() {
+        //     for (var i = 0; i < cardValues.length; i++) {
+        //         var cardBox = $('<div>').attr('id', 'card' + i);
+        //         var newCard = $('<div>').attr('data', cardValues[i]).html('c1');
+        //         var cards = cardBox.append(newCard);
+
+        //         $('#player-cards').append(cards);
+
+        //         newCard.attr('class', 'example_card').attr('id', 'example').html(cardValues[i]);
+        //     }
+        // }
+
+        // vDealing();
+
+        // $('h2').hide().delay(3000).fadeIn(3000)
+    </script>
 </body>
 </html>
 
