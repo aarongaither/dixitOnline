@@ -1,5 +1,3 @@
-$.cloudinary.config({ cloud_name: 'dymlxkpuq', api_key: '136738843422229' })
-
 let players = {
     pName: "",
     currScore: 0,
@@ -39,6 +37,10 @@ let pTestArray = [{
     role: "player"
 }, ]
 
+let database = firebase.database();
+
+cardRef = database.ref("/cards");
+
 let cards = {
     oDeck: [],
     sDeck: [],
@@ -48,12 +50,12 @@ let cards = {
         for (i = 1; i < 99; i++) {
             if (i < 10) {
 
-                array.push("card_0000"+i);
+                array.push("card_0000" + i);
 
-               // array.push($.cloudinary.image('card_0000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
+                // array.push($.cloudinary.image('card_0000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
             } else {
-                
-                array.push("card_000"+i);
+
+                array.push("card_000" + i);
 
                 //array.push($.cloudinary.image('card_000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
             }
@@ -83,41 +85,62 @@ let cards = {
     },
 
     displaySpecificCard: function(div, array, pos) {
-        $(div).append($.cloudinary.image(array[pos]+'.jpg', { width: 200, height: 300, crop: 'fill' }));
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', { width: 200, height: 300, crop: 'fill' }));
     },
 
     testCards: function(div, array) {
         $(div).empty();
         for (let i = 0; i < 98; i++) {
-            $(div).append($.cloudinary.image(array[i]+'.jpg', { width: 200, height: 300, crop: 'fill' }));
+            $(div).append($.cloudinary.image(array[i] + '.jpg', { width: 200, height: 300, crop: 'fill' }));
         }
     }
 }
 
 let game = {
-    cardsCountedArray: [],
-    //roles and players stored here.
+        cardsCountedArray: [],
+        //roles and players stored here.
 
-    scoring: function() {
-        // counting instances of an object
-        let cardsSelected = pTestArray.map(function(item) {
-            return item.voteSelection
+        scoring: function() {
+            // counting instances of an object
+            let cardsSelected = pTestArray.map(function(item) {
+                return item.voteSelection
+            });
+            // console.log("these are the cards selected", cardsSelected);
+            let countedCards = cardsSelected.reduce(function(allCards, card) {
+                if (card in allCards) {
+                    allCards[card]++;
+                } else {
+                    allCards[card] = 1;
+                }
+                return allCards;
+            }, {});
+            // console.log("this is CountedName", countedCards);
+            this.cardsCountedArray = countedCards;
+
+            let posStoryTeller = pTestArray.map(function(e) {
+                return e.role }).indexOf("storyTeller");
+
+            console.log("this is the position of the story teller", posStoryTeller);
+
+        },
+
+        dealingHand: function(deckArray,nCards) {
+        	let 
+
+        	for (var i = nCards - 1; i >= 0; i--) {
+
+
+        		
+        	}
+
+        }
+
+
+            cards.createDeck();
+        var shuffledDeck = cards.shuffleDeck(cards.oDeck);
+
+        cardRef.set(shuffledDeck);
+
+        cardRef.once("value", function(snap) {
+            cards.sDeck = snap.val();
         });
-        // console.log("these are the cards selected", cardsSelected);
-        let countedCards = cardsSelected.reduce(function(allCards, card) {
-            if (card in allCards) {
-                allCards[card]++;
-            } else {
-                allCards[card] = 1;
-            }
-            return allCards;
-        }, {});
-        // console.log("this is CountedName", countedCards);
-        this.cardsCountedArray = countedCards;
-
-        let posStoryTeller = pTestArray.map(function(e){return e.role}).indexOf("storyTeller");
-
-        console.log("this is the position of the story teller",posStoryTeller);
-
-    }
-}
