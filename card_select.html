@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!--    <script src="assets/javascript/api.js"></script> -->
+</head>
+
+<style>
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #content {
+      border-radius:8px;
+      background:#fff;
+      padding:20px;
+    }
+
+    .example_card {
+        width: 60px;
+        height: 100px;
+        border: 1px solid #000;
+        display: inline-block;
+        margin-right: 20px;
+        text-align: center;
+    }
+    
+    #example {
+        position: relative;
+        animation: move 5s;
+        animation-fill-mode: forwards;  
+    }
+
+    #card0 {
+        width: 70px;
+        display: inline-block;
+    }
+    #card1 {
+        width: 70px;
+        display: inline-block;
+    }
+    #card2 {
+        width: 70px;
+        display: inline-block;
+    }
+    #card3 {
+        width: 70px;
+        display: inline-block;
+    }
+    #card4 {
+        width: 70px;
+        display: inline-block;
+    }
+    #card5 {
+        width: 70px;
+        display: inline-block;
+    }
+
+    @keyframes move {
+        from {right: -100px;}
+        to {right: 0px;}
+    }
+
+    
+</style>
+<body>
+    <!-- Selection to hold modal button-->
+    <div id="select-box"></div>
+
+    <!-- Deal player cards -->
+    <div id="player-cards"></div>
+
+
+
+    <script type="text/javascript">
+        var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+
+        function dealing() {
+            for (let i = 0; i < cardValues.length; i++) {
+                
+                var delay = i * 100;
+                
+
+                setTimeout(function() {
+                    var cardBox = $('<div>').attr('id', 'card' + i);
+                    var newCard = $('<div>').attr('data', cardValues[i]);
+                    var cards = cardBox.append(newCard);
+
+                    $('#player-cards').append(cards);
+                    newCard.attr('class', 'example_card animated fadeInRight').html(cardValues[i]);
+                }, delay);
+            }
+        }       
+
+        dealing();
+        
+        // Create modal content & divs
+
+        var mBtn = $('<button>').attr('id', 'modal-btn');
+        $('#select-box').append(mBtn);
+
+        $('#modal-btn').html('modal');
+        $('#modal-btn').on('click', viewCard);
+        $('.example_card').on('click', viewCard);
+        // $('.close').on('click', closeCard);
+        $('.close').click(closeCard);
+        // $(window).on('click', closeWindow);
+
+        // Create modal content & divs
+
+        var modalWrapper = $('<div>').attr('id', 'modal').attr('class', 'modal');
+        $('body').append(modalWrapper);
+
+        var modalContent = $('<div>').attr('class', 'modal-content');
+        modalWrapper.append(modalContent);
+
+        var modalBtn = $('<button>').attr('class', 'close').html('x');
+        var modalText = $('<p>').html('Some text about the modal here');
+
+        modalContent.append(modalBtn).append(modalText);
+
+
+        // Get the modal
+        var modal = $('#modal');
+
+        // Modal functions
+
+        // When the user clicks a card, the modal opens
+        function viewCard() {
+            console.log('clicked');
+            modal.show();
+        }
+
+        // When the user clicks on x, close the modal
+        function closeCard() {
+            console.log('close');
+            modal.hide();
+        }
+
+        // function closeWindow() {
+        //     console.log('close window');
+        //     modal.hide();
+        // }
+
+        function submitCard() {
+            
+        }
+
+
+
+
+    </script>
+
+</body>
+</html>
+
