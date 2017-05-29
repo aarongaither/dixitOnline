@@ -117,16 +117,30 @@ let game = {
             console.log(usersArray);
             let userArrayKeys = Object.keys(usersArray);
             console.log(userArrayKeys);
+            let gamePlayers = {}
 
-            userRef.child(userArrayKeys[0]).update({
-                role: "storyTeller"
-            });
+            // userRef.child(userArrayKeys[0]).update({
+            //     role: "storyTeller"
+            // });
 
-            for (i = 1; i < userArrayKeys.length; i++) {
-                userRef.child(userArrayKeys[i]).update({
-                    role: "player"
-                })
-            };
+            for (i = 0; i < userArrayKeys.length; i++) {
+                if (i === 0) {
+                    userRef.child(userArrayKeys[i]).update({
+                        role: "storyTeller"
+                    })
+                    // gamePlayers.push({name:userArrayKeys[i], role:"storyTeller"})
+
+                    gamePlayers[userArrayKeys[i]] = "storyTeller"
+                } else {
+                    userRef.child(userArrayKeys[i]).update({
+                        role: "player"
+                    })
+                    // gamePlayers.push({name:userArrayKeys[i], role:"Player"})
+                    gamePlayers[userArrayKeys[i]] = "player"
+                }
+            }
+
+            gameRef.update({gamePlayers});
         })
     },
 
@@ -203,7 +217,18 @@ userRef.once("value", function(snap) {
 
 })
 
-//insure everyone has the latest shuffled deck locally. Updated as cards are dealt out.
+//insures everyone has the latest shuffled deck locally. Updated as cards are dealt out.
 cardRef.on("value", function(snap) {
     cards.sDeck = snap.val();
+});
+
+//assigns user role to local reference
+userRef.on("value", function(snap) {
+    let keysArray = Object.keys(snap.val());
+
+    for (var i = keysArray.length - 1; i >= 0; i--) {
+        if (player.key === keysArray[i]) {
+            player.role = snap.child(keysArray[i]).val().role
+        }
+    }
 });
