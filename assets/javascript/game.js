@@ -1,6 +1,7 @@
 let player = {
     role: "",
-    key: ""
+    key: "", 
+    currHand:[]
 }
 
 let pTestArray = [{
@@ -117,7 +118,7 @@ let game = {
             console.log(usersArray);
             let userArrayKeys = Object.keys(usersArray);
             console.log(userArrayKeys);
-            let gamePlayers = {}
+            // let gamePlayers = []
 
             // userRef.child(userArrayKeys[0]).update({
             //     role: "storyTeller"
@@ -129,18 +130,18 @@ let game = {
                         role: "storyTeller"
                     })
                     // gamePlayers.push({name:userArrayKeys[i], role:"storyTeller"})
-
-                    gamePlayers[userArrayKeys[i]] = "storyTeller"
+                    // gamePlayers[userArrayKeys[i]] = "storyTeller"
+                    gameRef.update({curr_teller:userArrayKeys[i]});
                 } else {
                     userRef.child(userArrayKeys[i]).update({
                         role: "player"
                     })
                     // gamePlayers.push({name:userArrayKeys[i], role:"Player"})
-                    gamePlayers[userArrayKeys[i]] = "player"
+                    // gamePlayers[userArrayKeys[i]] = "player"
                 }
             }
 
-            gameRef.update({gamePlayers});
+            // gameRef.update({gamePlayers});
         })
     },
 
@@ -179,11 +180,15 @@ let game = {
 
         cardRef.set(deckArray);
 
+        player.currHand = player.currHand.concat(hand);
+
         return hand;
     },
 
-    checkAndDeal: function() {
+    checkAndDeal: function(deckArray, nCards) {
+        cardsNeeded = nCards - player.currHand.length;
 
+        this.dealingHand(deckArray,cardsNeeded);
     }
 }
 
@@ -220,6 +225,8 @@ userRef.once("value", function(snap) {
 //insures everyone has the latest shuffled deck locally. Updated as cards are dealt out.
 cardRef.on("value", function(snap) {
     cards.sDeck = snap.val();
+}).then(function(){
+    game.checkAndDeal(cards.sDeck,6);
 });
 
 //assigns user role to local reference
