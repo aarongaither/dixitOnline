@@ -64,6 +64,9 @@
         text-align: center;
     }
     
+    .example_card img {
+        max-width: 60px;
+    }
     #example {
         position: relative;
         animation: move 5s;
@@ -113,6 +116,8 @@
 
     <script type="text/javascript">
         var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+        var cardImages = ['assets/cards/card_00001.jpg', 'assets/cards/card_00002.jpg', 'assets/cards/card_00003.jpg',
+        'assets/cards/card_00004.jpg', 'assets/cards/card_00005.jpg', 'assets/cards/card_00006.jpg' ]
 
         function dealing() {
             for (let i = 0; i < cardValues.length; i++) {
@@ -123,13 +128,13 @@
                 setTimeout(function() {
                     var cardBox = $('<div>').attr('id', 'card' + i);
                     var newCard = $('<div>').attr('data', cardValues[i]);
-                    var cards = cardBox.append(newCard);
+                    var cards = cardBox.append(newCard).on('click', viewCard);
 
                     $('#player-cards').append(cards);
-                    newCard.attr('class', 'example_card animated fadeInRight').html(cardValues[i]);
-                }, delay);
+                    newCard.attr('class', 'example_card animated fadeInRight ').html('<img src="' + cardImages[i] + '">');
+                }, delay)
             }
-        }       
+        }     
 
         dealing();
         
@@ -139,35 +144,39 @@
         $('#select-box').append(mBtn);
 
         $('#modal-btn').html('modal');
-        $('#modal-btn').on('click', viewCard);
-        $('.example_card').on('click', viewCard);
-        // $('.close').on('click', closeCard);
-        $('.close').click(closeCard);
-        // $(window).on('click', closeWindow);
+
+        
 
         // Create modal content & divs
-
         var modalWrapper = $('<div>').attr('id', 'modal').attr('class', 'modal');
         $('body').append(modalWrapper);
 
-        var modalContent = $('<div>').attr('class', 'modal-content');
+        var modalContent = $('<div>').attr('class', 'modal-content animated fadeInDown');
         modalWrapper.append(modalContent);
 
         var modalBtn = $('<button>').attr('class', 'close').html('x');
         var modalText = $('<p>').html('Some text about the modal here');
 
-        modalContent.append(modalBtn).append(modalText);
+        modalContent.append(modalBtn).append(modalText);    
 
+
+        // On click function for modal
+        $('#modal-btn').on('click', viewCard);
+        $('.close').on('click', closeCard);
+        // $(window).on('click', closeWindow);
 
         // Get the modal
         var modal = $('#modal');
 
+    
         // Modal functions
 
         // When the user clicks a card, the modal opens
         function viewCard() {
             console.log('clicked');
             modal.show();
+
+            modalText.html()
         }
 
         // When the user clicks on x, close the modal
@@ -176,16 +185,17 @@
             modal.hide();
         }
 
-        // function closeWindow() {
-        //     console.log('close window');
-        //     modal.hide();
+        // function closeWindow(event) {
+        //     if (event.target == modal) {
+        //         modal.hide();
+        //     }
         // }
 
         function submitCard() {
             
         }
 
-
+        // Other Functions
 
 
     </script>
