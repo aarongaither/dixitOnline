@@ -9,26 +9,77 @@
     <link type="text/css" rel="stylesheet" href="assets/css/style.css" media="screen,projection" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col s2 blue">
-                <p>col1</p>
-                <div class="row">1</div>
-                <div class="row">2</div>
-                <div class="row">3</div>
-                <div class="row">4</div>
-                <div class="row">5</div>
-                <div class="row">6</div>
-                <div class="row">7</div>
-                <div class="row">8</div>
+    
+    <div class="container" id="main-body">
+        
+        <div class="row" id="main-row">
+            <!-- <button onclick="move()">Click Me</button> -->
+            <!-- Left Panel -->
+            <div class="col s2 blue" id="left-panel">               
+                <div class="row player-score">
+
+                    <!-- Progress bar on click -->
+                    <div id="player-score-div">
+                        <div id="player-one-bar">
+                            <div id="player-one-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div id="player-one-bar">
+                            <div id="player-one-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div id="player-one-bar">
+                            <div id="player-one-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div id="player-one-bar">
+                            <div id="player-one-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div id="player-one-bar">
+                            <div id="player-one-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div id="player-one-bar">
+                            <div id="player-one-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
             </div>
-            <div class="col s8 green">
-                <p>Dexit Online</p>
-                <div class="row red" id="story-text">1 Story Text Area
+            
+            <!-- Center Panel -->
+            <div class="col s8 grey" id="center-panel">
+                <p>Dixit Online</p>
+                
+                <div class="row teal" id="story-text">1 Story Text Area
                     <div class="row">
                         <form class="col s12">
                             <div class="row">
@@ -40,9 +91,22 @@
                         </form>
                     </div>
                 </div>
-                <div class="row light teal">2 Chosen Card area div</div>
-                <div class="row">3 Given Cards
-                    <div class="row">
+                
+                <!-- Chosen Card Area -->
+                <div class="row light teal" id="chosen-cards">2 Chosen Card area div
+
+                <div class="col s12 m6 l2">
+                    <div class="card-panel teal">
+                        <span class="white-text">I am a very simple card.</span>
+                    </div>
+                </div>
+
+                </div>
+                
+                <!-- Delt Card Area -->
+                <div class="row" id="given-cards">3 Given Cards
+                    
+                    <div class="row">                       
                         <div class="col s12 m6 l2">
                             <div class="card-panel teal">
                                 <span class="white-text">I am a very simple card.</span>
@@ -52,7 +116,7 @@
                             <div class="card-panel teal">
                                 <span class="white-text">I am a very simple card.</span>
                             </div>
-                        </div>
+                        </div>                        
                         <div class="col s12 m6 l2">
                             <div class="card-panel teal">
                                 <span class="white-text">I am a very simple card.</span>
@@ -74,19 +138,146 @@
                             </div>
                         </div>
                     </div>
-                    <a class="btn-floating right btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+                    
+                    <!-- Function for showing pop up chat. -->
+                    <script type="text/javascript">
+                        $(function(){
+                            $("#pop-up-chat").hide();
+                            $("#chat-btn").hide();
+                            $("#pop-up-chat-display").hide();
+                            $("#show-text-button").click (function()    {
+                                $("#pop-up-chat-display").toggle();
+                                $("#chat-btn").toggle();
+                                $("#pop-up-chat").toggle();
+                            });
+                        });
+                            // Functions from Margaret
+                            function move() {
+                                var elem = $('#player-one-progress'); 
+                                var height = elem.height();
+                                // var id = setInterval(frame, 10);
+                                height++
+                                $('#player-one-progress').height(height);
+                                console.log(height);
+                            }
+                    </script>
+
+                <!-- closing div for chosen cards -->
+                </div>
+
+<!--                 <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="pop-up-chat-display" class="materialize-textarea white"></textarea>
+                                <label for="textarea1">POP UP Chat</label>
+                            </div>
+                        </div>
+                    </form>
+                </div> -->
+
+                        <!-- pop up chat -->
+                        <div class="row" id="chat-section-row">   
+                            <form class="col s12">
+
+                                <div class="row">
+                                <div class="input-field col s12" id="chat-display">
+                                    <textarea id="pop-up-chat-display" class="materialize-textarea white"></textarea>
+                                    <label for="textarea1">POP UP Chat</label>
+                                </div>
+
+                                <div class="input-field col s9">
+                                  <input placeholder="Chat here" id="pop-up-chat" type="text" class="validate">
+                                  
+                                  
+                                </div>
+                                <div class="input-field col s3" id="chat-btn">
+                                <div class="btn">
+                                    <span>Send</span>
+                                </div>
+                                </div><a class="btn-floating right btn-med waves-effect waves-light red" id="show-text-button"><i class="material-icons">add</i></a>
+                                   
+
+
+                                </div> 
+                            </form>
+                        </div>
+
+            <!-- Center Panel Closing Div -->
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="col s2 blue" id="right-panel">
+                <!-- <p>col3</p> -->
+                <div class="row">
+                    <div class="card horizontal">
+                        <div class="card-image">
+                            <img src="http://lorempixel.com/100/100/nature/6">
+                        </div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>player name.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card horizontal">
+                        <div class="card-image">
+                            <img src="http://lorempixel.com/100/100/nature/6">
+                        </div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>player name.</p>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="card horizontal">
+                        <div class="card-image">
+                            <img src="http://lorempixel.com/100/100/nature/6">
+                        </div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>player name.</p>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="card horizontal">
+                        <div class="card-image">
+                            <img src="http://lorempixel.com/100/100/nature/6">
+                        </div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>player name.</p>
+                            </div>
+                        </div>
+                    </div>                    
                 </div>
             </div>
-            <div class="col s2 yellow">
-                <p>col3</p>
-                <div class="row">1</div>
-                <div class="row">2</div>
-                <div class="row">3</div>
-                <div class="row">4</div>
-            </div>
+        
+        <!-- main-row closing div -->
         </div>
-        <!-- container div -->
+    
+    
+    
+
+
+        <footer class="page-footer">
+          <div class="container">
+            </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2014 Copyright Team Name
+            <a class="grey-text text-lighten-4 right" href="#!">Dixit Online</a>
+            </div>
+          
+        </footer>
     </div>
+
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Compiled and minified JavaScript -->
