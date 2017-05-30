@@ -132,37 +132,13 @@
 
                     $('#player-cards').append(cards);
                     newCard.attr('class', 'example_card animated fadeInRight ').html('<img src="' + cardImages[i] + '">');
+
                 }, delay)
             }
         }     
 
         dealing();
-        
-        // Create modal content & divs
 
-        var mBtn = $('<button>').attr('id', 'modal-btn');
-        $('#select-box').append(mBtn);
-
-        $('#modal-btn').html('modal');
-
-        
-
-        // Create modal content & divs
-        var modalWrapper = $('<div>').attr('id', 'modal').attr('class', 'modal');
-        $('body').append(modalWrapper);
-
-        var modalContent = $('<div>').attr('class', 'modal-content animated fadeInDown');
-        modalWrapper.append(modalContent);
-
-        var modalBtn = $('<button>').attr('class', 'close').html('x');
-        var modalText = $('<p>').html('Some text about the modal here');
-
-        modalContent.append(modalBtn).append(modalText);    
-
-
-        // On click function for modal
-        $('#modal-btn').on('click', viewCard);
-        $('.close').on('click', closeCard);
         // $(window).on('click', closeWindow);
 
         // Get the modal
@@ -173,10 +149,29 @@
 
         // When the user clicks a card, the modal opens
         function viewCard() {
-            console.log('clicked');
-            modal.show();
+               console.log('clicked');
 
-            modalText.html()
+        
+            // Create modal content & divs
+            // function modalCreation() {
+
+                // Create modal content & divs
+                var modalWrapper = $('<div>').attr('id', 'modal').attr('class', 'modal');
+                $('body').append(modalWrapper);
+
+                var modalContent = $('<div>').attr('class', 'modal-content animated fadeInDown');
+                modalWrapper.append(modalContent);
+
+                var modalBtn = $('<button>').attr('class', 'close').html('x');
+                var modalText = $(this).html();
+
+                modalContent.append(modalBtn).append(modalText);    
+
+                modal.show();
+            // }
+
+            
+
         }
 
         // When the user clicks on x, close the modal
@@ -197,6 +192,9 @@
 
         // Other Functions
 
+        // On click function for modal
+        $('#modal-btn').on('click', viewCard);
+        $('.close').on('click', closeCard);
 
     </script>
 
