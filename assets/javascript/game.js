@@ -146,27 +146,29 @@ let game = {
     },
 
     scoring: function() {
-        // counting instances of an object
-        let cardsSelected = pTestArray.map(function(item) {
-            return item.voteSelection
-        });
-        // console.log("these are the cards selected", cardsSelected);
-        let countedCards = cardsSelected.reduce(function(allCards, card) {
-            if (card in allCards) {
-                allCards[card]++;
-            } else {
-                allCards[card] = 1;
-            }
-            return allCards;
-        }, {});
-        // console.log("this is CountedName", countedCards);
-        this.cardsCountedArray = countedCards;
 
-        let posStoryTeller = pTestArray.map(function(e) {
-            return e.role
-        }).indexOf("storyTeller");
+        
+        // // counting instances of an object
+        // let cardsSelected = pTestArray.map(function(item) {
+        //     return item.voteSelection
+        // });
+        // // console.log("these are the cards selected", cardsSelected);
+        // let countedCards = cardsSelected.reduce(function(allCards, card) {
+        //     if (card in allCards) {
+        //         allCards[card]++;
+        //     } else {
+        //         allCards[card] = 1;
+        //     }
+        //     return allCards;
+        // }, {});
+        // // console.log("this is CountedName", countedCards);
+        // this.cardsCountedArray = countedCards;
 
-        console.log("this is the position of the story teller", posStoryTeller);
+        // let posStoryTeller = pTestArray.map(function(e) {
+        //     return e.role
+        // }).indexOf("storyTeller");
+
+        // console.log("this is the position of the story teller", posStoryTeller);
 
     },
 
@@ -225,8 +227,6 @@ userRef.once("value", function(snap) {
 //insures everyone has the latest shuffled deck locally. Updated as cards are dealt out.
 cardRef.on("value", function(snap) {
     cards.sDeck = snap.val();
-}).then(function(){
-    game.checkAndDeal(cards.sDeck,6);
 });
 
 //assigns user role to local reference
