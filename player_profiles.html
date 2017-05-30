@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="assets/javascript/api.js"></script>
+</head>
+
+<style>
+
+	.player-card {
+		width: 200px;
+		height: 100px;
+		position: relative;
+		margin: 20px 0px;
+		border-radius: 10px;
+		text-align: center;
+	}
+	.player-card img {
+		max-height: 100%;
+	}
+	.player-name {
+	    position: absolute;
+	    bottom: 0px;
+	    text-align: center;
+	    padding: 10px 0px;
+	    background: rgba(0, 0, 0, 0.5);
+	    width: 100%;
+	    color: #ececec;
+	    border-radius: 0px 0px 10px 10px;
+	}
+	
+	.total-points {
+	    border-radius: 50%;
+	    background: rgba(0, 0, 0, 0.5);
+	    position: absolute;
+	    top: -10px;
+	    right: 10px;
+	    padding: 5px 10px;
+	    color: #fff;
+	}
+
+	.player-avatar {
+		
+	}
+
+
+</style>
+
+<body>
+<div id='view-players'>
+</div>
+
+</body>
+
+<script type="text/javascript">
+	var playersArray = ['Margaret', 'Aaron', 'Fahad', 'Mike', 'Lina', 'Alex'];
+	var playerColors = ['#FF69B4', '#E6E6FA', '#FFA07A', '#66CDAA', '#DA70D6', '#FF6347'];
+	var score = 0;
+
+	function createPlayer() {
+		for(var i = 0; i < playersArray.length; i++) {
+			var playerName = $('<div>').attr('class', 'player-name').text(playersArray[i]);
+			var playerAvatar = $('<img>').attr('src', avatarObj.genAvatarURL());
+			var playerScore = $('<div>').html(score).attr('class', 'animated fadeInUp');
+			var playerPoints = $('<div>').attr('class','total-points').append(playerScore);
+			var playerCard = $('<div>').attr('class','player-card').html(playerName).append(playerAvatar).append(playerPoints);
+
+			playerCard.css('background-color', playerColors[i]);
+			
+			$('#view-players').append(playerCard);
+		}
+	}
+
+	createPlayer();
+
+	function addPoints() {
+
+	}
+
+</script>
+
+</html>

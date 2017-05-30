@@ -1,7 +1,7 @@
 let player = {
     role: "",
-    key: "", 
-    currHand:[]
+    key: "",
+    currHand: []
 }
 
 let pTestArray = [{
@@ -47,6 +47,9 @@ let connectedRef = database.ref(".info/connected");
 
 //will hold all card related information
 let gameRef = database.ref("/game")
+
+//holds players hands
+let playerHandRef = database.ref("/player_hand")
 
 let cards = {
     oDeck: [],
@@ -111,6 +114,7 @@ let game = {
         this.startGameAssignRoles();
         cards.createDeck();
         cards.shuffleDeck(cards.oDeck);
+        this.checkAndDeal(cards.sDeck, 6);
     },
     startGameAssignRoles: function() {
         userRef.orderByChild("dateAdded").once("value").then(function(snap) {
@@ -127,17 +131,17 @@ let game = {
             for (i = 0; i < userArrayKeys.length; i++) {
                 if (i === 0) {
                     userRef.child(userArrayKeys[i]).update({
-                        role: "storyTeller"
-                    })
-                    // gamePlayers.push({name:userArrayKeys[i], role:"storyTeller"})
-                    // gamePlayers[userArrayKeys[i]] = "storyTeller"
-                    gameRef.update({curr_teller:userArrayKeys[i]});
+                            role: "storyTeller"
+                        })
+                        // gamePlayers.push({name:userArrayKeys[i], role:"storyTeller"})
+                        // gamePlayers[userArrayKeys[i]] = "storyTeller"
+                    gameRef.update({ curr_teller: userArrayKeys[i] });
                 } else {
                     userRef.child(userArrayKeys[i]).update({
-                        role: "player"
-                    })
-                    // gamePlayers.push({name:userArrayKeys[i], role:"Player"})
-                    // gamePlayers[userArrayKeys[i]] = "player"
+                            role: "player"
+                        })
+                        // gamePlayers.push({name:userArrayKeys[i], role:"Player"})
+                        // gamePlayers[userArrayKeys[i]] = "player"
                 }
             }
 
@@ -182,17 +186,39 @@ let game = {
 
         cardRef.set(deckArray);
 
-        player.currHand = player.currHand.concat(hand);
+        // player.currHand = player.currHand.concat(hand);
 
         return hand;
     },
 
     checkAndDeal: function(deckArray, nCards) {
-        cardsNeeded = nCards - player.currHand.length;
+        userRef.once("value").then(function(snap) {
+            let keysArray = Object.keys(snap.val());
 
-        this.dealingHand(deckArray,cardsNeeded);
+            keysArray.forEach(function(key) {
+                // if (playerHandRef.child(key).exists()) {
+                //     cardsNeeded = playerHandRef.child(key).once("value", function(snap) {
+                //         currCards = snap.val().length
+                //         nCards = nCards - currCards;
+                //     })
+                //     let currHand = game.dealingHand(deckArray, cardsNeeded);
+                //     playerHandRef.update({
+                //         [key]: currHand
+                //     })
+                // } else {
+                //     let currHand = game.dealingHand(deckArray, nCards);
+                //     playerHandRef.update({
+                //         [key]: currHand
+                //     })
+                // }
+                let currHand = game.dealingHand(deckArray, nCards);
+                playerHandRef.update({
+                    [key]: currHand
+                })
+            })
+        })
     }
-}
+};
 
 //on user connection add them to the db
 connectedRef.on("value", function(snap) {
@@ -207,6 +233,7 @@ connectedRef.on("value", function(snap) {
 
         player.key = key;
         userRef.child(key).onDisconnect().remove();
+        playerHandRef.child(key).onDisconnect().remove();
     }
 });
 
@@ -217,7 +244,7 @@ userRef.once("value", function(snap) {
 
     console.log("numPlayers:", numPlayers);
 
-    if (numPlayers > 2) {
+    if (numPlayers > 3) {
         console.log("inside the start listener if statement");
         game.startGame();
     }
