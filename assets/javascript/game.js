@@ -96,12 +96,14 @@ let cards = {
     },
 
     displaySpecificCard: function(div, array, pos) {
-        $(div).append($.cloudinary.image(array[pos] + '.jpg', { width: 100, height: 150, crop: 'fill' }));
+        $(div).empty();
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', {crop: 'fill' }).attr("class","materialboxed").attr("height","150"));
+        $(".materialboxed").materialbox();
     },
 
     testCards: function(div, array) {
         $(div).empty();
-        for (let i = 0; i < 98; i++) {
+        for (let i = 0; i < array.length; i++) {
             $(div).append($.cloudinary.image(array[i] + '.jpg', { width: 200, height: 300, crop: 'fill' }));
         }
     }
@@ -300,3 +302,20 @@ userRef.on("value", function(snap) {
 //         console.log(playerHand[i]);
 //     }
 // })
+
+playerHandRef.on("value",function(snap) {
+    // let keysArray = Object.keys(snap.val());
+    let playerHand =[];
+
+    if (snap.child(player.key).exists()){
+        playerHand = snap.child(player.key).val()
+
+        for (let i = playerHand.length - 1; i >= 0; i--) {
+            // let cardDiv = $("#dealt-card-container").append($("<div>",{"id":"card"+[i]}));
+            cards.displaySpecificCard("#card"+i, playerHand, i);
+            console.log(playerHand[i]);
+        }
+
+        playerHandRef.off("value");
+    }
+})
