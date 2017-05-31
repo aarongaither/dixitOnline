@@ -96,7 +96,7 @@ let cards = {
     },
 
     displaySpecificCard: function(div, array, pos) {
-        $(div).append($.cloudinary.image(array[pos] + '.jpg', { width: 200, height: 300, crop: 'fill' }));
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', { width: 100, height: 150, crop: 'fill' }));
     },
 
     testCards: function(div, array) {
@@ -109,6 +109,16 @@ let cards = {
 
 let game = {
     cardsCountedArray: [],
+    stateArray: [
+        0 //initial state
+        , 1 //game start initial cards dealt story teller choose card
+        , 2 //story teller to tell story display story to everyone
+        , 3 //player card selection
+        , 4 //player voting
+        , 5 //player scoring
+        , 6 //round ended
+    ],
+    currState: 0,
     //roles and players stored here.
     startGame: function() {
         this.startGameAssignRoles();
@@ -151,7 +161,7 @@ let game = {
 
     scoring: function() {
 
-        
+
         // // counting instances of an object
         // let cardsSelected = pTestArray.map(function(item) {
         //     return item.voteSelection
@@ -214,10 +224,13 @@ let game = {
                 let currHand = game.dealingHand(deckArray, nCards);
                 playerHandRef.update({
                     [key]: currHand
-                })
+                });
             })
+            gameRef.update({
+                currState: 1
+            });
         })
-    }
+    },
 };
 
 //on user connection add them to the db
@@ -266,3 +279,24 @@ userRef.on("value", function(snap) {
         }
     }
 });
+
+//addd cards to player board.
+
+// playerHandRef.on("value",function(snap) {
+//     let keysArray = Object.keys(snap.val());
+//     let playerHand =[];
+
+//     for (let i = keysArray.length - 1; i >= 0; i--) {
+//         if (player.key === keysArray[i]) {
+//             playerHand = snap.child(keysArray[i]).val()
+//             console.log("inside the if loop for the player ref hand deal", playerHand)
+//             return;
+//         }
+//     }
+
+//     for (let i = playerHand.length - 1; i >= 0; i--) {
+//         let cardDiv = $("#dealt-card-container").append($("<div>",{"id":"card"+[i]}));
+//         cards.displaySpecificCard(cardDiv, playerHand, i);
+//         console.log(playerHand[i]);
+//     }
+// })
