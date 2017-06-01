@@ -1,55 +1,20 @@
-let player = {
-    role: "",
-    key: "",
-    currHand: []
-}
-
-let pTestArray = [{
-    pname: "p1",
-    currSelection: "a",
-    voteSelection: null,
-    role: "storyTeller"
-}, {
-    pname: "p2",
-    currSelection: 2,
-    voteSelection: "a",
-    role: "player"
-}, {
-    pname: "p3",
-    currSelection: 3,
-    voteSelection: "a",
-    role: "player"
-}, {
-    pname: "p4",
-    currSelection: 4,
-    voteSelection: "a",
-    role: "player"
-}, {
-    pname: "p5",
-    currSelection: 5,
-    voteSelection: "a",
-    role: "player"
-}, {
-    pname: "p6",
-    currSelection: 6,
-    voteSelection: "a",
-    role: "player"
-}, ]
-
 let database = firebase.database();
 
 //will hold the shuffled deck which will decrease as cards are dealt
 let cardRef = database.ref("/cards");
 
-//will hold users as they connect the site
+//will hold users as they connect to the site
 let userRef = database.ref("/users");
 let connectedRef = database.ref(".info/connected");
 
 //will hold all card related information
 let gameRef = database.ref("/game")
 
-//holds players hands
+//holds player's current hand
 let playerHandRef = database.ref("/player_hand")
+
+//holds player's card selection for given story prompt
+let cardSelectedRef = database.ref("/card_selection")
 
 let cards = {
     oDeck: [],
@@ -59,15 +24,9 @@ let cards = {
 
         for (i = 1; i < 99; i++) {
             if (i < 10) {
-
                 array.push("card_0000" + i);
-
-                // array.push($.cloudinary.image('card_0000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
             } else {
-
                 array.push("card_000" + i);
-
-                //array.push($.cloudinary.image('card_000' + i + '.jpg', { width: 200, height: 300, crop: 'fill' }));
             }
         }
         this.oDeck = array;
@@ -80,14 +39,13 @@ let cards = {
         let j = 0;
         let temp = null;
         let tArray = $.extend(true, [], array);
+        
         // console.log("this is before the for loop");
-
         for (i = tArray.length - 1; i > 0; i -= 1) {
             j = Math.floor(Math.random() * (i + 1));
             temp = tArray[i];
             tArray[i] = tArray[j];
             tArray[j] = temp;
-
             // console.log("this is inside the for loop ", i, j)
         }
         // this.sDeck = tArray;
@@ -97,7 +55,7 @@ let cards = {
 
     displaySpecificCard: function(div, array, pos) {
         $(div).empty();
-        $(div).append($.cloudinary.image(array[pos] + '.jpg', {crop: 'fill' }).attr("class","materialboxed").attr("height","150")).attr("card-value",array[pos]);
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed").attr("height", "150")).attr("card-value", array[pos]);
         $(".materialboxed").materialbox();
     },
 
@@ -109,8 +67,14 @@ let cards = {
     }
 }
 
+let player = {
+    role: "",
+    key: "",
+}
+
 let game = {
     cardsCountedArray: [],
+    nplayers: 0,
     stateArray: [
         0 //initial state
         , 1 //game start initial cards dealt story teller choose card
@@ -122,69 +86,37 @@ let game = {
     ],
     currState: 0,
     //roles and players stored here.
+   
     startGame: function() {
         this.startGameAssignRoles();
         cards.createDeck();
         cards.shuffleDeck(cards.oDeck);
         this.checkAndDeal(cards.sDeck, 6);
     },
+    
     startGameAssignRoles: function() {
         userRef.orderByChild("dateAdded").once("value").then(function(snap) {
             let usersArray = snap.val();
-            console.log(usersArray);
+            // console.log(usersArray);
             let userArrayKeys = Object.keys(usersArray);
-            console.log(userArrayKeys);
-            // let gamePlayers = []
-
-            // userRef.child(userArrayKeys[0]).update({
-            //     role: "storyTeller"
-            // });
+            // console.log(userArrayKeys);
 
             for (i = 0; i < userArrayKeys.length; i++) {
                 if (i === 0) {
                     userRef.child(userArrayKeys[i]).update({
-                            role: "storyTeller"
-                        })
-                        // gamePlayers.push({name:userArrayKeys[i], role:"storyTeller"})
-                        // gamePlayers[userArrayKeys[i]] = "storyTeller"
+                        role: "storyTeller"
+                    })
                     gameRef.update({ curr_teller: userArrayKeys[i] });
                 } else {
                     userRef.child(userArrayKeys[i]).update({
-                            role: "player"
-                        })
-                        // gamePlayers.push({name:userArrayKeys[i], role:"Player"})
-                        // gamePlayers[userArrayKeys[i]] = "player"
+                        role: "player"
+                    })
                 }
             }
-
-            // gameRef.update({gamePlayers});
         })
     },
 
     scoring: function() {
-
-
-        // // counting instances of an object
-        // let cardsSelected = pTestArray.map(function(item) {
-        //     return item.voteSelection
-        // });
-        // // console.log("these are the cards selected", cardsSelected);
-        // let countedCards = cardsSelected.reduce(function(allCards, card) {
-        //     if (card in allCards) {
-        //         allCards[card]++;
-        //     } else {
-        //         allCards[card] = 1;
-        //     }
-        //     return allCards;
-        // }, {});
-        // // console.log("this is CountedName", countedCards);
-        // this.cardsCountedArray = countedCards;
-
-        // let posStoryTeller = pTestArray.map(function(e) {
-        //     return e.role
-        // }).indexOf("storyTeller");
-
-        // console.log("this is the position of the story teller", posStoryTeller);
 
     },
 
@@ -195,14 +127,11 @@ let game = {
             hand.push(deckArray[0]);
             deckArray.splice(0, 1);
         }
-
         cardRef.set(deckArray);
-
-        // player.currHand = player.currHand.concat(hand);
-
         return hand;
     },
 
+    //need to update possibly to autocheck hand limit vs. handsize
     checkAndDeal: function(deckArray, nCards) {
         userRef.once("value").then(function(snap) {
             let keysArray = Object.keys(snap.val());
@@ -229,7 +158,7 @@ let game = {
                 });
             })
             gameRef.update({
-                currState: 1
+                curr_state: 1
             });
         })
     },
@@ -249,6 +178,7 @@ connectedRef.on("value", function(snap) {
         player.key = key;
         userRef.child(key).onDisconnect().remove();
         playerHandRef.child(key).onDisconnect().remove();
+        cardSelectedRef.child(key).onDisconnect().remove();
     }
 });
 
@@ -271,6 +201,86 @@ cardRef.on("value", function(snap) {
     cards.sDeck = snap.val();
 });
 
+//add cards to player board.
+playerHandRef.on("value", function(snap) {
+    let playerHand = [];
+    if (snap.child(player.key).exists()) {
+        playerHand = snap.child(player.key).val()
+
+        for (let i = playerHand.length - 1; i >= 0; i--) {
+            cards.displaySpecificCard("#card" + i, playerHand, i)
+                // console.log(playerHand[i]);
+        }
+        playerHandRef.off("value");
+    }
+})
+
+//click listener for current story 
+$("#tell-story-button").click(function(value) {
+    //need unique ID in HTML for story text area    
+    let currStory = $("#textarea1-z").val();
+    if (player.role === "storyTeller" && game.currState === 2) {
+        gameRef.update({
+            curr_story: currStory
+        })
+        gameRef.update({
+            curr_state: 3 //move onto player card selection
+        })
+    }
+});
+
+//click listener for cards and upload to correct location in DB
+$(".modal-footer").click(function() {
+    if (player.role === "storyTeller" && game.currState === 1) {
+        console.log($(this).siblings(".fahad-test").attr("card-value"))
+        gameRef.update({
+            curr_story_card: $(this).siblings(".fahad-test").attr("card-value")
+        })
+
+        gameRef.update({
+            curr_state: 2 //move onto story telling
+        })
+    } else if (player.role === "player" && game.currState === 3) {
+        let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
+        let playerKey = player.key;
+        cardSelectedRef.update({
+            [playerKey]: cardSelection
+        })
+
+    }
+})
+
+//update curr_state in DB to 4
+cardSelectedRef.on("value", function(snap) {
+    let totalPlayers = game.nplayers;
+
+    userRef.on("value", function(internalSnap) {
+        totalPlayers = internalSnap.numChildren()
+    });
+
+    game.nplayers = totalPlayers;
+
+    let currSelectedCards = snap.numChildren();
+
+    console.log("count of total players and current selected cards", totalPlayers, currSelectedCards)
+    if (totalPlayers - 1 === currSelectedCards && game.currState === 3) {
+        gameRef.update({
+            curr_state: 4 // move onto voting phase
+        })
+    };
+})
+
+//initializing to zero on refresh || might have to update if we want players to rejoin after disconnect.
+gameRef.update({
+    curr_state: game.currState
+})
+
+//updates state according to database value
+gameRef.child("curr_state").on("value", function(snap) {
+    game.currState = snap.val();
+    // console.log("this is child changed log curr_state", prevKey)
+})
+
 //assigns user role to local reference
 userRef.on("value", function(snap) {
     let keysArray = Object.keys(snap.val());
@@ -282,37 +292,30 @@ userRef.on("value", function(snap) {
     }
 });
 
-//addd cards to player board.
-playerHandRef.on("value",function(snap) {
-    let playerHand =[];
-    if (snap.child(player.key).exists()){
-        playerHand = snap.child(player.key).val()
+let vCards = [];
+//add selected cards to the board. 
+function getSelectionCards() {
+    vCards = [];
 
-        for (let i = playerHand.length - 1; i >= 0; i--) {
-            // let cardDiv = $("#dealt-card-container").append($("<div>",{"id":"card"+[i]}));
-            cards.displaySpecificCard("#card"+i, playerHand, i)
-            // console.log(playerHand[i]);
-        }
-        playerHandRef.off("value");
-    }
-})
-
-//click listener for current story
-$("#tell-story-button").click(function(value){
-    //need unique ID in HTML for story text area    
-    let currStory = $("#textarea1-z").val();
-    gameRef.update({
-        currStory:currStory
+    gameRef.child("curr_story_card").once("value", function(snap) {
+        let tempArray = [];
+        tempArray.push(snap.val());
+        vCards = vCards.concat(tempArray);
     })
 
-    $("#textarea1-z").text("");
-});
+    cardSelectedRef.once("value", function(snap) {
+        let tempArray = [];
+        tempArray = Object.values(snap.val())
+        vCards = vCards.concat(tempArray);
+    })
 
-$(".modal-footer").click(function(){
-    console.log ($(this).siblings(".fahad-test").attr("card-value"))
-})
+}
 
-
+function displayCardsVoting() {
+    for (var i = vCards.length - 1; i >= 0; i--) {
+        cards.displaySpecificCard("#card" + i, playerHand, i)
+    }
+}
 
 
 
