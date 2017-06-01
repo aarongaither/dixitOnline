@@ -97,7 +97,7 @@ let cards = {
 
     displaySpecificCard: function(div, array, pos) {
         $(div).empty();
-        $(div).append($.cloudinary.image(array[pos] + '.jpg', {crop: 'fill' }).attr("class","materialboxed").attr("height","150"));
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', {crop: 'fill' }).attr("class","materialboxed").attr("height","150")).attr("card-value",array[pos]);
         $(".materialboxed").materialbox();
     },
 
@@ -283,6 +283,38 @@ userRef.on("value", function(snap) {
 });
 
 //addd cards to player board.
+playerHandRef.on("value",function(snap) {
+    let playerHand =[];
+    if (snap.child(player.key).exists()){
+        playerHand = snap.child(player.key).val()
+
+        for (let i = playerHand.length - 1; i >= 0; i--) {
+            // let cardDiv = $("#dealt-card-container").append($("<div>",{"id":"card"+[i]}));
+            cards.displaySpecificCard("#card"+i, playerHand, i)
+            // console.log(playerHand[i]);
+        }
+        playerHandRef.off("value");
+    }
+})
+
+//click listener for current story
+$("#tell-story-button").click(function(value){
+    //need unique ID in HTML for story text area    
+    let currStory = $("#textarea1-z").val();
+    gameRef.update({
+        currStory:currStory
+    })
+
+    $("#textarea1-z").text("");
+});
+
+$(".modal-footer").click(function(){
+    console.log ($(this).siblings(".fahad-test").attr("card-value"))
+})
+
+
+
+
 
 // playerHandRef.on("value",function(snap) {
 //     let keysArray = Object.keys(snap.val());
@@ -302,20 +334,3 @@ userRef.on("value", function(snap) {
 //         console.log(playerHand[i]);
 //     }
 // })
-
-playerHandRef.on("value",function(snap) {
-    // let keysArray = Object.keys(snap.val());
-    let playerHand =[];
-
-    if (snap.child(player.key).exists()){
-        playerHand = snap.child(player.key).val()
-
-        for (let i = playerHand.length - 1; i >= 0; i--) {
-            // let cardDiv = $("#dealt-card-container").append($("<div>",{"id":"card"+[i]}));
-            cards.displaySpecificCard("#card"+i, playerHand, i);
-            console.log(playerHand[i]);
-        }
-
-        playerHandRef.off("value");
-    }
-})
