@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+      
+<!--    <script src="assets/javascript/api.js"></script> -->
+</head>
+
+<style>
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 20%; /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .well-outline {
+        background: #ececec;
+        border-radius: 10px;
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    
+    form input {
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    #login-well {
+    }
+    
+</style>
+<body>
+    <!-- Selection to hold modal button-->
+    <div id="select-box">
+        
+
+    </div>
+
+    <div id="modal" class="modal">
+    </div>
+
+    <!-- Script -->
+    <script type="text/javascript">
+
+
+    
+        // Get the modal div
+        var modal = $('#modal');
+
+        // Create a sign up button 
+        function signUpButton(){
+            var signUpBtn = $('<button>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup');
+            $('#select-box').append(signUpBtn);
+        }
+
+        signUpButton();
+
+        // Create a login button 
+        function loginButton(){
+            var loginBtn = $('<button>').html('Login').attr('id', 'login-btn').attr('value', 'login');
+            $('#select-box').append(loginBtn);
+        }
+
+        loginButton();
+
+
+        function createModal() {
+           console.log('clicked');
+
+            // Create modal body
+            var modalWrapper = $('<div>').attr('id', 'modal').attr('class', 'modal');
+            $('body').append(modalWrapper);
+
+            // Create well that holds the form
+            var well = $('<div>').attr('id', 'login-well').attr('class', 'round-well');
+            var wellOutline = $('<div>').attr('class', 'well-outline');
+
+            // // <Form> Wrappers
+            // var formLogin = $('<form>').attr('id', 'user-login');
+            // var formSignup = $('<form>').attr('id', 'user-signup');
+
+
+            // // Form Titles
+            // var loginTitle = $('<h2>').html('Login');
+            // var signUpTitle = $('<h2>').html('Sign Up');
+
+            // //Sign Up Fields
+            // var signUpUsername = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-account",
+            //     name: "user-account",
+            //     placeholder: "Username",
+            //     type: "text",
+            // });
+            
+            // var signUpEmail = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-email-signup",
+            //     name: "user-email-signup",
+            //     placeholder: "Email Address",
+            //     type: "email",
+            // });
+
+            // var signUpPassword = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-password-signup",
+            //     name: "user-password-signup",
+            //     placeholder: "Password",
+            //     type: "text",
+            // })
+
+            // var signUpPassword2 = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-password2",
+            //     name: "user-password2",
+            //     placeholder: "Password",
+            //     type: "text",
+            // })
+
+            // var submitSignup = $('<input>').attr({
+            //     class: "submit-button",
+            //     id: "submit-signup",
+            //     name: "submit-signup",
+            //     value: "Sign Up",
+            //     type: "submit"
+            // })
+
+
+            // // Login fields            
+            // var loginEmail = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-email-signup",
+            //     name: "user-email-signup",
+            //     placeholder: "Email Address",
+            //     type: "email",
+            // });
+
+            // var loginPassword = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-password-signup",
+            //     name: "user-password-signup",
+            //     placeholder: "Password",
+            //     type: "text",
+            // })
+
+            // var submitLogin = $('<input>').attr({
+            //     class: "submit-button",
+            //     id: "submit-signup",
+            //     name: "submit-signup",
+            //     value: "Sign Up",
+            //     type: "submit"
+            // })
+
+            // wellOutline.append(formLogin).append(formSignup);
+            well.append(wellOutline);
+
+            // Animated, focused modal content
+            var modalContent = $('<div>').attr('class', 'modal-content animated fadeInDown');
+            modalWrapper.append(modalContent);
+            modalContent.append(well);
+
+            // Click function to close modal on click
+            // $('.modal').on('click', closeModal);
+
+            // Click function to close modal on X
+            var modalBtn = $('<button>').attr('class', 'close').html('x');
+            
+            // Add X to modal
+            modalContent.append(modalBtn); 
+            $('.close').on('click', closeModal);
+ 
+        
+        }
+
+        createModal();
+
+        function showModal(formType) {
+
+            if (formType === 'signUp') {
+                $('.well-outline').empty();
+
+                var formSignup = $('<form>').attr('id', 'user-signup');
+                var signUpTitle = $('<h2>').html('Sign Up');
+
+                //Sign Up Fields
+                var signUpUsername = $('<input>').attr({
+                    class: "required",
+                    id: "user-account",
+                    name: "user-account",
+                    placeholder: "Username",
+                    type: "text",
+                });
+                
+                var signUpEmail = $('<input>').attr({
+                    class: "required",
+                    id: "user-email-signup",
+                    name: "user-email-signup",
+                    placeholder: "Email Address",
+                    type: "email",
+                });
+
+                var signUpPassword = $('<input>').attr({
+                    class: "required",
+                    id: "user-password-signup",
+                    name: "user-password-signup",
+                    placeholder: "Password",
+                    type: "text",
+                })
+
+                var signUpPassword2 = $('<input>').attr({
+                    class: "required",
+                    id: "user-password2",
+                    name: "user-password2",
+                    placeholder: "Password",
+                    type: "text",
+                })
+
+                var submitSignup = $('<input>').attr({
+                    class: "submit-button",
+                    id: "submit-signup",
+                    name: "submit-signup",
+                    value: "Sign Up",
+                    type: "submit"
+                })
+
+                formSignup.append(signUpTitle).append(signUpUsername).append(signUpEmail).append(signUpPassword).append(signUpPassword2).append(submitSignup);
+
+                $('.well-outline').append(formSignup);
+
+            } else if (formType === 'signIn') {
+                $('.well-outline').empty();
+
+                var formLogin = $('<form>').attr('id', 'user-login');
+                var loginTitle = $('<h2>').html('Login');
+                
+                // Login fields            
+                var loginEmail = $('<input>').attr({
+                    class: "required",
+                    id: "user-email-login",
+                    name: "user-email-login",
+                    placeholder: "Email Address",
+                    type: "email",
+                });
+
+                var loginPassword = $('<input>').attr({
+                    class: "required",
+                    id: "user-password-login",
+                    name: "user-password-login",
+                    placeholder: "Password",
+                    type: "text",
+                })
+
+                var submitLogin = $('<input>').attr({
+                    class: "submit-button",
+                    id: "submit-login",
+                    name: "submit-login",
+                    value: "Login",
+                    type: "submit"
+                })
+
+                formLogin.append(loginTitle).append(loginEmail).append(loginPassword).append(submitLogin);
+
+                $('.well-outline').append(formLogin);
+
+                console.log('Signing in');
+            }
+
+            $('.modal').show();
+        }
+
+        function loginPage() {
+            var login = $('<div>').attr('id', 'login-page');
+
+        }
+
+        // When the user clicks on x, close the modal
+        function closeModal() {
+            console.log('close');
+            $('.modal').hide();
+        }
+
+        $('#sign-up-btn').on('click', function(){showModal('signUp')});
+        $('#login-btn').on('click', function(){showModal('signIn')});
+
+
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+</body>
+</html>
+
