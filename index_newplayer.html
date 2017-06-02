@@ -1,106 +1,90 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title></title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css Compiled and minified CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css" media="screen,projection" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-      
-<!--    <script src="assets/javascript/api.js"></script> -->
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
-<style>
-
-    /* The Modal (background) */
-    .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-
-    /* Modal Content/Box */
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto; /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 20%; /* Could be more or less, depending on screen size */
-    }
-
-    /* The Close Button */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .well-outline {
-        background: #ececec;
-        border-radius: 10px;
-        padding: 30px;
-        margin-bottom: 20px;
-    }
-    
-    form input {
-        margin-bottom: 10px;
-        display: block;
-    }
-
-    #login-well {
-    }
-    
-</style>
 <body>
-    <!-- Selection to hold modal button-->
-    <div id="select-box">
+
+  <nav>
+    <div class="nav-wrapper">
+      <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
+      <ul id="player-info" class="right hide-on-med-and-down">
+      </ul>
+    </div>
+  </nav>
         
+    <div class="flex-container">
+        <div id="left-board" class="flex-item">
+         
+        </div>
+        <div id="main-board" class="flex-item">
+            <div id="player-info"></div>     
+        </div>
+        <div id="right-board" class="flex-item">
 
-    </div>
-
-    <div id="modal" class="modal">
-    </div>
-
-    <!-- Script -->
-    <script type="text/javascript">
-
-
+        </div>
+    </div> 
     
-        // Get the modal div
+
+
+    <footer class="page-footer">
+            <div class="footer-copyright">
+            <div class="container">© 2014 Copyright Team Name
+                <a class="grey-text text-lighten-4 right" href="#!">Dixit Online</a>
+            </div>
+            </div>
+      
+    </footer>
+    <!-- Main Body Closing Div -->
+    </div>
+
+                        
+
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/jquery.cloudinary.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+    <script type="text/javascript" src="assets/javascript/api.js"></script>
+    <script type="text/javascript" src="assets/javascript/game.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+   
+    
+    <!-- Create modal buttons and modal div-->
+    <script type="text/javascript">
+            // Get the modal div
         var modal = $('#modal');
 
         // Create a sign up button 
         function signUpButton(){
-            var signUpBtn = $('<button>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup');
-            $('#select-box').append(signUpBtn);
+            var signUpBtn = $('<a>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup');
+            $('#player-info').append(signUpBtn);
         }
 
         signUpButton();
 
         // Create a login button 
         function loginButton(){
-            var loginBtn = $('<button>').html('Login').attr('id', 'login-btn').attr('value', 'login');
-            $('#select-box').append(loginBtn);
+            var loginBtn = $('<a>').html('Login').attr('id', 'login-btn').attr('value', 'login');
+            $('#player-info').append(loginBtn);
         }
 
         loginButton();
 
-
+        
         function createModal() {
            console.log('clicked');
 
@@ -111,82 +95,6 @@
             // Create well that holds the form
             var well = $('<div>').attr('id', 'login-well').attr('class', 'round-well');
             var wellOutline = $('<div>').attr('class', 'well-outline');
-
-            // // <Form> Wrappers
-            // var formLogin = $('<form>').attr('id', 'user-login');
-            // var formSignup = $('<form>').attr('id', 'user-signup');
-
-
-            // // Form Titles
-            // var loginTitle = $('<h2>').html('Login');
-            // var signUpTitle = $('<h2>').html('Sign Up');
-
-            // //Sign Up Fields
-            // var signUpUsername = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-account",
-            //     name: "user-account",
-            //     placeholder: "Username",
-            //     type: "text",
-            // });
-            
-            // var signUpEmail = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-email-signup",
-            //     name: "user-email-signup",
-            //     placeholder: "Email Address",
-            //     type: "email",
-            // });
-
-            // var signUpPassword = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-password-signup",
-            //     name: "user-password-signup",
-            //     placeholder: "Password",
-            //     type: "text",
-            // })
-
-            // var signUpPassword2 = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-password2",
-            //     name: "user-password2",
-            //     placeholder: "Password",
-            //     type: "text",
-            // })
-
-            // var submitSignup = $('<input>').attr({
-            //     class: "submit-button",
-            //     id: "submit-signup",
-            //     name: "submit-signup",
-            //     value: "Sign Up",
-            //     type: "submit"
-            // })
-
-
-            // // Login fields            
-            // var loginEmail = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-email-signup",
-            //     name: "user-email-signup",
-            //     placeholder: "Email Address",
-            //     type: "email",
-            // });
-
-            // var loginPassword = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-password-signup",
-            //     name: "user-password-signup",
-            //     placeholder: "Password",
-            //     type: "text",
-            // })
-
-            // var submitLogin = $('<input>').attr({
-            //     class: "submit-button",
-            //     id: "submit-signup",
-            //     name: "submit-signup",
-            //     value: "Sign Up",
-            //     type: "submit"
-            // })
 
             // wellOutline.append(formLogin).append(formSignup);
             well.append(wellOutline);
@@ -321,9 +229,6 @@
 
 
     </script>
-    
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 </body>
 </html>
-
