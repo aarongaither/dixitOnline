@@ -39,7 +39,7 @@ let cards = {
         let j = 0;
         let temp = null;
         let tArray = $.extend(true, [], array);
-        
+
         // console.log("this is before the for loop");
         for (i = tArray.length - 1; i > 0; i -= 1) {
             j = Math.floor(Math.random() * (i + 1));
@@ -83,17 +83,18 @@ let game = {
         , 4 //player voting
         , 5 //player scoring
         , 6 //round ended
+        , 7 //game end
     ],
     currState: 0,
     //roles and players stored here.
-   
+
     startGame: function() {
         this.startGameAssignRoles();
         cards.createDeck();
         cards.shuffleDeck(cards.oDeck);
         this.checkAndDeal(cards.sDeck, 6);
     },
-    
+
     startGameAssignRoles: function() {
         userRef.orderByChild("dateAdded").once("value").then(function(snap) {
             let usersArray = snap.val();
@@ -292,30 +293,54 @@ userRef.on("value", function(snap) {
     }
 });
 
-let vCards = [];
+
 //add selected cards to the board. 
-function getSelectionCards() {
-    vCards = [];
+// function getSelectionCards() {
+//     let vCards = [];
 
-    gameRef.child("curr_story_card").once("value", function(snap) {
-        let tempArray = [];
-        tempArray.push(snap.val());
-        vCards = vCards.concat(tempArray);
-    })
+//     gameRef.child("curr_story_card").once("value", function(snap) {
+//         let tempArray = [];
+//         tempArray.push(snap.val());
+//         vCards = vCards.concat(tempArray);
+//     }).then(function() {
 
-    cardSelectedRef.once("value", function(snap) {
-        let tempArray = [];
-        tempArray = Object.values(snap.val())
-        vCards = vCards.concat(tempArray);
-    })
+//         cardSelectedRef.once("value", function(snap) {
+//             let tempArray = [];
+//             tempArray = Object.values(snap.val())
+//             vCards = vCards.concat(tempArray);
+//         })
+//     })
 
-}
 
-function displayCardsVoting() {
-    for (var i = vCards.length - 1; i >= 0; i--) {
-        cards.displaySpecificCard("#card" + i, playerHand, i)
+//     return vCards;
+
+// }
+
+// let vCards = getSelectionCards;
+
+
+gameRef.child("curr_state").on("value", function(snap) {
+    let currState = snap.val();
+    let vCards = [];
+    if (currState === 4) {
+        gameRef.child("curr_story_card").once("value", function(snap) {
+            let tempArray = [];
+            tempArray.push(snap.val());
+            vCards = vCards.concat(tempArray);
+        }).then(function() {
+
+            cardSelectedRef.once("value", function(snap) {
+                let tempArray = [];
+                tempArray = Object.values(snap.val())
+                vCards = vCards.concat(tempArray);
+            })
+        }).then(function() {
+            for (let i = vCards.length - 1; i >= 0; i--) {
+                cards.displaySpecificCard("#scard" + i, vCards, i)
+            }
+        })
     }
-}
+})
 
 
 
