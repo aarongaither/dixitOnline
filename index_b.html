@@ -15,13 +15,13 @@
 
 <body>
 
-  <nav>
-    <div class="nav-wrapper">
-      <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
-      <ul id="player-info" class="right hide-on-med-and-down">
-      </ul>
-    </div>
-  </nav>
+    <nav>
+        <div class="nav-wrapper">
+            <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
+            <ul id="player-info" class="right hide-on-med-and-down">
+            </ul>
+        </div>
+    </nav>
         
     <div class="flex-container">
         <div id="left-board" class="flex-item">
@@ -82,6 +82,7 @@
                 </div>
               
             </div>
+            <!-- Closing div for left board -->
         </div>
         <div id="main-board" class="flex-item">
 
@@ -99,55 +100,52 @@
                 <!-- Chosen Card Area -->
                 <div class="row" id="chosen-cards">
                     <div class="card-panel">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00004.jpg">
+  <!--                       <div class="col card-stock">
+                            <img class="materialboxed" height="150" src="assets/cards/card_00001.jpg">
+                                <div class="modal-footer">
+                                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Vote</a>
+                                </div>
+                        </div>
+                        <div class="col card-stock">
+                            <img class="materialboxed" height="150" src="assets/cards/card_00002.jpg">
+                                <div class="modal-footer">
+                                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Vote</a>
+                                </div>
+                        </div>
+                        <div class="col card-stock">
+                            <img class="materialboxed" height="150" src="assets/cards/card_00003.jpg">
+                                <div class="modal-footer">
+                                     <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Vote</a>
+                                </div>
+                        </div>
+                        <div class="col card-stock">
+                            <img class="materialboxed" height="150" src="assets/cards/card_00004.jpg">
+                                <div class="modal-footer">
+                                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Vote</a>
+                                </div>
+                        </div>
+                        <div class="col card-stock">
+                            <img class="materialboxed" height="150" src="assets/cards/card_00005.jpg">
+                                <div class="modal-footer">
+                                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Vote</a>
+                                </div>
+                        </div>
+                        <div class="col card-stock">
+                            <img class="materialboxed" height="150" src="assets/cards/card_00006.jpg">
+                                <div class="modal-footer">
+                                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Vote</a>
+                                </div>
+                        </div> -->
                     </div>
+                    <!-- closing div for chosen cards -->
                 </div>
                 
-                <!-- Delt Card Area -->
+                <!-- Dealt Card Area -->
                 <div class="row" id="given-cards">                
-                    <div class="col card-stock">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00001.jpg">
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
-                            </div>
-                    </div>
-                    <div class="col card-stock">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00002.jpg">
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
-                            </div>
-                    </div>
-                    <div class="col card-stock">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00003.jpg">
-                            <div class="modal-footer">
-                                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
-                            </div>
-                    </div>
-                    <div class="col card-stock">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00004.jpg">
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
-                            </div>
-                    </div>
-                    <div class="col card-stock">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00005.jpg">
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
-                            </div>
-                    </div>
-                    <div class="col card-stock">
-                        <img class="materialboxed" height="150" src="assets/cards/card_00006.jpg">
-                            <div class="modal-footer">
-                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
-                            </div>
-                    </div>
-                <!-- closing div for chosen cards -->
+                <!-- closing div for dealt cards -->
                 </div>
 
-                <div class="row" id="player-cards">
-
-                </div>
-                <!-- pop up chat area-->
+                <!-- Pop up chat area-->
                 <div class="row" id="chat-section-row">   
                     <form class="col s12">
                         <div class="row">
@@ -181,21 +179,20 @@
         </div>
     </div> 
     
-
-
-    <footer class="page-footer">
-            <div class="footer-copyright">
-            <div class="container">© 2014 Copyright Team Name
-                <a class="grey-text text-lighten-4 right" href="#!">Dixit Online</a>
+        <footer class="flex-container">
+            <div class="flex-item">
+                © 2017 Copyright Team Name<br>
+                
             </div>
+            <div class="flex-item">
+                <a class="" href="">Dixit Online</a>
             </div>
-      
-    </footer>
-    <!-- Main Body Closing Div -->
+        </footer>
+     <!-- Main Body Closing Div -->       
     </div>
 
                         
-
+<!-- JQUERY START -->
 
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -242,8 +239,10 @@
 
 
     </script>
-
+    <!-- Materialize script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <!-- Function for creating player info cards. -->
     <script type="text/javascript">
         var playersArray = ['Margaret', 'Aaron', 'Fahad', 'Mike', 'Lina', 'Alex'];
         var playerColors = ['#FF69B4', '#E6E6FA', '#FFA07A', '#66CDAA', '#DA70D6', '#FF6347'];
@@ -272,11 +271,41 @@
     </script>
 
 
-    <!-- Card Dealing Script -->
+    <!-- Function for dealing cards to players. -->
     <script type="text/javascript">
-        var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+        var cardValues = ['c1', 'c2', 'c3' ,'c4' ,'c5' ,'c6']
         var cardImages = ['assets/cards/card_00001.jpg', 'assets/cards/card_00002.jpg', 'assets/cards/card_00003.jpg',
         'assets/cards/card_00004.jpg', 'assets/cards/card_00005.jpg', 'assets/cards/card_00006.jpg' ]
+
+        function dealing() {
+            for (let i = 0; i < cardValues.length; i++) {
+                
+                var delay = i * 100;
+
+                setTimeout(function() {
+                    var cardBox = $('<div>').attr('class', 'col card-stock');
+                    var newCard = $('<div>').attr('id', 'card' + i);
+                    var cardSubmitBtn = $('<button>').attr('class', '').html('Play');
+                    var cardImg = $('<img>').css('height', '150px').attr('class','materialboxed').attr('src', cardImages[i]);
+
+                    newCard.attr('class', 'animated fadeInRight').append(cardImg);
+
+                    var cards = cardBox.append(newCard).append(cardSubmitBtn);
+
+                    $('#given-cards').append(cards);
+
+                }, delay)
+            }
+        }     
+
+        dealing();
+    </script>
+
+    <!-- Function for creating played cards -->
+    <script type="text/javascript">
+        var cardValues = ['c1', 'c2', 'c3' ,'c4' ,'c5' ,'c6']
+        var cardImages = ['assets/cards/card_00007.jpg', 'assets/cards/card_00008.jpg', 'assets/cards/card_00009.jpg',
+        'assets/cards/card_00010.jpg', 'assets/cards/card_00011.jpg', 'assets/cards/card_00012.jpg' ]
 
         function dealing() {
             for (let i = 0; i < cardValues.length; i++) {
@@ -285,12 +314,12 @@
                 
 
                 setTimeout(function() {
-                    var cardBox = $('<div>').attr('id', 'card' + i).attr('class', 'col card-stock');
-                    var newCard = $('<div>').attr('data', cardValues[i]);
-                    var cards = cardBox.append(newCard);
+                    var img = $('<img>').attr('class','materialboxed').css('height', '150px').attr('src', cardImages[i]); 
+                    var imgWrapper = $('<div>').attr('id', 'scard' + i).append(img);
+                    var cardVoteBtn = $('<button>').attr('class','play-card').html('Vote');
+                    var cardWrapper = $('<div>').attr('class', 'col card-stock').append(imgWrapper).append(cardVoteBtn); 
 
-                    $('#player-cards').append(cards);
-                    newCard.attr('class', 'animated fadeInRight material-placeholder').html('<img height="150px" class="materialboxed initialized" src="' + cardImages[i] + '">');
+                    $('.card-panel').append(cardWrapper);
 
                 }, delay)
             }
@@ -298,8 +327,27 @@
 
         dealing();
     </script>
+
+
+
+
+
+    <!-- Function to create end game button -->
+    <script type="text/javascript">
+
+        // Create an end game button 
+        function endButton(){
+            var li = $('<li>');
+            var endBtn = $('<a>').html('End Game').attr('id', 'end-game-btn').attr('value', 'endgame');
+            li.append(endBtn)
+            $('#player-info').append(li);
+        }
+
+        endButton();
+
+    </script>
     
-    <!-- Create modal buttons and modal div-->
+    <!-- Function to create modal buttons and modal div-->
     <script type="text/javascript">
             // Get the modal div
         var modal = $('#modal');
@@ -312,7 +360,7 @@
             $('#player-info').append(li);
         }
 
-        signUpButton();
+        // signUpButton();
 
         // Create a login button 
         function loginButton(){
@@ -322,9 +370,9 @@
             $('#player-info').append(li);
         }
 
-        loginButton();
+        // loginButton();
 
-        
+
         function createModal() {
            console.log('clicked');
 
@@ -335,82 +383,6 @@
             // Create well that holds the form
             var well = $('<div>').attr('id', 'login-well').attr('class', 'round-well');
             var wellOutline = $('<div>').attr('class', 'well-outline');
-
-            // // <Form> Wrappers
-            // var formLogin = $('<form>').attr('id', 'user-login');
-            // var formSignup = $('<form>').attr('id', 'user-signup');
-
-
-            // // Form Titles
-            // var loginTitle = $('<h2>').html('Login');
-            // var signUpTitle = $('<h2>').html('Sign Up');
-
-            // //Sign Up Fields
-            // var signUpUsername = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-account",
-            //     name: "user-account",
-            //     placeholder: "Username",
-            //     type: "text",
-            // });
-            
-            // var signUpEmail = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-email-signup",
-            //     name: "user-email-signup",
-            //     placeholder: "Email Address",
-            //     type: "email",
-            // });
-
-            // var signUpPassword = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-password-signup",
-            //     name: "user-password-signup",
-            //     placeholder: "Password",
-            //     type: "text",
-            // })
-
-            // var signUpPassword2 = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-password2",
-            //     name: "user-password2",
-            //     placeholder: "Password",
-            //     type: "text",
-            // })
-
-            // var submitSignup = $('<input>').attr({
-            //     class: "submit-button",
-            //     id: "submit-signup",
-            //     name: "submit-signup",
-            //     value: "Sign Up",
-            //     type: "submit"
-            // })
-
-
-            // // Login fields            
-            // var loginEmail = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-email-signup",
-            //     name: "user-email-signup",
-            //     placeholder: "Email Address",
-            //     type: "email",
-            // });
-
-            // var loginPassword = $('<input>').attr({
-            //     class: "required",
-            //     id: "user-password-signup",
-            //     name: "user-password-signup",
-            //     placeholder: "Password",
-            //     type: "text",
-            // })
-
-            // var submitLogin = $('<input>').attr({
-            //     class: "submit-button",
-            //     id: "submit-signup",
-            //     name: "submit-signup",
-            //     value: "Sign Up",
-            //     type: "submit"
-            // })
 
             // wellOutline.append(formLogin).append(formSignup);
             well.append(wellOutline);
