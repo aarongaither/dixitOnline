@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css Compiled and minified CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css" media="screen,projection" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <nav>
+    <div class="nav-wrapper">
+      <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
+      <ul id="player-info" class="right hide-on-med-and-down">
+      </ul>
+    </div>
+  </nav>
+        
+    <div class="flex-container">
+        <div id="left-board" class="flex-item">
+           <!-- Left Panel For Player Point Bars-->
+            <div class="" id="left-panel">               
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div class="player-1-avatar">
+                            <div id="player-1-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div class="player-2-avatar">
+                            <div id="player-2-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div class="player-3-avatar">
+                            <div id="player-3-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div class="player-4-avatar">
+                            <div id="player-4-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div class="player-5-avatar">
+                            <div id="player-5-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row player-score">
+                    <div id="player-score-div">
+                        <div class="player-6-avatar">
+                            <div id="player-6-progress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+        <div id="main-board" class="flex-item">
+
+            <!-- Center Panel -->
+            <div class="" id="center-panel">
+
+                <div class="row" id="story-text">
+                    <form id="story-form">
+                        <ul class="story-form-wrapper">
+                            <li><input placeholder="" id="storyteller_story" type="text" class="validate"></li>
+                            <li><input type="submit" value="Submit" class="submit"></li>
+                        </ul>
+                    </form>
+                </div>
+                <!-- Chosen Card Area -->
+                <div class="row" id="chosen-cards">
+                    <div class="card-panel">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00004.jpg">
+                    </div>
+                </div>
+                
+                <!-- Delt Card Area -->
+                <div class="row" id="given-cards">                
+                    <div class="col card-stock">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00001.jpg">
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
+                            </div>
+                    </div>
+                    <div class="col card-stock">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00002.jpg">
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
+                            </div>
+                    </div>
+                    <div class="col card-stock">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00003.jpg">
+                            <div class="modal-footer">
+                                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
+                            </div>
+                    </div>
+                    <div class="col card-stock">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00004.jpg">
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
+                            </div>
+                    </div>
+                    <div class="col card-stock">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00005.jpg">
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
+                            </div>
+                    </div>
+                    <div class="col card-stock">
+                        <img class="materialboxed" height="150" src="assets/cards/card_00006.jpg">
+                            <div class="modal-footer">
+                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat white-text">Play</a>
+                            </div>
+                    </div>
+                <!-- closing div for chosen cards -->
+                </div>
+
+                <div class="row" id="player-cards">
+
+                </div>
+                <!-- pop up chat area-->
+                <div class="row" id="chat-section-row">   
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12" id="chat-display">
+                                <textarea id="pop-up-chat-display" class="materialize-textarea white"></textarea>
+                                    <label for="textarea1"></label>
+                            </div>
+                            <div class="input-field col s9 white-text">
+                                <input placeholder="Chat with other players here." id="pop-up-chat" type="text" class="validate">   
+                            </div>
+                            <div class="input-field col s3" id="chat-btn">
+                                <div class="btn amber accent-3">
+                                    <span>Send</span>
+                                </div>
+                            </div>
+                                <a class="btn-floating right btn-med waves-effect waves-light amber accent-3" id="show-text-button"><i class="material-icons">add</i></a>
+                        </div> 
+                    </form>
+                </div>
+
+            <!-- Center Panel Closing Div -->
+            </div>
+        </div>
+        <div id="right-board" class="flex-item">
+            Players
+            <div id="view-players">
+                <div class="player-card">
+                    
+                </div>
+            </div>
+        </div>
+    </div> 
+    
+
+
+    <footer class="page-footer">
+            <div class="footer-copyright">
+            <div class="container">© 2014 Copyright Team Name
+                <a class="grey-text text-lighten-4 right" href="#!">Dixit Online</a>
+            </div>
+            </div>
+      
+    </footer>
+    <!-- Main Body Closing Div -->
+    </div>
+
+                        
+
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/jquery.cloudinary.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+    <script type="text/javascript" src="assets/javascript/api.js"></script>
+    <script type="text/javascript" src="assets/javascript/game.js"></script>
+<!-- Function for showing pop up chat. -->
+    <script type="text/javascript">
+        $(function(){
+            $("#pop-up-chat").hide();
+            $("#chat-btn").hide();
+            $("#pop-up-chat-display").hide();
+            $("#show-text-button").click (function()    {
+                $("#pop-up-chat-display").toggle();
+                $("#chat-btn").toggle();
+                $("#pop-up-chat").toggle();
+            });
+        });
+            // Functions from Margaret
+            function move() {
+                var elem = $('#player-one-progress'); 
+                var height = elem.height();
+                // var id = setInterval(frame, 10);
+                height++
+                $('#player-one-progress').height(height);
+                console.log(height);
+            }
+
+
+    
+    // var player = function() {
+        $('.player-1-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        $('.player-2-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        $('.player-3-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        $('.player-4-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+           
+    // };
+
+    player();
+
+
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript">
+        var playersArray = ['Margaret', 'Aaron', 'Fahad', 'Mike', 'Lina', 'Alex'];
+        var playerColors = ['#FF69B4', '#E6E6FA', '#FFA07A', '#66CDAA', '#DA70D6', '#FF6347'];
+        var score = 0;
+
+        function createPlayer() {
+            for(var i = 0; i < playersArray.length; i++) {
+                var playerName = $('<div>').attr('class', 'player-name').text(playersArray[i]);
+                var playerAvatar = $('<img>').attr('src', '').attr('class', 'circle responsive-img');
+                var playerScore = $('<div>').html(score).attr('class', 'animated fadeInUp');
+                var playerPoints = $('<div>').attr('class','circle responsive-img total-points').append(playerScore);
+                var playerCard = $('<div>').attr('class','player-card').html(playerName).append(playerAvatar).append(playerPoints);
+
+                playerCard.css('background-color', playerColors[i]);
+            
+                $('#right-board').append(playerCard);
+            }
+        }
+
+        createPlayer();
+
+        function addPoints() {
+
+        }
+
+    </script>
+
+
+    <!-- Card Dealing Script -->
+    <script type="text/javascript">
+        var cardValues = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+        var cardImages = ['assets/cards/card_00001.jpg', 'assets/cards/card_00002.jpg', 'assets/cards/card_00003.jpg',
+        'assets/cards/card_00004.jpg', 'assets/cards/card_00005.jpg', 'assets/cards/card_00006.jpg' ]
+
+        function dealing() {
+            for (let i = 0; i < cardValues.length; i++) {
+                
+                var delay = i * 100;
+                
+
+                setTimeout(function() {
+                    var cardBox = $('<div>').attr('id', 'card' + i).attr('class', 'col card-stock');
+                    var newCard = $('<div>').attr('data', cardValues[i]);
+                    var cards = cardBox.append(newCard);
+
+                    $('#player-cards').append(cards);
+                    newCard.attr('class', 'animated fadeInRight material-placeholder').html('<img height="150px" class="materialboxed initialized" src="' + cardImages[i] + '">');
+
+                }, delay)
+            }
+        }     
+
+        dealing();
+    </script>
+    
+    <!-- Create modal buttons and modal div-->
+    <script type="text/javascript">
+            // Get the modal div
+        var modal = $('#modal');
+
+        // Create a sign up button 
+        function signUpButton(){
+            var li = $('<li>');
+            var signUpBtn = $('<a>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup');
+            li.append(signUpBtn)
+            $('#player-info').append(li);
+        }
+
+        signUpButton();
+
+        // Create a login button 
+        function loginButton(){
+            var li = $('<li>');
+            var loginBtn = $('<a>').html('Login').attr('id', 'login-btn').attr('value', 'login');
+            li.append(loginBtn)
+            $('#player-info').append(li);
+        }
+
+        loginButton();
+
+        
+        function createModal() {
+           console.log('clicked');
+
+            // Create modal body
+            var modalWrapper = $('<div>').attr('id', 'modal').attr('class', 'modal');
+            $('body').append(modalWrapper);
+
+            // Create well that holds the form
+            var well = $('<div>').attr('id', 'login-well').attr('class', 'round-well');
+            var wellOutline = $('<div>').attr('class', 'well-outline');
+
+            // // <Form> Wrappers
+            // var formLogin = $('<form>').attr('id', 'user-login');
+            // var formSignup = $('<form>').attr('id', 'user-signup');
+
+
+            // // Form Titles
+            // var loginTitle = $('<h2>').html('Login');
+            // var signUpTitle = $('<h2>').html('Sign Up');
+
+            // //Sign Up Fields
+            // var signUpUsername = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-account",
+            //     name: "user-account",
+            //     placeholder: "Username",
+            //     type: "text",
+            // });
+            
+            // var signUpEmail = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-email-signup",
+            //     name: "user-email-signup",
+            //     placeholder: "Email Address",
+            //     type: "email",
+            // });
+
+            // var signUpPassword = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-password-signup",
+            //     name: "user-password-signup",
+            //     placeholder: "Password",
+            //     type: "text",
+            // })
+
+            // var signUpPassword2 = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-password2",
+            //     name: "user-password2",
+            //     placeholder: "Password",
+            //     type: "text",
+            // })
+
+            // var submitSignup = $('<input>').attr({
+            //     class: "submit-button",
+            //     id: "submit-signup",
+            //     name: "submit-signup",
+            //     value: "Sign Up",
+            //     type: "submit"
+            // })
+
+
+            // // Login fields            
+            // var loginEmail = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-email-signup",
+            //     name: "user-email-signup",
+            //     placeholder: "Email Address",
+            //     type: "email",
+            // });
+
+            // var loginPassword = $('<input>').attr({
+            //     class: "required",
+            //     id: "user-password-signup",
+            //     name: "user-password-signup",
+            //     placeholder: "Password",
+            //     type: "text",
+            // })
+
+            // var submitLogin = $('<input>').attr({
+            //     class: "submit-button",
+            //     id: "submit-signup",
+            //     name: "submit-signup",
+            //     value: "Sign Up",
+            //     type: "submit"
+            // })
+
+            // wellOutline.append(formLogin).append(formSignup);
+            well.append(wellOutline);
+
+            // Animated, focused modal content
+            var modalContent = $('<div>').attr('class', 'modal-content animated fadeInDown');
+            modalWrapper.append(modalContent);
+            modalContent.append(well);
+
+            // Click function to close modal on click
+            // $('.modal').on('click', closeModal);
+
+            // Click function to close modal on X
+            var modalBtn = $('<button>').attr('class', 'close').html('x');
+            
+            // Add X to modal
+            modalContent.append(modalBtn); 
+            $('.close').on('click', closeModal);
+ 
+        
+        }
+
+        createModal();
+
+        function showModal(formType) {
+
+            if (formType === 'signUp') {
+                $('.well-outline').empty();
+
+                var formSignup = $('<form>').attr('id', 'user-signup');
+                var signUpTitle = $('<h2>').html('Sign Up');
+
+                //Sign Up Fields
+                var signUpUsername = $('<input>').attr({
+                    class: "required",
+                    id: "user-account",
+                    name: "user-account",
+                    placeholder: "Username",
+                    type: "text",
+                });
+                
+                var signUpEmail = $('<input>').attr({
+                    class: "required",
+                    id: "user-email-signup",
+                    name: "user-email-signup",
+                    placeholder: "Email Address",
+                    type: "email",
+                });
+
+                var signUpPassword = $('<input>').attr({
+                    class: "required",
+                    id: "user-password-signup",
+                    name: "user-password-signup",
+                    placeholder: "Password",
+                    type: "text",
+                })
+
+                var signUpPassword2 = $('<input>').attr({
+                    class: "required",
+                    id: "user-password2",
+                    name: "user-password2",
+                    placeholder: "Password",
+                    type: "text",
+                })
+
+                var submitSignup = $('<input>').attr({
+                    class: "submit-button",
+                    id: "submit-signup",
+                    name: "submit-signup",
+                    value: "Sign Up",
+                    type: "submit"
+                })
+
+                formSignup.append(signUpTitle).append(signUpUsername).append(signUpEmail).append(signUpPassword).append(signUpPassword2).append(submitSignup);
+
+                $('.well-outline').append(formSignup);
+
+            } else if (formType === 'signIn') {
+                $('.well-outline').empty();
+
+                var formLogin = $('<form>').attr('id', 'user-login');
+                var loginTitle = $('<h2>').html('Login');
+                
+                // Login fields            
+                var loginEmail = $('<input>').attr({
+                    class: "required",
+                    id: "user-email-login",
+                    name: "user-email-login",
+                    placeholder: "Email Address",
+                    type: "email",
+                });
+
+                var loginPassword = $('<input>').attr({
+                    class: "required",
+                    id: "user-password-login",
+                    name: "user-password-login",
+                    placeholder: "Password",
+                    type: "text",
+                })
+
+                var submitLogin = $('<input>').attr({
+                    class: "submit-button",
+                    id: "submit-login",
+                    name: "submit-login",
+                    value: "Login",
+                    type: "submit"
+                })
+
+                formLogin.append(loginTitle).append(loginEmail).append(loginPassword).append(submitLogin);
+
+                $('.well-outline').append(formLogin);
+
+                console.log('Signing in');
+            }
+
+            $('.modal').show();
+        }
+
+        function loginPage() {
+            var login = $('<div>').attr('id', 'login-page');
+
+        }
+
+        // When the user clicks on x, close the modal
+        function closeModal() {
+            console.log('close');
+            $('.modal').hide();
+        }
+
+        $('#sign-up-btn').on('click', function(){showModal('signUp')});
+        $('#login-btn').on('click', function(){showModal('signIn')});
+
+
+    </script>
+
+</body>
+</html>

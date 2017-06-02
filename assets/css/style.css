@@ -7,8 +7,130 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100%;
-	background-color: #5E5735;
+	background-color: #304D5F;
 }
+
+header {
+	background: #000;
+}
+
+.flex-container {
+	display: flex; /* or inline-flex */
+	flex-direction: row;
+	justify-content: center;
+	margin: auto;
+	min-height: 100%;
+}
+
+.flex-item {
+	
+}
+
+.flex-item#main-board {
+	flex-grow: 1;
+}
+
+#left-board {
+	width: 200px;
+	background-color: grey;
+}
+#main-board {
+}
+#right-board {
+	width: 200px;
+	background: #304D5F;
+    padding-right: 40px;
+}
+
+
+.example_card {
+        width: 60px;
+        height: 100px;
+        border: 1px solid #000;
+        display: inline-block;
+        margin-right: 20px;
+        text-align: center;
+}
+
+.example_card img {
+    max-width: 60px;
+}
+
+#example {
+    position: relative;
+    animation: move 5s;
+    animation-fill-mode: forwards;  
+}
+
+#player-cards {
+	display: flex;
+    justify-content: center;
+    margin-bottom: 0px;
+}
+.player-card {
+	width: 100%;
+	height: 40px;
+	position: relative;
+	margin: 20px 0px;
+	border-radius: 10px;
+	/*text-align: center;*/
+}
+.player-card img {
+	max-height: 100%;
+}
+.player-name {
+    position: absolute;
+    bottom: 0px;
+    text-align: right;
+    padding: 0px 0px;
+    background: transparent;
+    /*width: 100%;*/
+    /*color: #ececec;*/
+    color: black;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.total-points {
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    color: #fff;
+    width: 25px; 
+    height: 25px;
+    text-align: center;
+}
+
+.player-avatar {
+
+	
+}
+
+#story-form {
+}
+
+#story-form li{
+	display: inline-block;
+}
+
+#story-form .validate{
+    background: rgba(255, 255, 255, .75);
+    border-radius: 20px 0px 0px 20px;
+    width: 400px;
+    border: 1px solid #000;
+    padding-left: 20px;
+}
+
+#story-form .submit{
+    border-radius: 0px 20px 20px 0px;
+    padding: 13px;
+    border: none;
+}
+
+#story-form-wrapper {
+	max-width: 100%;
+}
+
 
 #main-body {
 	flex: 1;
@@ -48,6 +170,7 @@ body {
 #story-text {
 	color: grey;
 	margin: 0px;
+	text-align: center;
 }
 
 .player-score {
