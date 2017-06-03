@@ -170,11 +170,8 @@
             </div>
         </div>
         <div id="right-board" class="flex-item">
-            Players
+            <h3>Players</h3>
             <div id="view-players">
-                <div class="player-card">
-                    
-                </div>
             </div>
         </div>
     </div> 
@@ -201,7 +198,7 @@
     <script type="text/javascript" src="assets/javascript/jquery.cloudinary.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
     <script type="text/javascript" src="assets/javascript/api.js"></script>
-    <script type="text/javascript" src="assets/javascript/game.js"></script>
+<!--     <script type="text/javascript" src="assets/javascript/game.js"></script> -->
 <!-- Function for showing pop up chat. -->
     <script type="text/javascript">
         $(function(){
@@ -227,14 +224,14 @@
 
     
     // var player = function() {
-        $('.player-1-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
-        $('.player-2-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
-        $('.player-3-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
-        $('.player-4-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        // $('.player-1-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        // $('.player-2-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        // $('.player-3-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
+        // $('.player-4-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
            
     // };
 
-    player();
+    // player();
 
 
 
@@ -254,11 +251,11 @@
                 var playerAvatar = $('<img>').attr('src', '').attr('class', 'circle responsive-img');
                 var playerScore = $('<div>').html(score).attr('class', 'animated fadeInUp');
                 var playerPoints = $('<div>').attr('class','circle responsive-img total-points').append(playerScore);
-                var playerCard = $('<div>').attr('class','player-card').html(playerName).append(playerAvatar).append(playerPoints);
+                var playerCard = $('<div>').attr('id','player-card' + i).attr('class','player-card').append(playerAvatar).append(playerName).append(playerPoints);
 
                 playerCard.css('background-color', playerColors[i]);
             
-                $('#right-board').append(playerCard);
+                $('#view-players').append(playerCard);
             }
         }
 
@@ -285,8 +282,8 @@
                 setTimeout(function() {
                     var cardBox = $('<div>').attr('class', 'col card-stock');
                     var newCard = $('<div>').attr('id', 'card' + i);
-                    var cardSubmitBtn = $('<button>').attr('class', '').html('Play');
-                    var cardImg = $('<img>').css('height', '150px').attr('class','materialboxed').attr('src', cardImages[i]);
+                    var cardSubmitBtn = $('<button>').attr('class', 'play-card').html('Play');
+                    var cardImg = $('<img>').css('height', '150px').attr('class','materialboxed round-card').attr('src', cardImages[i]);
 
                     newCard.attr('class', 'animated fadeInRight').append(cardImg);
 
@@ -314,9 +311,9 @@
                 
 
                 setTimeout(function() {
-                    var img = $('<img>').attr('class','materialboxed').css('height', '150px').attr('src', cardImages[i]); 
+                    var img = $('<img>').attr('class','materialboxed round-card').css('height', '150px').attr('src', cardImages[i]); 
                     var imgWrapper = $('<div>').attr('id', 'scard' + i).append(img);
-                    var cardVoteBtn = $('<button>').attr('class','play-card').html('Vote');
+                    var cardVoteBtn = $('<button>').attr('class','vote-card').html('Vote');
                     var cardWrapper = $('<div>').attr('class', 'col card-stock').append(imgWrapper).append(cardVoteBtn); 
 
                     $('.card-panel').append(cardWrapper);
@@ -327,9 +324,6 @@
 
         dealing();
     </script>
-
-
-
 
 
     <!-- Function to create end game button -->

@@ -50,19 +50,69 @@ header {
 	text-align: center;
 }
 
+#lobby-chat-board {
+	flex: 2;
+	margin-right: 20px;
+}
 
+#lobby-aside {
+	flex: 1;
+}
+.lobby-flex-container {
+	display: flex; /* or inline-flex */
+	flex-direction: row;
+	justify-content: flex-start;
+	margin: auto 0;
+	min-height: 100%;
+}
 
-/*#login-btn {
+#chat-box {
+	background: #fff;
+	padding: 10px;
+}
+
+.vote-card {
 	border-radius: 1px solid;
 	background: #fff;
 	text-transform: uppercase;
-    border-width: 2px;
+    border-width: 1px;
     border-style: none;
-    border-color: none;
+    border-color: #fff;
     border-image: initial;
-    padding: 10px 60px;
+    padding: 10px;
     margin-bottom: 20px;
-}*/
+    width: 100%;
+    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+	font-weight: bold;
+	transition: 0.5s;
+	background-size: 200% auto;
+	box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+.vote-card:hover,
+.play-card:hover {
+	background-position: right center; 
+	color: #fff;
+}
+
+.play-card {
+	border-radius: 1px solid;
+	background: #fff;
+	text-transform: uppercase;
+    border-width: 1px;
+    border-style: none;
+    border-color: #fff;
+    border-image: initial;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    font-weight: bold;
+    background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
+	transition: 0.5s;
+	background-size: 200% auto;
+	box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+}
+
 
 .example_card {
         width: 60px;
@@ -146,6 +196,101 @@ header {
 }
 
 
+#sign-up-btn,
+#login-btn {
+	border-radius: 1px solid;
+	background: #fff;
+	text-transform: uppercase;
+    border-width: 1px;
+    border-style: none;
+    border-color: #fff;
+    border-image: initial;
+    padding: 10px 60px;
+    margin-bottom: 20px;
+    width: 300px;
+    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+
+	transition: 0.5s;
+	background-size: 200% auto;
+	box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+#sign-up-btn:hover,
+#login-btn:hover {
+	background-position: right center; 
+}
+
+#left-board-blue {
+    width: 200px;
+    background-color: #304D5F;
+}
+
+h1 {
+    margin: 0px 0px 30px 0px;
+    color: #fff;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    max-height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.well {
+	background: #ececec;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.well-outline {
+    background: #ececec;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+
+form input {
+    margin-bottom: 10px;
+    display: block;
+}
+
+#login-well {
+}
+
+
 #main-body {
 	flex: 1;
 	display: flex;
@@ -202,6 +347,11 @@ header {
 	margin: 5px;
 }
 
+.round-card {
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
 .close {
 	float: right;
 }
@@ -227,11 +377,13 @@ header {
 }
 
 .page-footer {
-	background-color: #8099A9;
+	background-color: #7A91A0;
 }
 
 footer {
 	margin: -20px -11px 0px -11px;
+	background-color: #7A91A0;
+	padding: 20px 0px;
 }
 
 /*Margaret's CSS*/
