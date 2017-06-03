@@ -24,15 +24,15 @@
     </nav>
         
     <div class="flex-container">
-        <div id="left-board-blue" class="flex-item">
+        <div id="left-board" class="flex-item dark-blue-background">
         </div>
         <div id="main-board" class="flex-item">
             <h1>Lobby</h1>
             <div class="lobby-flex-container">
-                <div id='lobby-chat-board' class="flex-item">
-                </div>
                 <div id='lobby-aside' class="flex-item">
                     <div id="lobby" class="left-align"></div>
+                </div>
+                <div id='lobby-chat-board' class="flex-item">
                 </div>
             </div>
         </div>
@@ -83,7 +83,6 @@
             gamesCollection.append(item);
         }
 
-
         gamesWell.append(gamesCollection).prepend(gamesTitle);
  
         $('#lobby').append(btnWell).append(gamesWell);
@@ -114,16 +113,21 @@
 
         $('#lobby-chat').append(chatFormDiv);
 
-        // $('#create-game-btn').on('click', createGameForm);
+        $('#create-game-btn').on('click', gameForm);
 
-        // function gameForm() {
-        //     $('<form>').
-        // }
+        function gameForm() {
+            var gameFormDiv = $('<div>');
+            var gameForm = $('<form>');
+            var gameName = $('<input>').attr('id','game-name').attr('placeholder','Name your game').attr('class','');
+            var gamePlayers = $('<input>').attr('id','game-name').attr('placeholder','Number of players').attr('type','number');
+            var gameSubmit = $('<input>').attr('id','game-submit').attr('type','Submit');
 
+            gameForm.append(gameName).append(gamePlayers).append(gameSubmit);
 
-        // function createGameForm() {
-        //     btnWell.append(function(gameform()));
-        // }
+            gameFormDiv.append(gameForm);
+            
+            btnWell.html(gameFormDiv);
+        }
 
 
 
