@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css Compiled and minified CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/style.css" media="screen,projection" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-wrapper">
+            <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
+            <ul id="player-info" class="right hide-on-med-and-down">
+            </ul>
+        </div>
+    </nav>
+        
+    <div class="flex-container">
+        <div id="left-board-blue" class="flex-item">
+        </div>
+        <div id="main-board" class="flex-item">
+            <h1>Lobby</h1>
+            <div class="lobby-flex-container">
+                <div id='lobby-chat-board' class="flex-item">
+                </div>
+                <div id='lobby-aside' class="flex-item">
+                    <div id="lobby" class="left-align"></div>
+                </div>
+            </div>
+        </div>
+        <div id="right-board" class="flex-item">
+
+        </div>
+    </div> 
+    
+
+    <footer class="flex-container">
+        <div class="flex-item">
+            © 2017 Copyright Team Name<br>
+            
+        </div>
+        <div class="flex-item">
+            <a class="" href="">Dixit Online</a>
+        </div>
+    </footer>
+    <!-- Main Body Closing Div -->
+    </div>
+
+                        
+
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/jquery.cloudinary.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+    <script type="text/javascript" src="assets/javascript/api.js"></script><!-- 
+    <script type="text/javascript" src="assets/javascript/game.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <script type="text/javascript">
+        var createBtn = $('<button>').attr('id','create-game-btn').attr('value','Submit').attr('class','').text('Create New Game');
+        var btnWell = $('<div>').attr('class','well').append(createBtn);
+        var gamesWell = $('<div>').attr('id','games-listing').attr('class','well');
+
+        var gamesCollection = $('<ul>').attr('class','collection');
+        var gamesTitle = $('<h3>').text('Join a Game');
+
+        var gameNames = ['Fun Room' , 'New Game', 'Dixit Masters', '#1 Team'];
+
+        for (var i = 0; i < gameNames.length; i++) {
+            var item = $('<li>').html('<div>' + gameNames[i] + '<button href="#!" class="secondary-content">Join</button></div').attr('class','collection-item');
+            gamesCollection.append(item);
+        }
+
+
+        gamesWell.append(gamesCollection).prepend(gamesTitle);
+ 
+        $('#lobby').append(btnWell).append(gamesWell);
+
+        var chatWell = $('<div>').attr('class','well left-align').attr('id','lobby-chat');
+        var chatName = $('<span>').attr('class','chat-name').text('Margaret: ' );
+        var chatBox = $('<div>').attr('id','chat-box');
+        var chatMsg = $('<div>').attr('id','chat-messages');
+        var chatDiv = $('<div>').text('Talking shit here');
+        var chatTitle = $('<h3>').text('Chat');
+
+        chatDiv.prepend(chatName);
+        chatMsg.append(chatDiv);
+        chatBox.append(chatMsg);
+
+        chatWell.append(chatTitle).append(chatBox);
+
+        $('#lobby-chat-board').append(chatWell);
+
+
+        var chatFormDiv = $('<div>');
+        var chatForm = $('<form>');
+        var chatInput = $('<input>').attr('id','chat-input').attr('placeholder','Send a chat message');
+        var chatSubmit = $('<input>').attr('id','chat-submit').attr('type','Submit');
+
+        chatForm.append(chatInput).append(chatSubmit);
+        chatFormDiv.append(chatForm);
+
+        $('#lobby-chat').append(chatFormDiv);
+
+        // $('#create-game-btn').on('click', createGameForm);
+
+        // function gameForm() {
+        //     $('<form>').
+        // }
+
+
+        // function createGameForm() {
+        //     btnWell.append(function(gameform()));
+        // }
+
+
+
+    </script>
+   
+
+</body>
+</html>
