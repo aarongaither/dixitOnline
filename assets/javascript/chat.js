@@ -1,9 +1,10 @@
-const chat = (function(){
+const chat = (function() {
     let gameID = 'lobby';
     let db = firebase.database().ref('/' + gameID + '/chat');
     let initialDataLoaded = false;
 
-    let _validChat = (msg) => { return msg !== '' && msg.length < 144 ? true : false }
+    let _validChat = (msg) => {
+        return msg !== '' && msg.length < 144 ? true : false }
 
     let _postChat = function(name, msg) {
         let chat = db.push();
@@ -13,21 +14,20 @@ const chat = (function(){
         })
     }
 
-    let _makeChatLine = function (name, msg) {
-        let msgTxt = name + ': ' + msg;
-        let msgDiv = $('<div>').text(msgTxt);
+    let _makeChatLine = function(name, msg) {
+        let msgDiv = $('<div>').html('<span class="chat-name">' + name + ': </span>' + msg);
         $('#chat-messages').append(msgDiv);
         $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
     }
 
-    let _setDataLoaded = function () {
+    let _setDataLoaded = function() {
         //turn on toast for future messages
         db.once('value', function(snap) {
-          initialDataLoaded = true;
+            initialDataLoaded = true;
         });
     }
 
-    let setDBListener = function () {
+    let _setDBListener = function() {
         //load relevant chats on page load and listen for future changes
         db.on('child_added', function(snap) {
             let name = snap.val().name;
@@ -40,22 +40,24 @@ const chat = (function(){
         })
     }
 
-    let setGameListener = function (newID) {
+    let setGameListener = function(newID) {
         db.off('child_added');
         initialDataLoaded = false;
         gameID = newID;
         db = firebase.database().ref('/' + gameID + '/chat');
-        setDBListener();
+        _setDBListener();
         _setDataLoaded();
     }
 
-    let getGameID = () => {return gameID}
+    let getGameID = () => {
+        return gameID }
 
-    let getDBPath = () => {return db}
+    let getDBPath = () => {
+        return db }
 
-    let clearChats = () => {$('#chat-messages').empty();}
+    let clearChats = () => { $('#chat-messages').empty(); }
 
-    let loadChats = function () {
+    let loadChats = function() {
         db.once('value', function(snap) {
             let name = snap.val().name;
             let msg = snap.val().msg;
@@ -63,10 +65,10 @@ const chat = (function(){
         })
     }
 
-    $(document).on('click', '#chat-submit', function () {
+    $(document).on('click', '#chat-submit', function() {
         event.preventDefault();
         let msg = $('#chat-input').val().trim();
-        if (_validChat(msg)){
+        if (_validChat(msg)) {
             let name = auth.curUser().displayName;
             _postChat(name, msg)
         }
@@ -74,15 +76,15 @@ const chat = (function(){
     })
 
     //load lobby listener by default
-    setDBListener();
+    _setDBListener();
     _setDataLoaded();
 
     return {
-        getDBPath : getDBPath,
-        getGameID : getGameID,
-        setGameListener : setGameListener,
-        loadChats : loadChats,
-        clearChats : clearChats
+        getDBPath: getDBPath,
+        getGameID: getGameID,
+        setGameListener: setGameListener,
+        loadChats: loadChats,
+        clearChats: clearChats
     }
 
 })()
