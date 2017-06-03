@@ -7,6 +7,7 @@
     <!--Import materialize.css Compiled and minified CSS-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
     <link type="text/css" rel="stylesheet" href="assets/css/style.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="assets/css/login.css" media="screen,projection" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,18 +18,16 @@
 
   <nav>
     <div class="nav-wrapper">
-      <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
-      <ul id="player-info" class="right hide-on-med-and-down">
-      </ul>
     </div>
   </nav>
         
     <div class="flex-container">
         <div id="left-board" class="flex-item">
-         
         </div>
         <div id="main-board" class="flex-item">
-            <div id="player-info"></div>     
+            <img class="" height="200" src="assets/images/dixitlogo.png">
+            <h1>Let's play Dixit</h1>
+            <div id="player-login"></div>     
         </div>
         <div id="right-board" class="flex-item">
 
@@ -36,14 +35,14 @@
     </div> 
     
 
-
-    <footer class="page-footer">
-            <div class="footer-copyright">
-            <div class="container">© 2014 Copyright Team Name
-                <a class="grey-text text-lighten-4 right" href="#!">Dixit Online</a>
-            </div>
-            </div>
-      
+    <footer class="flex-container">
+        <div class="flex-item">
+            © 2017 Copyright Team Name<br>
+            
+        </div>
+        <div class="flex-item">
+            <a class="" href="">Dixit Online</a>
+        </div>
     </footer>
     <!-- Main Body Closing Div -->
     </div>
@@ -70,16 +69,16 @@
 
         // Create a sign up button 
         function signUpButton(){
-            var signUpBtn = $('<a>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup');
-            $('#player-info').append(signUpBtn);
+            var signUpBtn = $('<button>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup').attr('class', ' animated fadeInDownBig');
+            $('#player-login').append(signUpBtn).append('<br>');
         }
 
         signUpButton();
 
         // Create a login button 
         function loginButton(){
-            var loginBtn = $('<a>').html('Login').attr('id', 'login-btn').attr('value', 'login');
-            $('#player-info').append(loginBtn);
+            var loginBtn = $('<button>').html('Login').attr('id', 'login-btn').attr('value', 'login');
+            $('#player-login').append(loginBtn);
         }
 
         loginButton();
@@ -111,7 +110,7 @@
             var modalBtn = $('<button>').attr('class', 'close').html('x');
             
             // Add X to modal
-            modalContent.append(modalBtn); 
+            modalContent.prepend(modalBtn); 
             $('.close').on('click', closeModal);
  
         
