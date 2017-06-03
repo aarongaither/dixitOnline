@@ -57,8 +57,7 @@ apiTests = {
     }
 }
 
-// Initialize Firebase
-var fireConfig = {
+const fireConfig = {
     apiKey: "AIzaSyBY_Xzums7MHPwKGLdSQ_uR9q3nTq76E5w",
     authDomain: "dixit-e12e5.firebaseapp.com",
     databaseURL: "https://dixit-e12e5.firebaseio.com",
