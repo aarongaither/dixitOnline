@@ -164,13 +164,23 @@ let game = {
                                 userRef.child(userKeyArray[i]).update({
                                     curr_score: currScore
                                 })
-                            } else if(snap.val()[userKeyArray[i]].role ==="player"){
-
+                            } else if (snap.val()[userKeyArray[i]].role === "player") {
+                                let userCard = selectionObj[userKeyArray[i]];
+                                let nTricked = vCardCountObj[userCard] || 0;
+                                let currScore = snap.val()[userKeyArray[i]].curr_score || 0;
+                                let userGuess = votingObj[userKeyArray[i]];
+                                if (userGuess === currStoryCard) {
+                                    currScore += 3;
+                                }
+                                currScore += nTricked;
+                                userRef.child(userKeyArray[i]).update({
+                                    curr_score: currScore
+                                })
                             }
                         }
                     });
                     break;
-                //no correct guesses
+                    //no correct guesses
                 default:
                     console.log("noone guessed the storyTeller's card")
                     userRef.once("value", function(snap) {
@@ -187,6 +197,10 @@ let game = {
                     });
                     break;
             }
+
+            gameRef.update({
+                curr_state: 6
+            })
         }
     },
 
@@ -382,48 +396,50 @@ gameRef.child("curr_state").on("value", function(snap) {
     let currState = snap.val();
     let sCardsArray = [];
 
+    switch (currState) {
 
-
-    if (currState === 4) { //state 4 is the start of the voting stage
-        // console.log("current state", currState)
-        gameRef.child("curr_story_card").once("value", function(snap) {
-            let tempArray = [];
-            tempArray.push(snap.val());
-            sCardsArray = sCardsArray.concat(tempArray);
-        }).then(function() {
-
-            cardSelectedRef.once("value", function(snap) {
+        case 4: //state 4 is the start of the voting stage
+            // console.log("current state", currState)
+            gameRef.child("curr_story_card").once("value", function(snap) {
                 let tempArray = [];
-                tempArray = Object.values(snap.val())
+                tempArray.push(snap.val());
                 sCardsArray = sCardsArray.concat(tempArray);
-            })
-        }).then(function() {
-            //shuffle for each player differently - to make consistent have to push to DB and pull down.
-            sCardsArray = cards.shuffleDeck(sCardsArray);
-            for (let i = sCardsArray.length - 1; i >= 0; i--) {
-                cards.displaySpecificCard("#scard" + i, sCardsArray, i)
-            }
-        })
-    } else if (currState === 5) { //state of is the start of the scoring stage
-
-        voteSelectedRef.once("value", function(snap) {
-            vCardsObj = snap.val();
-        }).then(function() {
-            gameRef.once("value", function(snap) {
-                sCardsObj = {
-                    [snap.val().curr_teller]: snap.val().curr_story_card
-                }
             }).then(function() {
-                cardSelectedRef.once("value", function(snap) {
-                    sCardsObj = $.extend({}, sCardsObj, snap.val());
-                })
 
-                console.log("State = 5", vCardsObj, sCardsObj)
-                if (player.role === "storyTeller") {
-                    game.scoring(sCardsObj, vCardsObj);
+                cardSelectedRef.once("value", function(snap) {
+                    let tempArray = [];
+                    tempArray = Object.values(snap.val())
+                    sCardsArray = sCardsArray.concat(tempArray);
+                })
+            }).then(function() {
+                //shuffle for each player differently - to make consistent have to push to DB and pull down.
+                sCardsArray = cards.shuffleDeck(sCardsArray);
+                for (let i = sCardsArray.length - 1; i >= 0; i--) {
+                    cards.displaySpecificCard("#scard" + i, sCardsArray, i)
                 }
             })
-        })
+            break;
+        case 5: //state of is the start of the scoring stage
+
+            voteSelectedRef.once("value", function(snap) {
+                vCardsObj = snap.val();
+            }).then(function() {
+                gameRef.once("value", function(snap) {
+                    sCardsObj = {
+                        [snap.val().curr_teller]: snap.val().curr_story_card
+                    }
+                }).then(function() {
+                    cardSelectedRef.once("value", function(snap) {
+                        sCardsObj = $.extend({}, sCardsObj, snap.val());
+                    })
+
+                    console.log("State = 5", vCardsObj, sCardsObj)
+                    if (player.role === "storyTeller") {
+                        game.scoring(sCardsObj, vCardsObj);
+                    }
+                })
+            })
+            break;
     }
 })
 
@@ -452,5 +468,5 @@ voteSelectedRef.on("value", function(snap) {
 
 
 function getKeyByValue(object, value) {
-  return Object.keys(object).find(key => object[key] === value);
+    return Object.keys(object).find(key => object[key] === value);
 }
