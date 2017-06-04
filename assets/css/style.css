@@ -32,7 +32,6 @@ header {
 
 #left-board {
 	width: 200px;
-	background-color: grey;
 }
 
 #main-board {
@@ -52,12 +51,13 @@ header {
 
 #lobby-chat-board {
 	flex: 2;
-	margin-right: 20px;
+	margin-left: 20px;
 }
 
 #lobby-aside {
 	flex: 1;
 }
+
 .lobby-flex-container {
 	display: flex; /* or inline-flex */
 	flex-direction: row;
@@ -220,8 +220,11 @@ header {
 	background-position: right center; 
 }
 
-#left-board-blue {
-    width: 200px;
+.dark-blue-background {
+    background-color: #304D5F;
+}
+
+.grey-background {
     background-color: #304D5F;
 }
 
@@ -332,6 +335,14 @@ form input {
 	text-align: center;
 }
 
+.score-flex-container {
+	display: flex; /* or inline-flex */
+	flex-direction: row;
+	justify-content: flex-start;
+	margin: auto 0;
+	min-height: 100%;
+}
+
 .player-score {
 	background-color: grey;
 	color: white;
@@ -388,21 +399,30 @@ footer {
 
 /*Margaret's CSS*/
 
-	#player-score-div {
-		height: 100%;
-		margin-bottom: 20px;
+	.player-score-div {
+		margin: 5px 5px 20px 0px;
 		background-color: #B5C7D7;
 	}
-	#player-one-bar {
+	#player-one-bar,
+	#player-two-bar,
+	#player-three-bar,
+	#player-four-bar,
+	#player-five-bar,
+	#player-six-bar {
 	    width: 15px;
 	    height: 100%;
 	    background-color: #847440;
 	    position: relative;
 	}
-	#player-one-progress {
+	#player-one-progress,
+	#player-two-progress,
+	#player-three-progress,
+	#player-four-progress,
+	#player-five-progress,
+	#player-six-progress {
 	    width: 15px;
 	    height: 20px;
 	    background-color: green;
 	    position: absolute;
 	    bottom: 0px;
-}
+	}
