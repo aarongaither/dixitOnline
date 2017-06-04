@@ -218,9 +218,9 @@ let game = {
     //need to update possibly to autocheck hand limit vs. handsize
     checkAndDeal: function(deckArray, nCards) {
         userRef.once("value").then(function(snap) {
-            let keysArray = Object.keys(snap.val());
+            let userKeyArray = Object.keys(snap.val());
 
-            keysArray.forEach(function(key) {
+            userKeyArray.forEach(function(key) {
                 // if (playerHandRef.child(key).exists()) {
                 //     cardsNeeded = playerHandRef.child(key).once("value", function(snap) {
                 //         currCards = snap.val().length
@@ -321,19 +321,18 @@ $(".modal-footer").click(function() {
         gameRef.update({
             curr_story_card: $(this).siblings(".fahad-test").attr("card-value")
         })
-
         gameRef.update({
             curr_state: 2 //move onto story telling
         })
+        $(this).parent().remove();
     } else if (player.role === "player" && game.currState === 3) {
         let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
         let playerKey = player.key;
         cardSelectedRef.update({
             [playerKey]: cardSelection
         })
-
+        $(this).parent().remove();
         player.selectedCard = cardSelection;
-
     } else if (player.role === "player" && game.currState === 4) {
         let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
         let playerKey = player.key;
