@@ -89,7 +89,7 @@ const loginPage = (function() {
         formSignup.append(signUpTitle).append(signUpUsername).append(signUpEmail).append(signUpPassword).append(signUpPassword2).append(submitSignup);
 
         $('.well-outline').append(formSignup);
-        $('.modal').show();
+        $('#modal').show();
     }
 
     let _createLoginModal = function() {
@@ -126,11 +126,12 @@ const loginPage = (function() {
         formLogin.append(loginTitle).append(loginEmail).append(loginPassword).append(submitLogin);
 
         $('.well-outline').append(formLogin);
-        $('.modal').show();
+        $('#modal').show();
     }
 
     let cleanUpLoginPage = function() {
         $('#main-board').empty();
+        $('#modal').remove();
         $(document).off('click', '#sign-up-btn');
         $(document).off('click', '#login-btn');
     }
@@ -306,3 +307,5 @@ let dealCards = function() {
         }, delay)
     }
 }
+
+loginPage.createPage();
