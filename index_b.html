@@ -167,7 +167,6 @@
                 console.log(height);
             }
 
-
     
     // var player = function() {
         // $('.player-1-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
@@ -193,8 +192,8 @@
 
         function createPlayer() {
             for(var i = 0; i < playersArray.length; i++) {
-                var playerName = $('<div>').attr('class', 'player-name').text(playersArray[i]);
-                var playerAvatar = $('<img>').attr('src', '').attr('class', 'circle responsive-img');
+                var playerName = $('<div>').attr('class', 'player-name center').text(playersArray[i]);
+                var playerAvatar = $('<img>').attr('src', avatarObj.genAvatarURL(playerColors[i])).attr('class', 'circle responsive-img');
                 var playerScore = $('<div>').html(score).attr('class', 'animated fadeInUp');
                 var playerPoints = $('<div>').attr('class','circle responsive-img total-points').append(playerScore);
                 var playerCard = $('<div>').attr('id','player-card' + i).attr('class','player-card').append(playerAvatar).append(playerName).append(playerPoints);

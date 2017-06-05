@@ -69,6 +69,7 @@ header {
 #chat-box {
 	background: #fff;
 	padding: 10px;
+    min-height: 200px;
 }
 
 .vote-card {
