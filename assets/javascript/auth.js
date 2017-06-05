@@ -1,10 +1,12 @@
 const auth = (function() {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            //run login func here
+            loginPage.cleanUpPage();
             lobbyPage.createPage();
         } else {
-            console.log("how'd we get here?");
+            lobbyPage.cleanUpPage();
+            gamePage.cleanUpPage();
+            loginPage.createPage();
         }
     });
 
@@ -97,10 +99,15 @@ const auth = (function() {
         }
     }
 
+    let signOut = function () {
+        firebase.auth().signOut();
+    }
+
     return {
         curUser: curUser,
         signUp: signUp,
         signIn: signIn,
-        errorHandler: errorHandler
+        errorHandler: errorHandler,
+        signout: signOut
     }
 })()
