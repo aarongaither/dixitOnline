@@ -238,20 +238,20 @@ let game = {
 
             userKeyArray.forEach(function(key) {
                 playerHandRef.child(key).once("value", function(snap) {
-                    let currHand = [];
-                    let nCardsNeeded = game.nHandSize;
-                    if (snap.exists()) {
-                        let currHandSize = snap.val().length;
-                        currHand = snap.val();
-                        nCardsNeeded = nCardsNeeded - currHandSize;
-                        console.log("in the if statement for check and deal", currHand, nCardsNeeded)
-                    }
-                    currHand = currHand.concat(game.dealingHand(deckArray, nCardsNeeded));
-                    playerHandRef.update({
-                        [key]: currHand
-                    });
-                })
-                console.log("inside the for each statement in check and deal", key)
+                        let currHand = [];
+                        let nCardsNeeded = game.nHandSize;
+                        if (snap.exists()) {
+                            let currHandSize = snap.val().length;
+                            currHand = snap.val();
+                            nCardsNeeded = nCardsNeeded - currHandSize;
+                            console.log("in the if statement for check and deal", currHand, nCardsNeeded)
+                        }
+                        currHand = currHand.concat(game.dealingHand(deckArray, nCardsNeeded));
+                        playerHandRef.update({
+                            [key]: currHand
+                        });
+                    })
+                    // console.log("inside the for each statement in check and deal", key)
             })
             gameRef.update({
                 curr_state: 1 //game start
@@ -280,22 +280,54 @@ let game = {
     roundEndAssignRoles: function() {
         let newPlayOrder = [];
         gameRef.child("curr_play_order").once("value", function(snap) {
-            newPlayOrder = snap.val();
-        }).then(function() {
-            for (let i = newPlayOrder.length - 1; i >= 0; i--) {
-                if (player.key === newPlayOrder[i]) {
-                    if (i === 0) {
-                        userRef.child(newPlayOrder[i]).update({
-                            role: "storyTeller"
-                        })
-                    } else {
-                        userRef.child(newPlayOrder[i]).update({
-                            role: "player"
-                        })
-                    }
+                newPlayOrder = snap.val();
+
+                for (let i = newPlayOrder.length - 1; i >= 0; i--) {
+                    userRef.once("value", function(innerSnap) {
+                        let userKeyArray = Object.keys(innerSnap.val());
+
+                        console.log("REAR first for loop", i)
+                        console.log("REAR second keys", userKeyArray)
+
+                        for (let j = userKeyArray.length - 1; j >= 0; j--) {
+
+                            console.log("REAR second for loop", i, j)
+                            console.log("REAR second keys", userKeyArray[j], newPlayOrder[i])
+
+                            if (userKeyArray[j] === newPlayOrder[i]) {
+                                console.log("REAR inside the if loop")
+                                if (i === 0) {
+                                    userRef.child(userKeyArray[j]).update({
+                                        role: "storyTeller"
+                                    })
+                                } else {
+                                    userRef.child(userKeyArray[j]).update({
+                                        role: "player"
+                                    })
+                                }
+                                return;
+                            }
+                        }
+
+                    })
                 }
-            }
-        })
+
+            })
+            // .then(function() {
+            //     for (let i = newPlayOrder.length - 1; i >= 0; i--) {
+            //         if (player.key === newPlayOrder[i]) {
+            //             if (i === 0) {
+            //                 userRef.child(newPlayOrder[i]).update({
+            //                     role: "storyTeller"
+            //                 })
+            //             } else {
+            //                 userRef.child(newPlayOrder[i]).update({
+            //                     role: "player"
+            //                 })
+            //             }
+            //         }
+            //     }
+            // })
     }
 };
 
@@ -326,7 +358,7 @@ userRef.once("value", function(snap) {
     console.log("numPlayers:", numPlayers);
 
     if (numPlayers > 3) {
-        console.log("inside the start listener if statement");
+        // console.log("inside the start listener if statement");
         game.startGame();
     }
 
@@ -401,7 +433,7 @@ $(".modal-footer").click(function() {
         let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
         let playerKey = player.key;
         if (cardSelection != player.selectedCard) {
-            console.log("inside the voting if statement");
+            // console.log("inside the voting if statement");
             voteSelectedRef.update({
                 [playerKey]: cardSelection
             })
@@ -492,7 +524,7 @@ gameRef.child("curr_state").on("value", function(snap) {
                         sCardsObj = $.extend({}, sCardsObj, snap.val());
                     })
 
-                    console.log("State = 5", vCardsObj, sCardsObj)
+                    // console.log("State = 5", vCardsObj, sCardsObj)
                     if (player.role === "storyTeller") {
                         game.scoring(sCardsObj, vCardsObj);
                     }
@@ -514,7 +546,6 @@ gameRef.child("curr_state").on("value", function(snap) {
                     game.roundEndAssignRoles();
                 })
             }
-            game.roundEndAssignRoles();
             break;
     }
 })
