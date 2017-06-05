@@ -1,16 +1,17 @@
 const auth = (function() {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            //run login func here
-            console.log(user)
-            console.log('user logged in:', user.displayName);
+            loginPage.cleanUpPage();
+            lobbyPage.createPage();
         } else {
-            console.log("how'd we get here?");
+            lobbyPage.cleanUpPage();
+            gamePage.cleanUpPage();
+            loginPage.createPage();
         }
     });
 
     //click listener for signin form
-    $(document).on('click', '#sign-in', function() {
+    $(document).on('click', '#submit-login', function() {
         event.preventDefault();
 
         //get form values
@@ -27,11 +28,11 @@ const auth = (function() {
     })
 
     //click listener for signup form
-    $(document).on('click', '#sign-up', function() {
+    $(document).on('click', '#submit-signup', function() {
         event.preventDefault();
 
         //get form values
-        let email = $('#user-email').val().trim();
+        let email = $('#user-email-signup').val().trim();
         let password = $('#user-password').val().trim();
         let password2 = $('#user-password2').val().trim();
         let name = $('#user-account').val().trim();
@@ -98,10 +99,15 @@ const auth = (function() {
         }
     }
 
+    let signOut = function () {
+        firebase.auth().signOut();
+    }
+
     return {
         curUser: curUser,
         signUp: signUp,
         signIn: signIn,
-        errorHandler: errorHandler
+        errorHandler: errorHandler,
+        signout: signOut
     }
 })()

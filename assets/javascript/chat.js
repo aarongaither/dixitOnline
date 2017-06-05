@@ -75,10 +75,6 @@ const chat = (function() {
         $('#chat-input').val('');
     })
 
-    //load lobby listener by default
-    _setDBListener();
-    _setDataLoaded();
-
     return {
         getDBPath: getDBPath,
         getGameID: getGameID,
