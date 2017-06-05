@@ -13,8 +13,11 @@ let gameRef = database.ref("/game")
 //holds player's current hand
 let playerHandRef = database.ref("/player_hand")
 
-//holds player's card selection for given story prompt
+//holds player's card selection for given round
 let cardSelectedRef = database.ref("/card_selection")
+
+//holds player's vote select for a given round
+let voteSelectedRef = database.ref("/vote_selection")
 
 let cards = {
     oDeck: [],
@@ -39,7 +42,7 @@ let cards = {
         let j = 0;
         let temp = null;
         let tArray = $.extend(true, [], array);
-        
+
         // console.log("this is before the for loop");
         for (i = tArray.length - 1; i > 0; i -= 1) {
             j = Math.floor(Math.random() * (i + 1));
@@ -70,6 +73,7 @@ let cards = {
 let player = {
     role: "",
     key: "",
+    selectedCard: ""
 }
 
 let game = {
@@ -83,17 +87,18 @@ let game = {
         , 4 //player voting
         , 5 //player scoring
         , 6 //round ended
+        , 7 //game end
     ],
     currState: 0,
     //roles and players stored here.
-   
+
     startGame: function() {
         this.startGameAssignRoles();
         cards.createDeck();
         cards.shuffleDeck(cards.oDeck);
         this.checkAndDeal(cards.sDeck, 6);
     },
-    
+
     startGameAssignRoles: function() {
         userRef.orderByChild("dateAdded").once("value").then(function(snap) {
             let usersArray = snap.val();
@@ -116,8 +121,87 @@ let game = {
         })
     },
 
-    scoring: function() {
+    scoring: function(selectionObj, votingObj) {
+        if (player.role === "storyTeller") {
+            let currStoryCard = selectionObj[player.key];
+            let vCardArray = Object.values(votingObj);
+            let vCardCountObj = vCardArray.reduce(function(allVotes, card) {
+                if (card in allVotes) {
+                    allVotes[card]++;
+                } else {
+                    allVotes[card] = 1;
+                }
+                return allVotes;
+            }, {});
+            let nCorrectGuesses = vCardCountObj[currStoryCard];
+            let nGuessingPlayers = game.nplayers - 1;
 
+            switch (true) {
+                //everyone guesses correctly;
+                case (nGuessingPlayers === nCorrectGuesses):
+                    console.log("everyone guessed the storyTeller's card");
+                    userRef.once("value", function(snap) {
+                        userKeyArray = Object.keys(snap.val())
+                        for (let i = userKeyArray.length - 1; i >= 0; i--) {
+                            if (snap.val()[userKeyArray[i]].role === "player") {
+                                let currScore = snap.val()[userKeyArray[i]].curr_score || 0;
+                                currScore += 2;
+                                userRef.child(userKeyArray[i]).update({
+                                    curr_score: currScore
+                                })
+                            }
+                        }
+                    });
+                    break;
+                case (nCorrectGuesses > 0 && nGuessingPlayers > nCorrectGuesses):
+                    console.log("not everyone guessed the storyTeller's card");
+                    userRef.once("value", function(snap) {
+                        userKeyArray = Object.keys(snap.val())
+                        for (let i = userKeyArray.length - 1; i >= 0; i--) {
+                            if (snap.val()[userKeyArray[i]].role === "storyTeller") {
+                                let currScore = snap.val()[userKeyArray[i]].curr_score || 0;
+                                currScore += 3;
+                                userRef.child(userKeyArray[i]).update({
+                                    curr_score: currScore
+                                })
+                            } else if (snap.val()[userKeyArray[i]].role === "player") {
+                                let userCard = selectionObj[userKeyArray[i]];
+                                let nTricked = vCardCountObj[userCard] || 0;
+                                let currScore = snap.val()[userKeyArray[i]].curr_score || 0;
+                                let userGuess = votingObj[userKeyArray[i]];
+                                if (userGuess === currStoryCard) {
+                                    currScore += 3;
+                                }
+                                currScore += nTricked;
+                                userRef.child(userKeyArray[i]).update({
+                                    curr_score: currScore
+                                })
+                            }
+                        }
+                    });
+                    break;
+                    //no correct guesses
+                default:
+                    console.log("noone guessed the storyTeller's card")
+                    userRef.once("value", function(snap) {
+                        userKeyArray = Object.keys(snap.val())
+                        for (let i = userKeyArray.length - 1; i >= 0; i--) {
+                            if (snap.val()[userKeyArray[i]].role === "player") {
+                                let currScore = snap.val()[userKeyArray[i]].curr_score || 0;
+                                currScore += 2;
+                                userRef.child(userKeyArray[i]).update({
+                                    curr_score: currScore
+                                })
+                            }
+                        }
+                    });
+                    break;
+            }
+
+            gameRef.update({
+                curr_state: 6
+            })
+        }
     },
 
     dealingHand: function(deckArray, nCards) {
@@ -179,6 +263,7 @@ connectedRef.on("value", function(snap) {
         userRef.child(key).onDisconnect().remove();
         playerHandRef.child(key).onDisconnect().remove();
         cardSelectedRef.child(key).onDisconnect().remove();
+        voteSelectedRef.child(key).onDisconnect().remove();
     }
 });
 
@@ -218,7 +303,7 @@ playerHandRef.on("value", function(snap) {
 //click listener for current story 
 $("#tell-story-button").click(function(value) {
     //need unique ID in HTML for story text area    
-    let currStory = $("#textarea1-z").val();
+    let currStory = $("#textarea1-z").val().trim();
     if (player.role === "storyTeller" && game.currState === 2) {
         gameRef.update({
             curr_story: currStory
@@ -247,6 +332,17 @@ $(".modal-footer").click(function() {
             [playerKey]: cardSelection
         })
 
+        player.selectedCard = cardSelection;
+
+    } else if (player.role === "player" && game.currState === 4) {
+        let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
+        let playerKey = player.key;
+        if (cardSelection != player.selectedCard) {
+            console.log("inside the voting if statement");
+            voteSelectedRef.update({
+                [playerKey]: cardSelection
+            })
+        }
     }
 })
 
@@ -292,52 +388,85 @@ userRef.on("value", function(snap) {
     }
 });
 
-let vCards = [];
-//add selected cards to the board. 
-function getSelectionCards() {
-    vCards = [];
+//display selected cards in voting section||state change listener
+let vCardsObj = {};
+let sCardsObj = {};
 
-    gameRef.child("curr_story_card").once("value", function(snap) {
-        let tempArray = [];
-        tempArray.push(snap.val());
-        vCards = vCards.concat(tempArray);
-    })
+gameRef.child("curr_state").on("value", function(snap) {
+    let currState = snap.val();
+    let sCardsArray = [];
 
-    cardSelectedRef.once("value", function(snap) {
-        let tempArray = [];
-        tempArray = Object.values(snap.val())
-        vCards = vCards.concat(tempArray);
-    })
+    switch (currState) {
 
-}
+        case 4: //state 4 is the start of the voting stage
+            // console.log("current state", currState)
+            gameRef.child("curr_story_card").once("value", function(snap) {
+                let tempArray = [];
+                tempArray.push(snap.val());
+                sCardsArray = sCardsArray.concat(tempArray);
+            }).then(function() {
 
-function displayCardsVoting() {
-    for (var i = vCards.length - 1; i >= 0; i--) {
-        cards.displaySpecificCard("#card" + i, playerHand, i)
+                cardSelectedRef.once("value", function(snap) {
+                    let tempArray = [];
+                    tempArray = Object.values(snap.val())
+                    sCardsArray = sCardsArray.concat(tempArray);
+                })
+            }).then(function() {
+                //shuffle for each player differently - to make consistent have to push to DB and pull down.
+                sCardsArray = cards.shuffleDeck(sCardsArray);
+                for (let i = sCardsArray.length - 1; i >= 0; i--) {
+                    cards.displaySpecificCard("#scard" + i, sCardsArray, i)
+                }
+            })
+            break;
+        case 5: //state of is the start of the scoring stage
+
+            voteSelectedRef.once("value", function(snap) {
+                vCardsObj = snap.val();
+            }).then(function() {
+                gameRef.once("value", function(snap) {
+                    sCardsObj = {
+                        [snap.val().curr_teller]: snap.val().curr_story_card
+                    }
+                }).then(function() {
+                    cardSelectedRef.once("value", function(snap) {
+                        sCardsObj = $.extend({}, sCardsObj, snap.val());
+                    })
+
+                    console.log("State = 5", vCardsObj, sCardsObj)
+                    if (player.role === "storyTeller") {
+                        game.scoring(sCardsObj, vCardsObj);
+                    }
+                })
+            })
+            break;
     }
+})
+
+//check to see if everyone has voted and change state to scoring
+voteSelectedRef.on("value", function(snap) {
+    let totalPlayers = game.nplayers;
+
+    userRef.on("value", function(internalSnap) {
+        totalPlayers = internalSnap.numChildren()
+    });
+
+    game.nplayers = totalPlayers;
+
+    let currSelectedCards = snap.numChildren();
+
+    // console.log("count of total players and current selected cards", totalPlayers, currSelectedCards)
+    if (totalPlayers - 1 === currSelectedCards && game.currState === 4) {
+        gameRef.update({
+            curr_state: 5 // move onto scoring phase
+        })
+    };
+})
+
+//get the information for scoring
+
+
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
 }
-
-
-
-// playerHandRef.on("value",function(snap) {
-//     let keysArray = Object.keys(snap.val());
-//     let playerHand =[];
-
-//     for (let i = keysArray.length - 1; i >= 0; i--) {
-//         if (player.key === keysArray[i]) {
-//             playerHand = snap.child(keysArray[i]).val()
-//             console.log("inside the if loop for the player ref hand deal", playerHand)
-//             return;
-//         }
-//     }
-
-//     for (let i = playerHand.length - 1; i >= 0; i--) {
-//         let cardDiv = $("#dealt-card-container").append($("<div>",{"id":"card"+[i]}));
-//         cards.displaySpecificCard(cardDiv, playerHand, i);
-//         console.log(playerHand[i]);
-//     }
-// })
-
-// function getKeyByValue(object, value) {
-//   return Object.keys(object).find(key => object[key] === value);
-// }
