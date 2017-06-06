@@ -56,19 +56,9 @@ let cards = {
         return tArray;
     },
 
-    displaySpecificCard: function(div, idName, array, pos) {
-        // $(div).empty();
-        // $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card").attr("height", "150")).attr("card-value", array[pos]);  
-
-        let cardBox = $('<div>').attr('class', 'col card-stock');
-        let newCard = $('<div>').attr('id', idName + i);
-        let cardImg = $.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card").attr("height", "150").attr("card-value", array[pos]);
-
-        let cardSubmitBtn = $('<button>').attr('class', 'play-card').html('Play');
-
-        newCard.attr('class', 'animated fadeInRight').append(cardImg);
-        let cards = cardBox.append(newCard).append(cardSubmitBtn);
-        $(div).append(cards);
+    displaySpecificCard: function(div, array, pos) {
+        $(div).empty();
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card").attr("height", "150")).attr("card-value", array[pos]);
         $(".materialboxed").materialbox();
     },
 
@@ -394,23 +384,24 @@ playerHandRef.on("value", function(snap) {
     if (snap.child(player.key).exists()) {
         playerHand = snap.child(player.key).val()
 
-        for (let i = 0; i < playerHand.length; i++) {
+        for (let i = playerHand.length - 1; i >= 0; i--) {
 
             let delay = i * 100;
+
             setTimeout(function() {
-                console.log("inside the playhand listener", i, playerHand[i]);
-                cards.displaySpecificCard("#given-cards", "card" + i, playerHand, i)
-                    console.log(playerHand[i]);
-            }, delay);
+                cards.displaySpecificCard("#card" + i, playerHand, i)
+                    // console.log(playerHand[i]);
+            }, delay)
         }
+
         playerHandRef.off("value");
     }
 })
 
 //click listener for current story 
-$(".submit").click(function(value) {
+$("#tell-story-button").click(function(value) {
     //need unique ID in HTML for story text area    
-    let currStory = $("#storyteller-story").val().trim();
+    let currStory = $("#textarea1-z").val().trim();
     if (player.role === "storyTeller" && game.currState === 2) {
         gameRef.update({
             curr_story: currStory
