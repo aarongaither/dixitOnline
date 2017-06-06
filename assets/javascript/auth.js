@@ -3,6 +3,7 @@ const auth = (function() {
         if (user) {
             loginPage.cleanUpPage();
             lobbyPage.createPage();
+            chat.setGameListener('lobby')
         } else {
             lobbyPage.cleanUpPage();
             gamePage.cleanUpPage();
@@ -49,6 +50,20 @@ const auth = (function() {
             //run signUp func
             auth.signUp(email, password, name);
         }
+    })
+
+    $(document).on('click', '#game-submit', function() {
+        event.preventDefault();
+
+        let gameName = $('#game-name').val().trim();
+        let gamePlayers = $('#players').val().trim();
+        let gameRounds = $('#rounds').val().trim();
+
+        $('#game-name').val('')
+        $('#players').val('')
+        $('#rounds').val('')
+
+        _makeGame(gameName, gamePlayers, gameRounds);
     })
 
     let _setupUserinDB = function(uid, name) {
@@ -102,6 +117,17 @@ const auth = (function() {
     let signOut = function () {
         firebase.auth().signOut();
     }
+
+    let _makeGame = function(name, players, rounds) {
+        let game = firebase.database().ref('/games').push()
+        game.set({
+            game_name: name,
+            max_players: players,
+            max_rounds: rounds
+        })
+    }
+
+    let 
 
     return {
         curUser: curUser,

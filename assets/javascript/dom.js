@@ -13,8 +13,8 @@ const loginPage = (function() {
         let signUpBtn = $('<button>').html('Sign Up').attr('id', 'sign-up-btn').attr('value', 'signup').attr('class', ' animated fadeInDownBig');
         let loginBtn = $('<button>').html('Login').attr('id', 'login-btn').attr('value', 'login');
         $('#player-login').append(signUpBtn).append('<br>').append(loginBtn);
-        $(document).on('click', '#sign-up-btn', function() { _createSignUpModal() });
-        $(document).on('click', '#login-btn', function() { _createLoginModal() });
+        $(document).on('click', '#sign-up-btn', _createSignUpModal);
+        $(document).on('click', '#login-btn', _createLoginModal);
     }
 
     let _createModal = function() {
@@ -41,7 +41,6 @@ const loginPage = (function() {
 
     let _createSignUpModal = function() {
         _createModal();
-
         let formSignup = $('<form>').attr('id', 'user-signup');
         let signUpTitle = $('<h2>').html('Sign Up');
 
@@ -52,6 +51,7 @@ const loginPage = (function() {
             name: "user-account",
             placeholder: "Username",
             type: "text",
+            maxlength: '20'
         });
 
         let signUpEmail = $('<input>').attr({
@@ -59,7 +59,7 @@ const loginPage = (function() {
             id: "user-email-signup",
             name: "user-email-signup",
             placeholder: "Email Address",
-            type: "email",
+            type: "email"
         });
 
         let signUpPassword = $('<input>').attr({
@@ -68,6 +68,7 @@ const loginPage = (function() {
             name: "user-password",
             placeholder: "Password",
             type: "text",
+            minlength: '6'
         })
 
         let signUpPassword2 = $('<input>').attr({
@@ -76,6 +77,7 @@ const loginPage = (function() {
             name: "user-password2",
             placeholder: "Confirm Password",
             type: "text",
+            minlength: '6'
         })
 
         let submitSignup = $('<input>').attr({
@@ -168,13 +170,11 @@ let lobbyPage = (function() {
         $('#lobby').append(btnWell).append(gamesWell);
 
         let chatWell = $('<div>').attr('class', 'well left-align').attr('id', 'lobby-chat');
-        let chatName = $('<span>').attr('class', 'chat-name').text('Margaret: ');
         let chatBox = $('<div>').attr('id', 'chat-box');
         let chatMsg = $('<div>').attr('id', 'chat-messages');
-        let chatDiv = $('<div>').text('Talking shit here');
+        let chatDiv = $('<div>');
         let chatTitle = $('<h3>').text('Chat');
 
-        chatDiv.prepend(chatName);
         chatMsg.append(chatDiv);
         chatBox.append(chatMsg);
 
@@ -193,25 +193,33 @@ let lobbyPage = (function() {
 
         $('#lobby-chat').append(chatFormDiv);
 
-        $(document).on('click','#create-game-btn', gameForm);
+        $(document).on('click','#create-game-btn', _gameForm);
 
-        function gameForm() {
+        function _gameForm() {
             let gameFormDiv = $('<div>');
             let gameForm = $('<form>');
             let gameName = $('<input>',{
                 id: 'game-name',
-                placeholder: 'Name your game'
+                placeholder: 'Name your game',
+                maxlength: '20'
             })
             let gamePlayers = $('<input>', {
-                id: 'game-name',
+                id: 'players',
                 placeholder: 'Number of players',
                 type: 'number',
                 min: '4',
                 max: '6'
             })
+            let gameRounds = $('<input>',{
+                id: 'rounds',
+                placeholder: 'Rounds to play',
+                type: 'number',
+                min: '6',
+                max: '10'
+            })
             let gameSubmit = $('<input>').attr('id','game-submit').attr('type','Submit');
 
-            gameForm.append(gameName).append(gamePlayers).append(gameSubmit);
+            gameForm.append(gameName).append(gamePlayers).append(gameRounds).append(gameSubmit);
 
             gameFormDiv.append(gameForm);
             
@@ -307,5 +315,3 @@ let dealCards = function() {
         }, delay)
     }
 }
-
-loginPage.createPage();
