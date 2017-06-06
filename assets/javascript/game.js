@@ -1,23 +1,23 @@
 let database = firebase.database();
 
 //will hold the shuffled deck which will decrease as cards are dealt
-let cardRef = database.ref("/cards");
+let cardRef = database.ref("/game/cards");
 
 //will hold users as they connect to the site
-let userRef = database.ref("/users");
+let userRef = database.ref("/game/users");
 let connectedRef = database.ref(".info/connected");
 
 //will hold all card related information
 let gameRef = database.ref("/game")
 
 //holds player's current hand
-let playerHandRef = database.ref("/player_hand")
+let playerHandRef = database.ref("/game/player_hand")
 
 //holds player's card selection for given round
-let cardSelectedRef = database.ref("/card_selection")
+let cardSelectedRef = database.ref("/game/card_selection")
 
 //holds player's vote select for a given round
-let voteSelectedRef = database.ref("/vote_selection")
+let voteSelectedRef = database.ref("/game/vote_selection")
 
 let cards = {
     oDeck: [], //original deck
@@ -81,7 +81,7 @@ let game = {
     nPlayers: 0,
     nHandSize: 6,
     maxPlayers: 4,
-    gamePoint: 30,
+    maxRounds: 2,
     stateArray: [
         0 //initial state
         , 1 //game start initial cards dealt story teller choose card
@@ -126,7 +126,6 @@ let game = {
         })
     },
 
-
     scoring: function(selectionObj, votingObj) {
         if (player.role === "storyTeller") {
             let currStoryCard = selectionObj[player.key];
@@ -142,7 +141,7 @@ let game = {
             let nCorrectGuesses = vCardCountObj[currStoryCard];
             let nGuessingPlayers = game.nPlayers - 1;
 
-            console.log("scoring variables", currStoryCard, vCardArray, vCardCountObj, nCorrectGuesses, nGuessingPlayers);
+            // console.log("scoring variables", currStoryCard, vCardArray, vCardCountObj, nCorrectGuesses, nGuessingPlayers);
 
             switch (true) {
                 //everyone guesses correctly;
@@ -177,7 +176,7 @@ let game = {
                                 let currScore = snap.val()[userKeyArray[i]].curr_score || 0;
                                 currScore += 3;
 
-                                console.log("storyTeller before upload",userKeyArray[i], currScore);
+                                // console.log("storyTeller before upload", userKeyArray[i], currScore);
                                 userRef.child(userKeyArray[i]).update({
                                     curr_score: currScore
                                 })
@@ -190,7 +189,7 @@ let game = {
                                     currScore += 3;
                                 }
                                 currScore += nTricked;
-                                console.log("player before upload",userKeyArray[i], currScore);
+                                // console.log("player before upload", userKeyArray[i], currScore);
                                 userRef.child(userKeyArray[i]).update({
                                     curr_score: currScore
                                 })
@@ -308,7 +307,7 @@ let game = {
                                     role: "storyTeller"
                                 })
                                 gameRef.update({
-                                    curr_teller:userKeyArray[j]
+                                    curr_teller: userKeyArray[j]
                                 })
 
                             } else {
@@ -349,7 +348,7 @@ connectedRef.on("value", function(snap) {
 
 //automatically start game when three players have joined. This will be assigned to enable the start button in the final game.
 userRef.once("value", function(snap) {
-    numPlayers = snap.numChildren();
+    let numPlayers = snap.numChildren();
 
     console.log("numPlayers:", numPlayers);
 
@@ -358,6 +357,20 @@ userRef.once("value", function(snap) {
         game.startGame();
     }
 
+})
+
+gameRef.once("value", function(snap) {
+    game.maxPlayers = snap.val().max_players||4;
+    game.maxRounds = snap.val().max_rounds||2;
+
+    //Start Game
+    userRef.once("value", function(userSnap) {
+        let numPlayers = userSnap.numChildren();
+
+        if (numPlayers >= game.maxPlayers) {
+            game.startGame();
+        }
+    })
 })
 
 //insures everyone has the latest shuffled deck locally. Updated as cards are dealt out.
@@ -493,7 +506,6 @@ gameRef.child("curr_state").on("value", function(snap) {
                 tempArray.push(snap.val());
                 sCardsArray = sCardsArray.concat(tempArray);
             }).then(function() {
-
                 cardSelectedRef.once("value", function(snap) {
                     let tempArray = [];
                     tempArray = Object.values(snap.val())
@@ -519,8 +531,7 @@ gameRef.child("curr_state").on("value", function(snap) {
                     cardSelectedRef.once("value", function(snap) {
                         sCardsObj = $.extend({}, sCardsObj, snap.val());
                     })
-
-                    console.log("State = 5", vCardsObj, sCardsObj)
+                    // console.log("State = 5", vCardsObj, sCardsObj)
                     if (player.role === "storyTeller") {
                         game.scoring(sCardsObj, vCardsObj);
                     }
@@ -528,24 +539,30 @@ gameRef.child("curr_state").on("value", function(snap) {
             })
             break;
         case 6: //round end restart round
-            userRef.orderByChild("curr_score").limitToLast(1).once("value", function(snap) {
-                let key = Object.keys(snap.val())
-                console.log(snap.child(key[0]).val().curr_score);
-                console.log(snap.val());
+            gameRef.once("value", function(snap) {
+                let roundNum = snap.child("curr_round").val()||1;
+                let maxRounds = snap.child("max_rounds").val()||game.maxRounds;
 
-                if (snap.child(key[0]).val().curr_score >= game.gamePoint) {
+                console.log(maxRounds, roundNum);
+
+                if (maxRounds === roundNum) {
                     gameRef.update({
                         curr_state: 7
                     })
                 } else {
 
                     if (player.role === "storyTeller") {
-                        gameRef.child("curr_play_order").once("value", function(snap) {
-                            let currPlayOrder = snap.val();
+                        gameRef.once("value", function(snap) {
+                            let currPlayOrder = snap.child("curr_play_order").val();
                             let newPlayOrder = game.playOrderUpdate(currPlayOrder);
+                            let currRound = snap.val().curr_round || 0;
+
+                            currRound++;
+
                             gameRef.update({
                                 curr_play_order: newPlayOrder,
-                                curr_state: 1
+                                curr_state: 1,
+                                curr_round: currRound
                             })
                         }).then(function() {
                             cardSelectedRef.remove();
@@ -555,6 +572,8 @@ gameRef.child("curr_state").on("value", function(snap) {
                     }
                 }
             })
+            break;
+        case 7:
             break;
     }
 })
