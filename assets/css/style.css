@@ -10,6 +10,8 @@ body {
 	background-color: #304D5F;
 	font-family: 'Raleway', arial, sans-serif;
 	text-align: center;
+	background-image: url(../images/dixit_background.jpg);
+	background-size: cover;
 }
 
 header {
@@ -78,9 +80,10 @@ form input {
 
 /* Navigation */
 
-nav .brand-logo {
-	margin: 5px;
+nav .logo {
+	margin-top: 10px;
 }
+
 
 /* Flex box for main game board */
 
@@ -211,7 +214,7 @@ nav .brand-logo {
 /* Dealt and chosen card styling */
 
 .vote-card {
-	border-radius: 1px solid;
+	border-radius: 5px;
 	background: #fff;
 	text-transform: uppercase;
     border-width: 1px;
@@ -219,7 +222,6 @@ nav .brand-logo {
     border-color: #fff;
     border-image: initial;
     padding: 10px;
-    margin-bottom: 20px;
     width: 100%;
     background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
 	font-weight: bold;
@@ -235,7 +237,7 @@ nav .brand-logo {
 }
 
 .play-card {
-	border-radius: 1px solid;
+	border-radius: 5px;
 	background: #fff;
 	text-transform: uppercase;
     border-width: 1px;
@@ -301,14 +303,18 @@ nav .brand-logo {
 	/*background-color: white;*/
 }
 
+.card-shadow {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
 
+}
 
 /* Player detail cards */
 
 .player-card {
 	width: 100%;
 	position: relative;
-	margin: 20px 0px;
+	margin: 10px 0px;
 	padding: 5px;
 	border-radius: 5px;
 }
@@ -463,7 +469,6 @@ nav .brand-logo {
 
 .player-score-div {
 	margin: 5px 5px 20px 0px;
-	background-color: #B5C7D7;
 }
 #player-one-bar,
 #player-two-bar,
@@ -489,7 +494,6 @@ nav .brand-logo {
     bottom: 0px;
 }
 
-
 #player-score-wrapper {
 	height: 60%;
 	margin-top: 20px;
@@ -497,6 +501,124 @@ nav .brand-logo {
 	padding: 5px;
 	position: relative;
 }
+
+.player-score-div {
+	height: 100%;
+	margin-bottom: 20px;
+}
+.player-bar {
+    width: 20px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+.player-progress {
+    width: 20px;
+    height: 48px;
+    background-color: green;
+    position: absolute;
+    bottom: 0px;
+}
+
+
+#ticks {
+  position: absolute; 
+  top: 0px; 
+  left: 0px; 
+  z-index: 1;
+  margin-bottom: -300px;
+  font-size: 10px;
+  font-family: "fira-sans-2", Verdana, sans-serif;
+  width: 100%;
+}
+
+#ticks .tick {
+  position: relative; 
+  border-bottom: 1px dotted #C4C4C4; 
+}
+
+#ticks .tick p {
+    position: absolute;
+    left: -3em;
+    margin: 0;
+    font-size: 0.75em;
+    color: #fff;
+    text-align: right;
+    top: .75em;
+}
+
+#points {
+	display: block;
+	position: absolute;
+	height: 435px;
+	margin: 0px;
+	padding: 0;
+	background: transparent;
+	font-size: 11px;
+	top: 14px;
+}
+
+#points-table-wrapper {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+#points tr, #points th, #points td { 
+  position: absolute;
+  bottom: 0; 
+  width: 20px; 
+  z-index: 2;
+  margin: 0; 
+  padding: 0;
+  text-align: center;
+}
+
+#points td {
+  transition: all .3s ease;
+}
+  
+#points td:hover {
+	background-color: desaturate(#85144b, 100);
+	opacity: .9;
+	color: white;
+}
+  
+#points thead tr {
+  left: 100%; 
+  top: 50%; 
+  bottom: auto;
+  margin: -2.5em 0 0 5em;}
+#points thead th {
+  width: 7.5em; 
+  height: auto; 
+  padding: 0.5em 1em;
+}
+
+#points tbody {
+  height: 100%;
+  padding-top: 2px;
+  color: #AAA;
+}
+
+#points tbody tr {
+  height: 100%;
+  padding-top: 2px;
+  color: #AAA;
+}
+#points #p1 {
+  left: 0;
+}
+#points #p2 {left: 25px;}
+#points #p3 {left: 50px;}
+#points #p4 {left: 75px;}
+#points #p5 {left: 100px;}
+#points #p6 {left: 125px; border-right: none;}
+#points tbody th {bottom: -1.75em; vertical-align: top;
+font-weight: normal; color: #fff;}
+
+
+
 
 
 /* Page footer */

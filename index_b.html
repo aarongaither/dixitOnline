@@ -18,15 +18,13 @@
 
     <nav>
         <div class="nav-wrapper dark-blue">
-            <img class="materialboxed brand-logo" height="50" src="assets/images/dixitlogo.png">
-            <ul id="player-info" class="right hide-on-med-and-down">
-            </ul>
+            <img class="logo" height="44" src="assets/images/dixitlogo.png">
         </div>
     </nav>
         
     <div class="flex-container">
         <div id="left-board" class="flex-item">
-            <h3>Scoreboard</h3>
+            <h3>Scoreboard</h3><!-- 
             <div id="player-score-wrapper" class="grey-blue">
                 <div class="score-flex-container" >
                     <div class="player-score-div">
@@ -66,7 +64,114 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+
+
+            <div id="points-table-wrapper">
+                    <table id="points">
+                        
+                    <thead></thead>
+                    <tbody>
+                        <tr id="p1" >
+                            <th scope="row">P1</th>
+                            <td class="player-score-div" >  
+                                <div class="player-bar">
+                                <div class="player-progress">
+                                    <p>50</p>
+                                </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="p2" >
+                            <th scope="row">P2</th>
+                            <td class="player-score-div" >
+                                <div class="player-bar">
+                                <div class="player-progress">
+                                    <p>50</p>
+                                </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="p3" >
+                            <th scope="row">P3</th>
+                            <td class="player-score-div"">
+                                <div class="player-bar">
+                                <div class="player-progress">
+                                    <p>50</p>
+                                </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="p4">
+                            <th scope="row">P4</th>
+                            <td  class="player-score-div"">
+                                <div class="player-bar">
+                                <div class="player-progress">
+                                    <p>50</p>
+                                </div>
+                                </div>          
+                            </td>
+                        </tr>
+                        <tr id="p5">
+                            <th scope="row">P5</th>
+                            <td class="player-score-div"">
+                                <div class="player-bar">
+                                <div class="player-progress">
+                                    <p>50</p>
+                                </div>
+                                </div>          
+                            </td>
+                        </tr>
+                        <tr id="p6" >
+                            <th scope="row">P6</th>
+                            <td class="player-score-div">
+                                <div class="player-bar">
+                                <div class="player-progress">
+                                    <p>50</p>
+                                </div>
+                                </div>          
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    </table>
+
+                    <div id="ticks">
+                    <div class="tick" style="height: 15px;"><p>30</p></div>
+                    <div class="tick" style="height: 15px;"><p>29</p></div>
+                    <div class="tick" style="height: 15px;"><p>28</p></div>
+                    <div class="tick" style="height: 15px;"><p>27</p></div>
+                    <div class="tick" style="height: 15px;"><p>25</p></div>
+                    <div class="tick" style="height: 15px;"><p>24</p></div>
+                    <div class="tick" style="height: 15px;"><p>23</p></div>
+                    <div class="tick" style="height: 15px;"><p>22</p></div>
+                    <div class="tick" style="height: 15px;"><p>21</p></div>
+                    <div class="tick" style="height: 15px;"><p>20</p></div>
+                    <div class="tick" style="height: 15px;"><p>19</p></div>
+                    <div class="tick" style="height: 15px;"><p>18</p></div>
+                    <div class="tick" style="height: 15px;"><p>17</p></div>
+                    <div class="tick" style="height: 15px;"><p>16</p></div>
+                    <div class="tick" style="height: 15px;"><p>15</p></div>
+                    <div class="tick" style="height: 15px;"><p>14</p></div>
+                    <div class="tick" style="height: 15px;"><p>13</p></div>
+                    <div class="tick" style="height: 15px;"><p>12</p></div>
+                    <div class="tick" style="height: 15px;"><p>11</p></div>
+                    <div class="tick" style="height: 15px;"><p>15</p></div>
+                    <div class="tick" style="height: 15px;"><p>9</p></div>
+                    <div class="tick" style="height: 15px;"><p>8</p></div>
+                    <div class="tick" style="height: 15px;"><p>7</p></div>
+                    <div class="tick" style="height: 15px;"><p>6</p></div>
+                    <div class="tick" style="height: 15px;"><p>5</p></div>
+                    <div class="tick" style="height: 15px;"><p>4</p></div>
+                    <div class="tick" style="height: 15px;"><p>3</p></div>
+                    <div class="tick" style="height: 15px;"><p>2</p></div>
+                    <div class="tick" style="height: 15px;"><p>1</p></div>
+                    <div class="tick" style="height: 15px;"><p>0</p></div>
+                    </div>
             </div>
+
+
+
 
             <!-- Closing div for left board -->
         </div>
@@ -123,6 +228,8 @@
             <h3>Players</h3>
             <div id="view-players">
             </div>
+            <ul id="player-info" class="right hide-on-med-and-down">
+            </ul>
         </div>
     </div> 
     
@@ -230,7 +337,7 @@
 
                 setTimeout(function() {
                     var cardBox = $('<div>').attr('class', 'col card-stock');
-                    var newCard = $('<div>').attr('id', 'card' + i);
+                    var newCard = $('<div>').attr('id', 'card' + i).attr('class','card-shadow');
                     var cardSubmitBtn = $('<button>').attr('class', 'play-card').html('Play');
                     var cardImg = $('<img>').css('height', '150px').attr('class','materialboxed round-card').attr('src', cardImages[i]);
 
@@ -261,7 +368,7 @@
 
                 setTimeout(function() {
                     var img = $('<img>').attr('class','materialboxed round-card').css('height', '150px').attr('src', cardImages[i]); 
-                    var imgWrapper = $('<div>').attr('id', 'scard' + i).append(img);
+                    var imgWrapper = $('<div>').attr('id', 'scard' + i).attr('class','card-shadow').append(img);
                     var cardVoteBtn = $('<button>').attr('class','vote-card').html('Vote');
                     var cardWrapper = $('<div>').attr('class', 'col card-stock').append(imgWrapper).append(cardVoteBtn); 
 
@@ -283,7 +390,7 @@
             var li = $('<li>');
             var endBtn = $('<a>').html('End Game').attr('id', 'end-game-btn').attr('value', 'endgame');
             li.append(endBtn)
-            $('#player-info').append(li);
+            $('#right-board').append(li);
         }
 
         endButton();
