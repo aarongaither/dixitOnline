@@ -117,12 +117,13 @@
 
         function gameForm() {
             var gameFormDiv = $('<div>');
+            var gameFormTitle = $('<h3>').text('Create game');
             var gameForm = $('<form>');
             var gameName = $('<input>').attr('id','game-name').attr('placeholder','Name your game').attr('class','');
             var gamePlayers = $('<input>').attr('id','game-name').attr('placeholder','Number of players').attr('type','number');
             var gameSubmit = $('<input>').attr('id','game-submit').attr('type','Submit');
 
-            gameForm.append(gameName).append(gamePlayers).append(gameSubmit);
+            gameForm.append(gameFormTitle).append(gameName).append(gamePlayers).append(gameSubmit);
 
             gameFormDiv.append(gameForm);
             
