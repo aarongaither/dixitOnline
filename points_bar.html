@@ -7,39 +7,272 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <style>
-	#player-score-div {
-		height: 300px;
-		margin-bottom: 20px;
-	}
-	#player-one-bar {
-	    width: 30px;
-	    height: 100%;
-	    background-color: grey;
-	    position: relative;
-	}
-	#player-one-progress {
-	    width: 30px;
-	    height: 48px;
-	    background-color: green;
-	    position: absolute;
-	    bottom: 0px;
-	}
+
+.player-score-div {
+	height: 320px;
+	margin-bottom: 20px;
+}
+.player-bar {
+    width: 20px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+.player-progress {
+    width: 20px;
+    height: 48px;
+    background-color: green;
+    position: absolute;
+    bottom: 0px;
+}
+
+
+body, html {
+  height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: "fira-sans-2", Verdana, sans-serif;  
+}
+
+
+#ticks {
+  position: absolute; 
+  top: 0px; 
+  left: 0px; 
+  z-index: 1;
+  margin-bottom: -300px;
+  font-size: 10px;
+  font-family: "fira-sans-2", Verdana, sans-serif;
+  width: 200px;
+}
+
+#ticks .tick {
+  position: relative; 
+  border-bottom: 1px dotted #C4C4C4; 
+}
+
+#ticks .tick p {
+    position: absolute;
+    left: -3em;
+    margin: 0;
+    font-size: 0.75em;
+    color: #fff;
+    text-align: right;
+    top: .75em;
+}
+
+
+#points {
+  display: block; /* fixes layout wonkiness in FF1.5 */
+  position: absolute; 
+  width: 300px; 
+  height: 300px;
+  margin: 1.1em 0 0; 
+  padding: 0;
+  background: transparent;
+  font-size: 11px;
+  top: 18px;
+}
+
+#points-table-wrapper {
+	position: relative;
+	height: 100%;
+	width: 200px;
+}
+
+#points caption {
+  caption-side: top; 
+  width: 600px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  top: -40px;
+  position: relative; 
+  z-index: 10;
+  font-weight: bold;
+}
+
+#points tr, #points th, #points td { 
+  position: absolute;
+  bottom: 0; 
+  width: 20px; 
+  z-index: 2;
+  margin: 0; 
+  padding: 0;
+  text-align: center;
+}
+
+#points td {
+  transition: all .3s ease;
+}
+  
+#points td:hover {
+	background-color: desaturate(#85144b, 100);
+	opacity: .9;
+	color: white;
+}
+  
+#points thead tr {
+  left: 100%; 
+  top: 50%; 
+  bottom: auto;
+  margin: -2.5em 0 0 5em;}
+#points thead th {
+  width: 7.5em; 
+  height: auto; 
+  padding: 0.5em 1em;
+}
+
+#points tbody {
+  height: 300px;
+  padding-top: 2px;
+  color: #AAA;
+}
+
+#points tbody tr {
+  height: 300px;
+  padding-top: 2px;
+  color: #AAA;
+}
+#points #p1 {
+  left: 0;
+}
+#points #p2 {left: 30px;}
+#points #p3 {left: 60px;}
+#points #p4 {left: 90px;}
+#points #p5 {left: 120px;}
+#points #p6 {left: 150px; border-right: none;}
+#points tbody th {bottom: -1.75em; vertical-align: top;
+font-weight: normal; color: #fff;}
+
+
+
+
+
 </style>
 <body>
 
 
 <!-- Progress bar on click -->
 
-<div id="player-score-div">
+<!-- <div id="player-score-div">
 	<div id="player-one-bar">
 	  <div id="player-one-progress">
 	  </div>
 	</div>
 
 <button onclick="move()">Click Me</button> 
+</div> -->
+
+<div id="points-table-wrapper">
+		<table id="points">
+			
+		<thead></thead>
+		<tbody>
+			<tr id="p1" >
+				<th scope="row">P1</th>
+				<td class="player-score-div" >	
+					<div class="player-bar">
+					<div class="player-progress">
+						<p>50</p>
+					</div>
+					</div>
+				</td>
+			</tr>
+			<tr id="p2" >
+				<th scope="row">P2</th>
+				<td class="player-score-div" >
+					<div class="player-bar">
+					<div class="player-progress">
+						<p>50</p>
+					</div>
+					</div>
+				</td>
+			</tr>
+			<tr id="p3" >
+				<th scope="row">P3</th>
+				<td class="player-score-div"">
+					<div class="player-bar">
+					<div class="player-progress">
+						<p>50</p>
+					</div>
+					</div>
+				</td>
+			</tr>
+			<tr id="p4">
+				<th scope="row">P4</th>
+				<td  class="player-score-div"">
+					<div class="player-bar">
+					<div class="player-progress">
+						<p>50</p>
+					</div>
+					</div>			
+				</td>
+			</tr>
+			<tr id="p5">
+				<th scope="row">P5</th>
+				<td class="player-score-div"">
+					<div class="player-bar">
+					<div class="player-progress">
+						<p>50</p>
+					</div>
+					</div>			
+				</td>
+			</tr>
+			<tr id="p6" >
+				<th scope="row">P6</th>
+				<td class="player-score-div">
+					<div class="player-bar">
+					<div class="player-progress">
+						<p>50</p>
+					</div>
+					</div>			
+				</td>
+			</tr>
+		</tbody>
+
+		</table>
+
+		<div id="ticks">
+		<div class="tick" style="height: 10px;"><p>30</p></div>
+		<div class="tick" style="height: 10px;"><p>29</p></div>
+		<div class="tick" style="height: 10px;"><p>28</p></div>
+		<div class="tick" style="height: 10px;"><p>27</p></div>
+		<div class="tick" style="height: 10px;"><p>25</p></div>
+		<div class="tick" style="height: 10px;"><p>24</p></div>
+		<div class="tick" style="height: 10px;"><p>23</p></div>
+		<div class="tick" style="height: 10px;"><p>22</p></div>
+		<div class="tick" style="height: 10px;"><p>21</p></div>
+		<div class="tick" style="height: 10px;"><p>20</p></div>
+		<div class="tick" style="height: 10px;"><p>19</p></div>
+		<div class="tick" style="height: 10px;"><p>18</p></div>
+		<div class="tick" style="height: 10px;"><p>17</p></div>
+		<div class="tick" style="height: 10px;"><p>16</p></div>
+		<div class="tick" style="height: 10px;"><p>15</p></div>
+		<div class="tick" style="height: 10px;"><p>14</p></div>
+		<div class="tick" style="height: 10px;"><p>13</p></div>
+		<div class="tick" style="height: 10px;"><p>12</p></div>
+		<div class="tick" style="height: 10px;"><p>11</p></div>
+		<div class="tick" style="height: 10px;"><p>10</p></div>
+		<div class="tick" style="height: 10px;"><p>9</p></div>
+		<div class="tick" style="height: 10px;"><p>8</p></div>
+		<div class="tick" style="height: 10px;"><p>7</p></div>
+		<div class="tick" style="height: 10px;"><p>6</p></div>
+		<div class="tick" style="height: 10px;"><p>5</p></div>
+		<div class="tick" style="height: 10px;"><p>4</p></div>
+		<div class="tick" style="height: 10px;"><p>3</p></div>
+		<div class="tick" style="height: 10px;"><p>2</p></div>
+		<div class="tick" style="height: 10px;"><p>1</p></div>
+		<div class="tick" style="height: 10px;"><p>0</p></div>
+		</div>
 </div>
 
-<script type="text/javascript">
+
+<!-- <script type="text/javascript">
 	function move() {
 	    var elem = $('#player-one-progress'); 
 	    var height = elem.height();
@@ -49,7 +282,7 @@
 		console.log(height);
 	}
 </script>
-
+ -->
 
 </body>
 </html>
