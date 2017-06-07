@@ -1,23 +1,23 @@
 let database = firebase.database();
 
+//will hold all card related information
+let gameRef = "";
+
 //will hold the shuffled deck which will decrease as cards are dealt
-let cardRef = database.ref("/game/cards");
+let cardRef = gameRef.child("cards");
 
 //will hold users as they connect to the site
-let userRef = database.ref("/game/users");
-let connectedRef = database.ref(".info/connected");
-
-//will hold all card related information
-let gameRef = database.ref("/game")
+let userRef = gameRef.child("players");
+// let connectedRef = database.ref(".info/connected");
 
 //holds player's current hand
-let playerHandRef = database.ref("/game/player_hand")
+let playerHandRef = gameRef.child("player_hand")
 
 //holds player's card selection for given round
-let cardSelectedRef = database.ref("/game/card_selection")
+let cardSelectedRef = gameRef.child("card_selection")
 
 //holds player's vote select for a given round
-let voteSelectedRef = database.ref("/game/vote_selection")
+let voteSelectedRef = gameRef.child("vote_selection")
 
 let cards = {
     oDeck: [], //original deck
@@ -56,19 +56,9 @@ let cards = {
         return tArray;
     },
 
-    displaySpecificCard: function(div, idName, array, pos) {
-        // $(div).empty();
-        // $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card").attr("height", "150")).attr("card-value", array[pos]);  
-
-        let cardBox = $('<div>').attr('class', 'col card-stock');
-        let newCard = $('<div>').attr('id', idName + i);
-        let cardImg = $.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card").attr("height", "150").attr("card-value", array[pos]);
-
-        let cardSubmitBtn = $('<button>').attr('class', 'play-card').html('Play');
-
-        newCard.attr('class', 'animated fadeInRight').append(cardImg);
-        let cards = cardBox.append(newCard).append(cardSubmitBtn);
-        $(div).append(cards);
+    displaySpecificCard: function(div, array, pos) {
+        $(div).empty();
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card").attr("height", "150")).attr("card-value", array[pos]);
         $(".materialboxed").materialbox();
     },
 
@@ -105,34 +95,45 @@ let game = {
     currState: 0,
     //roles and players stored here.
 
-    startGame: function() {
-        this.startGameAssignRoles();
+    startGame: function(gameID) {
+
+        gameRef = database.ref("/game/" + gameID);
+
+        gameRef.once("value", function(snap) {
+            game.maxPlayers = snap.val().max_players || 4;
+            game.maxRounds = snap.val().max_rounds || 2;
+
+            //Start Game
+            userRef.once("value", function(userSnap) {
+                let numPlayers = userSnap.numChildren();
+
+                if (numPlayers >= game.maxPlayers) {
+                    game.startGame();
+                }
+            })
+
+            player.key = key;
+            userRef.child(key).onDisconnect().remove();
+            playerHandRef.child(key).onDisconnect().remove();
+            cardSelectedRef.child(key).onDisconnect().remove();
+            voteSelectedRef.child(key).onDisconnect().remove();
+
+        })
+
+
         cards.createDeck();
         cards.shuffleDeck(cards.oDeck);
         this.checkAndDeal(cards.sDeck);
+        this.startGameAssignRoles();
     },
 
     startGameAssignRoles: function() {
-        userRef.orderByChild("dateAdded").once("value").then(function(snap) {
+        userRef.once("value").then(function(snap) {
             let usersArray = snap.val();
             // console.log(usersArray);
             let userKeyArray = Object.keys(usersArray);
             // console.log(userKeyArray);
-
             gameRef.update({ curr_play_order: userKeyArray });
-
-            for (i = 0; i < userKeyArray.length; i++) {
-                if (i === 0) {
-                    userRef.child(userKeyArray[i]).update({
-                        role: "storyTeller"
-                    })
-                    gameRef.update({ curr_teller: userKeyArray[i] });
-                } else {
-                    userRef.child(userKeyArray[i]).update({
-                        role: "player"
-                    })
-                }
-            }
         })
     },
 
@@ -236,7 +237,7 @@ let game = {
         }
     },
 
-    dealingHand: function(deckArray, nCards) {
+    dealnCards: function(deckArray, nCards) {
         let hand = [];
 
         for (let i = 0; i < nCards; i++) {
@@ -245,6 +246,27 @@ let game = {
         }
         cardRef.set(deckArray);
         return hand;
+    },
+
+    dealPlayerHand: function() {
+        playerHandRef.on("value", function(snap) {
+            let playerHand = [];
+            if (snap.child(player.key).exists()) {
+                playerHand = snap.child(player.key).val()
+
+                for (let i = playerHand.length - 1; i >= 0; i--) {
+
+                    let delay = i * 100;
+
+                    setTimeout(function() {
+                        cards.displaySpecificCard("#card" + i, playerHand, i)
+                            // console.log(playerHand[i]);
+                    }, delay)
+                }
+
+                playerHandRef.off("value");
+            }
+        })
     },
 
     //need to update possibly to autocheck hand limit vs. handsize
@@ -262,12 +284,13 @@ let game = {
                             nCardsNeeded = nCardsNeeded - currHandSize;
                             console.log("in the if statement for check and deal", currHand, nCardsNeeded)
                         }
-                        currHand = currHand.concat(game.dealingHand(deckArray, nCardsNeeded));
+                        currHand = currHand.concat(game.dealnCards(deckArray, nCardsNeeded));
                         playerHandRef.update({
                             [key]: currHand
                         });
                     })
                     // console.log("inside the for each statement in check and deal", key)
+                game.dealPlayerHand();
             })
             gameRef.update({
                 curr_state: 1 //game start
@@ -337,51 +360,63 @@ let game = {
 };
 
 //on user connection add them to the db
-connectedRef.on("value", function(snap) {
-    if (snap.val()) {
-        var key = userRef.push({
-            dateAdded: firebase.database.ServerValue.TIMESTAMP
-        }).key;
+// connectedRef.on("value", function(snap) {
+//     if (snap.val()) {
+//         var key = userRef.push({
+//             dateAdded: firebase.database.ServerValue.TIMESTAMP
+//         }).key;
 
-        userRef.child(key).update({
-            key: key
-        })
+//         userRef.child(key).update({
+//             key: key
+//         })
 
-        player.key = key;
-        userRef.child(key).onDisconnect().remove();
-        playerHandRef.child(key).onDisconnect().remove();
-        cardSelectedRef.child(key).onDisconnect().remove();
-        voteSelectedRef.child(key).onDisconnect().remove();
-    }
-});
+//         player.key = key;
+//         userRef.child(key).onDisconnect().remove();
+//         playerHandRef.child(key).onDisconnect().remove();
+//         cardSelectedRef.child(key).onDisconnect().remove();
+//         voteSelectedRef.child(key).onDisconnect().remove();
+//     }
+// });
 
 
 //automatically start game when three players have joined. This will be assigned to enable the start button in the final game.
-userRef.once("value", function(snap) {
-    let numPlayers = snap.numChildren();
+// userRef.once("value", function(snap) {
+//     let numPlayers = snap.numChildren();
 
-    console.log("numPlayers:", numPlayers);
+//     console.log("numPlayers:", numPlayers);
 
-    if (numPlayers >= game.maxPlayers) {
-        // console.log("inside the start listener if statement");
-        game.startGame();
-    }
+//     if (numPlayers >= game.maxPlayers) {
+//         // console.log("inside the start listener if statement");
+//         game.startGame();
+//     }
 
-})
+//     player.key = key;
+//     userRef.child(key).onDisconnect().remove();
+//     playerHandRef.child(key).onDisconnect().remove();
+//     cardSelectedRef.child(key).onDisconnect().remove();
+//     voteSelectedRef.child(key).onDisconnect().remove();
+// })
 
-gameRef.once("value", function(snap) {
-    game.maxPlayers = snap.val().max_players || 4;
-    game.maxRounds = snap.val().max_rounds || 2;
+// gameRef.once("value", function(snap) {
+//     game.maxPlayers = snap.val().max_players || 4;
+//     game.maxRounds = snap.val().max_rounds || 2;
 
-    //Start Game
-    userRef.once("value", function(userSnap) {
-        let numPlayers = userSnap.numChildren();
+//     //Start Game
+//     userRef.once("value", function(userSnap) {
+//         let numPlayers = userSnap.numChildren();
 
-        if (numPlayers >= game.maxPlayers) {
-            game.startGame();
-        }
-    })
-})
+//         if (numPlayers >= game.maxPlayers) {
+//             game.startGame();
+//         }
+//     })
+
+//     player.key = key;
+//     userRef.child(key).onDisconnect().remove();
+//     playerHandRef.child(key).onDisconnect().remove();
+//     cardSelectedRef.child(key).onDisconnect().remove();
+//     voteSelectedRef.child(key).onDisconnect().remove();
+
+// })
 
 //insures everyone has the latest shuffled deck locally. Updated as cards are dealt out.
 cardRef.on("value", function(snap) {
@@ -389,23 +424,7 @@ cardRef.on("value", function(snap) {
 });
 
 //add cards to player board.
-playerHandRef.on("value", function(snap) {
-    let playerHand = [];
-    if (snap.child(player.key).exists()) {
-        playerHand = snap.child(player.key).val()
 
-        for (let i = 0; i < playerHand.length; i++) {
-
-            let delay = i * 100;
-            setTimeout(function() {
-                console.log("inside the playhand listener", i, playerHand[i]);
-                cards.displaySpecificCard("#given-cards", "card" + i, playerHand, i)
-                    console.log(playerHand[i]);
-            }, delay);
-        }
-        playerHandRef.off("value");
-    }
-})
 
 //click listener for current story 
 $(".submit").click(function(value) {
@@ -616,6 +635,6 @@ voteSelectedRef.on("value", function(snap) {
 
 //get the information for scoring
 
-function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
-}
+// function getKeyByValue(object, value) {
+//     return Object.keys(object).find(key => object[key] === value);
+// }
