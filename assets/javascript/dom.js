@@ -147,7 +147,7 @@ const loginPage = (function() {
 let lobbyPage = (function() {
     let makeLobbyPage = function() {
         let main = $('#main-board');
-        $('#left-board').empty().addClass('dark-blue-background');
+        $('#left-board').empty();
         $('#right-board').empty();
 
         main.append($('<h1>').text('Lobby'));
@@ -233,8 +233,8 @@ let lobbyPage = (function() {
         $('#main-board').empty();
     }
 
-    let makeGameButton = function(gameName, gameID) {
-        let item = $('<li>').html('<div>' + gameName + '<button href="#!" class="secondary-content" gameID=' + gameID + '>Join</button></div')
+    let makeGameListItem = function(gameName, gameID) {
+        let item = $('<li>').html('<div>' + gameName + '<button href="#!" class="secondary-content join" gameID=' + gameID + '>Join</button></div')
             .attr('class', 'collection-item');
         $('#game-list').append(item);
     }
@@ -242,7 +242,7 @@ let lobbyPage = (function() {
     return {
         createPage: makeLobbyPage,
         cleanUpPage: cleanUpLobbyPage,
-        makeGameButton: makeGameButton
+        makeGameListItem: makeGameListItem
     }
 })()
 
