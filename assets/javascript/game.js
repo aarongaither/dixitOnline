@@ -433,6 +433,7 @@ cardRef.on("value", function(snap) {
 
 //click listener for current story 
 $(".submit").click(function(value) {
+    event.preventDefault();
     //need unique ID in HTML for story text area    
     let currStory = $("#storyteller-story").val().trim();
     if (player.role === "storyTeller" && game.currState === 2) {
