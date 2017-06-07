@@ -282,8 +282,6 @@ const gamePage = (function() {
         centerPanel.append(chosenCards.append(cardPanel));
         centerPanel.append(givenCards);
         centerPanel.append(chatSectionRow);
-        createCardDivs(6);
-        createCardDivs(players, 'vote')
     }
 
     let createCardDivs = function(qty, type) {
