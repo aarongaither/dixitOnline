@@ -247,7 +247,7 @@ let lobbyPage = (function() {
 })()
 
 const gamePage = (function() {
-    let makeGamePage = function() {
+    let makeGamePage = function(players) {
         let main = $('#main-board');
         $('#left-board').removeClass('dark-blue-background');
         let centerPanel = $('<div>').attr('id', 'center-panel');
@@ -272,7 +272,7 @@ const gamePage = (function() {
             );
 
         let chosenCards = $('<div>').attr('id', 'chosen-cards').addClass('row');
-        let cardPanel = $('<div>').addClass('card-panel');
+        let cardPanel = $('<div>').addClass('card-panel white').attr('id', 'chosen-cards-panel');
         let givenCards = $('<div>').attr('id', 'given-cards').addClass('row');
         let chatSectionRow = $('<div>').attr('id', 'chat-section-row').addClass('row');
         let chatForm = $('<form>').addClass('col s12');
@@ -284,34 +284,34 @@ const gamePage = (function() {
         centerPanel.append(chatSectionRow);
     }
 
+    let createCardDivs = function(qty, type) {
+        let cardDiv = type ? $('#chosen-cards-panel') : $('#given-cards');
+        let id = type ? 'vote-card' : 'card';
+        let btnClass = type ? 'vote-card' : 'play-card';
+        let btnText = type ? 'vote' : 'play';
+        for (let i = 0; i < qty; i++) {
+            let cardBox = $('<div>').attr('class', 'col card-stock');
+            let newCard = $('<div>').attr('id', id + i).css({
+                'height': '150px',
+                'width': '100px',
+                'border': '2px solid black'
+            }).addClass('card-shadow');
+            let cardSubmitBtn = $('<button>').addClass(btnClass).text(btnText);
+
+            // newCard.attr('class', 'animated fadeInRight');
+            let cards = cardBox.append(newCard).append(cardSubmitBtn);
+            cardDiv.append(cards);
+        }
+    }
+
     let cleanUpGamePage = function() {
         $('#main-board').empty();
     }
 
     return {
         createPage: makeGamePage,
+        createCardDivs: createCardDivs,
         cleanUpPage: cleanUpGamePage
     }
 
 })()
-
-let dealCards = function() {
-    for (let i = 0; i < cardValues.length; i++) {
-
-        let delay = i * 100;
-
-        setTimeout(function() {
-            let cardBox = $('<div>').attr('class', 'col card-stock');
-            let newCard = $('<div>').attr('id', 'card' + i);
-            let cardSubmitBtn = $('<button>').attr('class', 'play-card').html('Play');
-            let cardImg = $('<img>').css('height', '150px').attr('class', 'materialboxed round-card').attr('src', cardImages[i]);
-
-            newCard.attr('class', 'animated fadeInRight').append(cardImg);
-
-            let cards = cardBox.append(newCard).append(cardSubmitBtn);
-
-            $('#given-cards').append(cards);
-
-        }, delay)
-    }
-}
