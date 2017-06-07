@@ -4,20 +4,20 @@ let database = firebase.database();
 let gameRef = "";
 
 //will hold the shuffled deck which will decrease as cards are dealt
-let cardRef = gameRef.child("cards");
+let cardRef = "";
 
 //will hold users as they connect to the site
-let userRef = gameRef.child("players");
+let userRef = "";
 // let connectedRef = database.ref(".info/connected");
 
 //holds player's current hand
-let playerHandRef = gameRef.child("player_hand")
+let playerHandRef = "";
 
 //holds player's card selection for given round
-let cardSelectedRef = gameRef.child("card_selection")
+let cardSelectedRef = "";
 
 //holds player's vote select for a given round
-let voteSelectedRef = gameRef.child("vote_selection")
+let voteSelectedRef = "";
 
 let cards = {
     oDeck: [], //original deck
@@ -98,6 +98,11 @@ let game = {
     startGame: function(gameID) {
 
         gameRef = database.ref("/game/" + gameID);
+        cardRef = gameRef.child("cards");
+        userRef = gameRef.child("players");
+        playerHandRef = gameRef.child("player_hand")
+        cardSelectedRef = gameRef.child("card_selection")
+        voteSelectedRef = gameRef.child("vote_selection")
 
         gameRef.once("value", function(snap) {
             game.maxPlayers = snap.val().max_players || 4;
