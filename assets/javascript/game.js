@@ -98,7 +98,7 @@ let game = {
     //roles and players stored here.
 
     startGame: function(gameID) {
-
+        console.log("startGame");
         //setting the ref to the particular instance of a game
         gameRef = database.ref("/games/" + gameID);
         cardRef = gameRef.child("cards");
@@ -115,12 +115,12 @@ let game = {
             userRef.on("value", function(userSnap) {
                 let numPlayers = userSnap.numChildren();
 
-                if (numPlayers >= game.maxPlayers) {
+                if (numPlayers == game.maxPlayers) {
                     game.initGameListeners();
                     cards.createDeck();
                     cards.shuffleDeck(cards.oDeck);
-                    game.checkAndDeal(cards.sDeck);
                     game.startGameAssignRoles();
+                    game.checkAndDeal(cards.sDeck);
 
 
                 }
@@ -142,6 +142,7 @@ let game = {
             let userKeyArray = Object.keys(usersArray);
             // console.log(userKeyArray);
             gameRef.update({ curr_play_order: userKeyArray });
+
         })
     },
 
@@ -257,28 +258,26 @@ let game = {
     },
 
     dealPlayerHand: function() {
-        playerHandRef.on("value", function(snap) {
+        console.log("dealPlayerHand")
+        playerHandRef.once("value", function(snap) {
             let playerHand = [];
             if (snap.child(player.key).exists()) {
                 playerHand = snap.child(player.key).val()
-
                 for (let i = playerHand.length - 1; i >= 0; i--) {
-
                     let delay = i * 100;
-
                     setTimeout(function() {
                         cards.displaySpecificCard("#card" + i, playerHand, i)
                             // console.log(playerHand[i]);
                     }, delay)
                 }
-
-                playerHandRef.off("value");
+                // playerHandRef.off("value");
             }
         })
     },
 
     //need to update possibly to autocheck hand limit vs. handsize
     checkAndDeal: function(deckArray) {
+        console.log("checkAndDeal");
         userRef.once("value").then(function(snap) {
             let userKeyArray = Object.keys(snap.val());
 
@@ -298,12 +297,20 @@ let game = {
                         });
                     })
                     // console.log("inside the for each statement in check and deal", key)
-                game.dealPlayerHand();
             })
+
             gameRef.update({
                 curr_state: 1 //game start
             });
+        }).then(function() {
+            game.dealPlayerHand();
         })
+
+        let currCards = $("#given-cards").children().lenth || 0
+        gamePage.createCardDivs(game.nHandSize - currCards);
+        game.storyClickListener();
+        game.cardClickListener();
+
     },
 
     removeCard: function(player, card) {
@@ -376,6 +383,7 @@ let game = {
 
     updateLocalDeckListener: function() {
         //insures everyone has the latest shuffled deck locally. Updated as cards are dealt out.
+        console.log("updateLocalDeckListener");
         cardRef.on("value", function(snap) {
             cards.sDeck = snap.val();
         });
@@ -388,6 +396,7 @@ let game = {
         // });
 
         //updates state according to database value
+        console.log("updateLocalStateListener");
         gameRef.child("curr_state").on("value", function(snap) {
             game.currState = snap.val();
             // console.log("this is child changed log curr_state", prevKey)
@@ -396,6 +405,7 @@ let game = {
 
     updateLocalPlayerRoleListener: function() {
         //assigns user role to local reference
+        console.log("updateLocalPlayerRoleListener");
         userRef.on("value", function(snap) {
             let keysArray = Object.keys(snap.val());
 
@@ -409,6 +419,7 @@ let game = {
 
     updateStateListener: function() {
         //update curr_state in DB to 4 after everyone has selected a card
+        console.log("updateStateListener");
         cardSelectedRef.on("value", function(snap) {
             let totalPlayers = game.nPlayers;
             let currSelectedCards = snap.numChildren();
@@ -449,6 +460,7 @@ let game = {
 
     stateChangeListener: function() {
         //display selected cards in voting section||state change listener
+        console.log("stateChangeListener");
         gameRef.child("curr_state").on("value", function(snap) {
             let vCardsObj = {};
             let sCardsObj = {};
@@ -457,7 +469,7 @@ let game = {
 
             switch (currState) {
                 case 4: //state 4 is the start of the voting stage
-                    // console.log("current state", currState)
+                    console.log("current state", currState)
                     gameRef.child("curr_story_card").once("value", function(snap) {
                         let tempArray = [];
                         tempArray.push(snap.val());
@@ -471,9 +483,13 @@ let game = {
                     }).then(function() {
                         //shuffle for each player differently - to make consistent have to push to DB and pull down.
                         // sCardsArray = cards.shuffleDeck(sCardsArray);
+                        gamePage.createCardDivs(game.nPlayers, true);
+
                         for (let i = sCardsArray.length - 1; i >= 0; i--) {
-                            cards.displaySpecificCard("#scard" + i, sCardsArray, i)
+                            cards.displaySpecificCard("#vote-card" + i, sCardsArray, i)
                         }
+
+                        game.cardClickListener();
                     })
                     break;
                 case 5: //state of is the start of the scoring stage
@@ -534,68 +550,70 @@ let game = {
                     break;
             }
         });
+    },
+
+    storyClickListener: function() {
+        //click listener for current story 
+        $(".submit").off().click(function(value) {
+            event.preventDefault();
+            let currStory = $("#storyteller-story").val().trim();
+            $("#storyteller-story").val(""); //clear story text after submission
+            if (player.role === "storyTeller" && game.currState === 2) {
+                gameRef.update({
+                    curr_story: currStory
+                })
+                gameRef.update({
+                    curr_state: 3 //move onto player card selection
+                })
+            }
+        });
+    },
+
+    cardClickListener: function() {
+        $(".play-card, .vote-card").off().click(function() {
+            if (player.role === "storyTeller" && game.currState === 1) {
+                // console.log($(this).siblings(".fahad-test").attr("card-value"))
+                let cardSelection = $(this).siblings(".cards-container").attr("card-value");
+                gameRef.update({
+                    curr_story_card: cardSelection
+                })
+                gameRef.update({
+                        curr_state: 2 //move onto story telling
+                    })
+                    //removing card from DOM
+                $(this).parent().remove();
+                //removing card from firebaseDB
+                game.removeCard(player.key, cardSelection);
+            } else if (player.role === "player" && game.currState === 3) {
+                let cardSelection = $(this).siblings(".cards-container").attr("card-value");
+                let playerKey = player.key;
+                cardSelectedRef.update({
+                    [playerKey]: cardSelection
+                })
+                player.selectedCard = cardSelection;
+                //removing card from DOM
+                $(this).parent().remove();
+                //removing card from firebaseDB
+                game.removeCard(playerKey, cardSelection);
+            } else if (player.role === "player" && game.currState === 4) {
+                let cardSelection = $(this).siblings(".cards-container").attr("card-value");
+                let playerKey = player.key;
+                if (cardSelection != player.selectedCard) {
+                    // console.log("inside the voting if statement");
+                    voteSelectedRef.update({
+                        [playerKey]: cardSelection
+                    })
+                }
+            }
+        })
     }
 };
 
 
-//click listener for current story 
-$(".submit").click(function(value) {
-    event.preventDefault();
-    //need unique ID in HTML for story text area    
-    let currStory = $("#storyteller-story").val().trim();
-    if (player.role === "storyTeller" && game.currState === 2) {
-        gameRef.update({
-            curr_story: currStory
-        })
-        gameRef.update({
-            curr_state: 3 //move onto player card selection
-        })
-    }
-});
+
 
 //click listener for cards and upload to correct location in DB
-$(".modal-footer").click(function() {
-    if (player.role === "storyTeller" && game.currState === 1) {
-        // console.log($(this).siblings(".fahad-test").attr("card-value"))
-        let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
-        gameRef.update({
-            curr_story_card: cardSelection
-        })
-        gameRef.update({
-            curr_state: 2 //move onto story telling
-        })
 
-        //removing card from DOM
-        $(this).parent().remove();
-
-        //removing card from firebaseDB
-        game.removeCard(player.key, cardSelection);
-
-    } else if (player.role === "player" && game.currState === 3) {
-        let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
-        let playerKey = player.key;
-        cardSelectedRef.update({
-            [playerKey]: cardSelection
-        })
-        player.selectedCard = cardSelection;
-
-        //removing card from DOM
-        $(this).parent().remove();
-
-        //removing card from firebaseDB
-        game.removeCard(playerKey, cardSelection);
-
-    } else if (player.role === "player" && game.currState === 4) {
-        let cardSelection = $(this).siblings(".fahad-test").attr("card-value");
-        let playerKey = player.key;
-        if (cardSelection != player.selectedCard) {
-            // console.log("inside the voting if statement");
-            voteSelectedRef.update({
-                [playerKey]: cardSelection
-            })
-        }
-    }
-})
 
 //get the information for scoring
 

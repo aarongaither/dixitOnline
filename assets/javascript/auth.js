@@ -183,6 +183,7 @@ const auth = (function() {
             game_name: name,
             max_players: players,
             max_rounds: rounds,
+            curr_teller: userID,
             players: {
                 [userID]: {
                     key: userID,
