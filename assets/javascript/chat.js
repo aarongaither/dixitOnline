@@ -18,7 +18,7 @@ const chat = (function() {
     let _makeChatLine = function(name, msg) {
         let msgDiv = $('<div>').html('<span class="chat-name">' + name + ': </span>' + msg);
         $('#chat-messages').append(msgDiv);
-        $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
     }
 
     let _setDataLoaded = function() {
