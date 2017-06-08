@@ -259,7 +259,7 @@ const gamePage = (function() {
             .append($('<ul>').addClass('story-form-wrapper')
                 .append($('<li>')
                     .append($('<input>', {
-                        id: 'storyteller_story',
+                        id: 'storyteller-story',
                         type: 'text',
                         class: 'validate'
                     }))
@@ -291,7 +291,7 @@ const gamePage = (function() {
         let btnText = type ? 'vote' : 'play';
         for (let i = 0; i < qty; i++) {
             let cardBox = $('<div>').attr('class', 'col card-stock');
-            let newCard = $('<div>').attr('id', id + i).css({
+            let newCard = $('<div>').attr('id', id + i).attr('class', 'cards-container').css({
                 'height': '150px',
                 'width': '100px',
                 'border': '2px solid black'

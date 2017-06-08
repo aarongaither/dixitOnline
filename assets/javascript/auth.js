@@ -99,7 +99,7 @@ const auth = (function() {
 
     let _joinGameBtnListener = function(method) {
         if (method === 'on') {
-            $(document).on('click', '.join', function(){
+            $(document).on('click', '.join', function() {
                 let gameID = $(this).attr('gameID')
                 _joinGame(gameID)
             })
@@ -108,7 +108,7 @@ const auth = (function() {
         }
     }
 
-    let _gamesListListener = function (method) {
+    let _gamesListListener = function(method) {
         if (method === 'on') {
             firebase.database().ref('/games').on('child_added', function(snap) {
                 let gameID = snap.val().gameID;
@@ -116,7 +116,7 @@ const auth = (function() {
                 lobbyPage.makeGameListItem(gameName, gameID)
             })
         } else if (method === 'off') {
-           firebase.database().ref('/games').off('child_added')
+            firebase.database().ref('/games').off('child_added')
         }
     }
 
@@ -183,6 +183,7 @@ const auth = (function() {
             game_name: name,
             max_players: players,
             max_rounds: rounds,
+            curr_teller: userID,
             players: {
                 [userID]: {
                     key: userID,
@@ -196,16 +197,14 @@ const auth = (function() {
     let _joinGame = function(gameID) {
         let userID = curUser().uid;
         let game = firebase.database().ref('/games/' + gameID);
-        game.update({
-            players: {
-                [userID]: {
-                    key: userID,
-                    role: 'player'
-                }
+        game.child("players").update({
+            [userID]: {
+                key: userID,
+                role: 'player'
             }
         })
 
-        game.once('value', function(snap){
+        game.once('value', function(snap) {
             let players = snap.val().max_players;
             _gameInit(userID, gameID, players)
         })
@@ -217,7 +216,7 @@ const auth = (function() {
         lobbyPage.cleanUpPage();
         lobbyListeners('off');
         gamePage.createPage(players);
-        // game.startGame(gameID);
+        game.startGame(gameID);
     }
 
     return {
