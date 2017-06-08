@@ -121,39 +121,6 @@ nav .logo {
 
 }
 
-/*
-#main-body {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-}
-
-#main-row {
-	display: flex;
-	flex: 1;
-}
-
-#left-panel {
-	/*flex: 1;*/
-/*	display: flex;
-	justify-content: space-around;
-	background-color: #7A91A0;
-
-}
-
-#right-panel {
-	flex-direction: column;
-	display: flex;
-	justify-content: space-around;
-	background-color: #7A91A0;
-}
-
-#center-panel {
-	flex: 3;
-	background-color: #304D5F;
-}
-*/
-
 /* Lobby styling */
 
 #lobby-chat-board {
@@ -208,7 +175,6 @@ nav .logo {
 #login-btn:hover {
 	background-position: right center; 
 }
-
 
 
 /* Dealt and chosen card styling */
@@ -455,11 +421,11 @@ nav .logo {
 /* Scoreboard panel */
 
 .score-flex-container {
-	display: flex; /* or inline-flex */
-	flex-direction: row;
-	justify-content: flex-start;
-	margin: auto 0;
-	min-height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin: 0px;
+  width: 100%;
 }
 
 .player-score {
@@ -468,31 +434,9 @@ nav .logo {
 }
 
 .player-score-div {
-	margin: 5px 5px 20px 0px;
+	margin: 5px;
 }
-#player-one-bar,
-#player-two-bar,
-#player-three-bar,
-#player-four-bar,
-#player-five-bar,
-#player-six-bar {
-    width: 15px;
-    height: 100%;
-    background-color: #847440;
-    position: relative;
-}
-#player-one-progress,
-#player-two-progress,
-#player-three-progress,
-#player-four-progress,
-#player-five-progress,
-#player-six-progress {
-    width: 15px;
-    height: 20px;
-    background-color: green;
-    position: absolute;
-    bottom: 0px;
-}
+
 
 #player-score-wrapper {
 	height: 60%;
@@ -505,27 +449,34 @@ nav .logo {
 .player-score-div {
 	height: 100%;
 	margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.player-label {
+    color: #fff;
+    font-size: .8em;
 }
 .player-bar {
-    width: 20px;
+    width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.2);
     position: relative;
 }
 .player-progress {
-    width: 20px;
-    height: 48px;
+    width: 100%;
+    height: 20px;
     background-color: green;
     position: absolute;
     bottom: 0px;
+    font-size: .8em;
+    color: #fff;
 }
-
 
 #ticks {
   position: absolute; 
   top: 0px; 
   left: 0px; 
-  z-index: 1;
+  z-index: -2000;
   margin-bottom: -300px;
   font-size: 10px;
   font-family: "fira-sans-2", Verdana, sans-serif;
@@ -535,6 +486,7 @@ nav .logo {
 #ticks .tick {
   position: relative; 
   border-bottom: 1px dotted #C4C4C4; 
+  height: 15px;
 }
 
 #ticks .tick p {
@@ -548,20 +500,14 @@ nav .logo {
 }
 
 #points {
-	display: block;
-	position: absolute;
-	height: 435px;
-	margin: 0px;
-	padding: 0;
-	background: transparent;
-	font-size: 11px;
-	top: 14px;
+
 }
 
 #points-table-wrapper {
 	position: relative;
-	height: 100%;
+	height: 460px;
 	width: 100%;
+  display: flex;
 }
 
 #points tr, #points th, #points td { 
