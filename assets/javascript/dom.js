@@ -377,7 +377,8 @@ const gamePage = (function() {
         createPage: makeGamePage,
         createCardDivs: createCardDivs,
         cleanUpPage: cleanUpGamePage,
-        updateScoreBar: updateScoreBar
+        updateScoreBar: updateScoreBar,
+        addAvatar: addAvatar
     }
 
 })()
