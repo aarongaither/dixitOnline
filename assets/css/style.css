@@ -7,11 +7,15 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100%;
-	background-color: #304D5F;
 	font-family: 'Raleway', arial, sans-serif;
 	text-align: center;
+  background-color: #000;
 	background-image: url(../images/dixit_background.jpg);
 	background-size: cover;
+  background-attachment: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+
 }
 
 header {
@@ -21,6 +25,7 @@ header {
 footer {
 	margin: -20px -11px 0px -11px;
 	padding: 20px 0px;
+  color: #9CC4E4;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -37,6 +42,9 @@ h6 { font-size: .75em; }
 form input {
     margin-bottom: 10px;
     display: block;
+}
+
+nav {
 }
 
 
@@ -78,10 +86,37 @@ form input {
     background-color: #304D5F;
 }
 
+.gold {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: -webkit-linear-gradient(top, #efd100 0, #e2a233 38%, #f0c328 60%, #fff1a3 86%, #ffe13e 100%);
+  background-size: 1em 1em;
+  color: #f8b700;
+  display: inline-block;
+  line-height: 1em;
+  position: relative;
+  z-index: auto
+}
+
+.white-transparent {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #000;
+  box-shadow: 0px 0px 10px #000;
+}
+
 /* Navigation */
 
 nav .logo {
-	margin-top: 10px;
+	margin: 10px;
+}
+
+.nav-flex-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #000;
 }
 
 
@@ -106,6 +141,7 @@ nav .logo {
 #left-board {
 	width: 200px;
 	padding-left: 40px;
+  margin: 20px 0px;
 }
 
 #main-board {
@@ -114,45 +150,13 @@ nav .logo {
 
 #right-board {
 	width: 200px;
-    padding-right: 40px;
+  padding-right: 40px;
+  margin: 20px 0px;
 }
 
 .side-well {
 
 }
-
-/*
-#main-body {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-}
-
-#main-row {
-	display: flex;
-	flex: 1;
-}
-
-#left-panel {
-	/*flex: 1;*/
-/*	display: flex;
-	justify-content: space-around;
-	background-color: #7A91A0;
-
-}
-
-#right-panel {
-	flex-direction: column;
-	display: flex;
-	justify-content: space-around;
-	background-color: #7A91A0;
-}
-
-#center-panel {
-	flex: 3;
-	background-color: #304D5F;
-}
-*/
 
 /* Lobby styling */
 
@@ -210,24 +214,24 @@ nav .logo {
 }
 
 
-
 /* Dealt and chosen card styling */
 
-.vote-card {
+.play-card {
 	border-radius: 5px;
 	background: #fff;
 	text-transform: uppercase;
-    border-width: 1px;
-    border-style: none;
-    border-color: #fff;
-    border-image: initial;
-    padding: 10px;
-    width: 100%;
-    background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+  border-width: 1px;
+  border-style: none;
+  border-color: #fff;
+  border-image: initial;
+  padding: 10px;
+  width: 100%;
+  background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
 	font-weight: bold;
 	transition: 0.5s;
 	background-size: 200% auto;
 	box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+  font-size: .8em;
 }
 
 .vote-card:hover,
@@ -236,19 +240,19 @@ nav .logo {
 	color: #fff;
 }
 
-.play-card {
+.vote-card {
 	border-radius: 5px;
 	background: #fff;
 	text-transform: uppercase;
-    border-width: 1px;
-    border-style: none;
-    border-color: #fff;
-    border-image: initial;
-    padding: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    font-weight: bold;
-    background-image: linear-gradient(to right, #f6d365 0%, #fda085 51%, #f6d365 100%);
+  border-width: 1px;
+  border-style: none;
+  border-color: #fff;
+  border-image: initial;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  font-weight: bold;
+  background-image: linear-gradient(to right, #efd100 0, #e2a233 38%, #f0c328 60%, #ffe13e 100%);
 	transition: 0.5s;
 	background-size: 200% auto;
 	box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
@@ -274,9 +278,18 @@ nav .logo {
     animation-fill-mode: forwards;  
 }
 
+.top-to-bottom {
+    border-width: 3px;
+    border-style: solid;
+    border-image: linear-gradient(top, #efd100 0, #e2a233 38%, #f0c328 60%, #fff1a3 86%, #ffe13e 100%);
+}
+
+
 .card-panel {
 	margin-bottom: 0px;
 	border-radius: 5px;
+  display: flex;
+  flex-direction: row;
 }
 
 .card-stock {
@@ -299,8 +312,10 @@ nav .logo {
 
 #chosen-cards {
 	display: flex;
-    justify-content: center;
+  justify-content: center;
 	/*background-color: white;*/
+  margin: 0px 20px 20px 20px;
+
 }
 
 .card-shadow {
@@ -327,6 +342,7 @@ nav .logo {
     background: transparent;
     color: black;
     border-radius: 0px 0px 10px 10px;
+    font-size: .8em;
 }
 
 .total-points {
@@ -347,6 +363,15 @@ nav .logo {
 
 /* Gameboard story form */
 
+
+#story-text {
+  color: grey;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+
 #story-form {
 }
 
@@ -356,14 +381,20 @@ nav .logo {
 
 #story-form .validate{
     background: rgba(255, 255, 255, .75);
-    border-radius: 20px 0px 0px 20px;
+    border-radius: 5px 0px 0px 5px;
     width: 400px;
     border: 1px solid #000;
     padding-left: 20px;
+    
+}
+
+#story-form input {
+  margin: 0px;
+
 }
 
 #story-form .submit{
-    border-radius: 0px 20px 20px 0px;
+    border-radius: 0px 5px 5px 0px;
     padding: 13px;
     border: none;
 }
@@ -372,10 +403,18 @@ nav .logo {
 	max-width: 100%;
 }
 
-#story-text {
-	color: grey;
-	margin: 0px;
-	text-align: center;
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 
@@ -455,11 +494,11 @@ nav .logo {
 /* Scoreboard panel */
 
 .score-flex-container {
-	display: flex; /* or inline-flex */
-	flex-direction: row;
-	justify-content: flex-start;
-	margin: auto 0;
-	min-height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin: 0px;
+  width: 100%;
 }
 
 .player-score {
@@ -468,31 +507,9 @@ nav .logo {
 }
 
 .player-score-div {
-	margin: 5px 5px 20px 0px;
+	margin: 5px;
 }
-#player-one-bar,
-#player-two-bar,
-#player-three-bar,
-#player-four-bar,
-#player-five-bar,
-#player-six-bar {
-    width: 15px;
-    height: 100%;
-    background-color: #847440;
-    position: relative;
-}
-#player-one-progress,
-#player-two-progress,
-#player-three-progress,
-#player-four-progress,
-#player-five-progress,
-#player-six-progress {
-    width: 15px;
-    height: 20px;
-    background-color: green;
-    position: absolute;
-    bottom: 0px;
-}
+
 
 #player-score-wrapper {
 	height: 60%;
@@ -505,27 +522,34 @@ nav .logo {
 .player-score-div {
 	height: 100%;
 	margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.player-label {
+    color: #fff;
+    font-size: .8em;
 }
 .player-bar {
-    width: 20px;
+    width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.2);
     position: relative;
 }
 .player-progress {
-    width: 20px;
-    height: 48px;
+    width: 100%;
+    height: 20px;
     background-color: green;
     position: absolute;
     bottom: 0px;
+    font-size: .8em;
+    color: #fff;
 }
-
 
 #ticks {
   position: absolute; 
   top: 0px; 
   left: 0px; 
-  z-index: 1;
+  z-index: -2000;
   margin-bottom: -300px;
   font-size: 10px;
   font-family: "fira-sans-2", Verdana, sans-serif;
@@ -535,33 +559,28 @@ nav .logo {
 #ticks .tick {
   position: relative; 
   border-bottom: 1px dotted #C4C4C4; 
+  height: 15px;
 }
 
 #ticks .tick p {
     position: absolute;
-    left: -3em;
+    left: -2em;
     margin: 0;
     font-size: 0.75em;
-    color: #fff;
+    color: #ececec;
     text-align: right;
-    top: .75em;
+    top: 1em;
 }
 
 #points {
-	display: block;
-	position: absolute;
-	height: 435px;
-	margin: 0px;
-	padding: 0;
-	background: transparent;
-	font-size: 11px;
-	top: 14px;
+
 }
 
 #points-table-wrapper {
 	position: relative;
-	height: 100%;
+	height: 460px;
 	width: 100%;
+  display: flex;
 }
 
 #points tr, #points th, #points td { 
@@ -625,5 +644,6 @@ font-weight: normal; color: #fff;}
 
 .page-footer {
 	background-color: #7A91A0;
+
 }
 

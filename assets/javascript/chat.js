@@ -4,7 +4,8 @@ const chat = (function() {
     let initialDataLoaded = false;
 
     let _validChat = (msg) => {
-        return msg !== '' && msg.length < 144 ? true : false }
+        return msg !== '' && msg.length < 144 ? true : false
+    }
 
     let _postChat = function(name, msg) {
         let chat = db.push();
@@ -17,7 +18,7 @@ const chat = (function() {
     let _makeChatLine = function(name, msg) {
         let msgDiv = $('<div>').html('<span class="chat-name">' + name + ': </span>' + msg);
         $('#chat-messages').append(msgDiv);
-        $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
     }
 
     let _setDataLoaded = function() {
@@ -40,20 +41,18 @@ const chat = (function() {
         })
     }
 
-    let setGameListener = function(newID) {
+    let setGameListener = function(gameID, lobby) {
         db.off('child_added');
         initialDataLoaded = false;
-        gameID = newID;
-        db = firebase.database().ref('/' + gameID + '/chat');
+        let loc = lobby ? '/' + gameID + '/chat' : '/games/' +gameID+ '/chat'
+        db = firebase.database().ref(loc);
         _setDBListener();
         _setDataLoaded();
     }
 
-    let getGameID = () => {
-        return gameID }
+    let getGameID = () => { return gameID }
 
-    let getDBPath = () => {
-        return db }
+    let getDBPath = () => { return db }
 
     let clearChats = () => { $('#chat-messages').empty(); }
 
