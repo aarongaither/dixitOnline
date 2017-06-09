@@ -108,21 +108,22 @@ let game = {
         voteSelectedRef = gameRef.child("vote_selection")
 
         gameRef.once("value", function(snap) {
-            game.maxPlayers = snap.val().max_players || 4;
-            game.maxRounds = snap.val().max_rounds || 2;
+            game.maxPlayers = parseInt(snap.val().max_players, 10) || 4;
+            game.maxRounds = parseInt(snap.val().max_rounds, 10) || 2;
 
             //Start Game
-            userRef.on("value", function(userSnap) {
+            userRef.on("value", function start(userSnap) {
                 let numPlayers = userSnap.numChildren();
 
-                if (numPlayers == game.maxPlayers) {
+                if (numPlayers === game.maxPlayers) {
                     game.initGameListeners();
-                    cards.createDeck();
-                    cards.shuffleDeck(cards.oDeck);
-                    game.startGameAssignRoles();
-                    game.checkAndDeal(cards.sDeck);
-
-
+                    if (userSnap.val().role = "storyTeller") {
+                        cards.createDeck();
+                        cards.shuffleDeck(cards.oDeck);
+                        game.startGameAssignRoles();
+                        game.checkAndDeal(cards.sDeck);
+                    }
+                    userRef.off("value", start)
                 }
             })
         })
@@ -259,9 +260,10 @@ let game = {
 
     dealPlayerHand: function() {
         console.log("dealPlayerHand")
-        playerHandRef.once("value", function(snap) {
+        playerHandRef.on("value", function(snap) {
             let playerHand = [];
             if (snap.child(player.key).exists()) {
+                console.log("inside dealPlayerHand if statement")
                 playerHand = snap.child(player.key).val()
                 for (let i = playerHand.length - 1; i >= 0; i--) {
                     let delay = i * 100;
@@ -270,17 +272,15 @@ let game = {
                             // console.log(playerHand[i]);
                     }, delay)
                 }
-                // playerHandRef.off("value");
+                playerHandRef.off("value");
             }
         })
     },
 
-    //need to update possibly to autocheck hand limit vs. handsize
     checkAndDeal: function(deckArray) {
         console.log("checkAndDeal");
         userRef.once("value").then(function(snap) {
             let userKeyArray = Object.keys(snap.val());
-
             userKeyArray.forEach(function(key) {
                 playerHandRef.child(key).once("value", function(snap) {
                         let currHand = [];
@@ -298,19 +298,16 @@ let game = {
                     })
                     // console.log("inside the for each statement in check and deal", key)
             })
-
+            game.dealPlayerHand();
             gameRef.update({
                 curr_state: 1 //game start
             });
-        }).then(function() {
-            game.dealPlayerHand();
         })
-
-        let currCards = $("#given-cards").children().lenth || 0
+        let currCards = $("#given-cards").children().length || 0
+        console.log("currCards", currCards);
         gamePage.createCardDivs(game.nHandSize - currCards);
         game.storyClickListener();
         game.cardClickListener();
-
     },
 
     removeCard: function(player, card) {
@@ -374,11 +371,13 @@ let game = {
     },
 
     initGameListeners: function() {
-        this.updateLocalDeckListener();
-        this.updateLocalStateListener();
-        this.updateLocalPlayerRoleListener();
-        this.updateStateListener();
-        this.stateChangeListener();
+        if (game.currState === 0) {
+            console.log("initGameListeners");
+            this.updateLocalDeckListener();
+            this.updateLocalStateListener();
+            this.updateLocalPlayerRoleListener();
+            this.stateChangeListener();
+        }
     },
 
     updateLocalDeckListener: function() {
@@ -417,14 +416,14 @@ let game = {
         });
     },
 
-    updateStateListener: function() {
+    cardSelectionCompletionListener: function() {
         //update curr_state in DB to 4 after everyone has selected a card
-        console.log("updateStateListener");
+        console.log("cardSelectionCompletionListener");
         cardSelectedRef.on("value", function(snap) {
             let totalPlayers = game.nPlayers;
             let currSelectedCards = snap.numChildren();
 
-            userRef.on("value", function(internalSnap) {
+            userRef.once("value", function(internalSnap) {
                 totalPlayers = internalSnap.numChildren()
             });
 
@@ -433,17 +432,21 @@ let game = {
             // console.log("count of total players and current selected cards", totalPlayers, currSelectedCards)
             if (totalPlayers - 1 === currSelectedCards && game.currState === 3) {
                 gameRef.update({
-                    curr_state: 4 // move onto voting phase
-                })
+                        curr_state: 4 // move onto voting phase
+                    })
+                    // cardSelectedRef.off("value");
             };
         });
+    },
 
+    voteSelectionCompletionListener: function() {
         //check to see if everyone has voted and change state to 5 for scoring
+        console.log("voteSelectionCompletionListener");
         voteSelectedRef.on("value", function(snap) {
             let totalPlayers = game.nPlayers;
             let currSelectedCards = snap.numChildren();
 
-            userRef.on("value", function(internalSnap) {
+            userRef.once("value", function(internalSnap) {
                 totalPlayers = internalSnap.numChildren()
             });
 
@@ -454,6 +457,7 @@ let game = {
                 gameRef.update({
                     curr_state: 5 // move onto scoring phase
                 })
+                voteSelectedRef.off("value");
             };
         });
     },
@@ -467,93 +471,98 @@ let game = {
             let currState = snap.val();
             let sCardsArray = [];
 
-            switch (currState) {
-                case 4: //state 4 is the start of the voting stage
-                    console.log("current state", currState)
-                    gameRef.child("curr_story_card").once("value", function(snap) {
+            if (currState === 3) {
+                game.cardSelectionCompletionListener();
+
+            } else if (currState === 4) { //state 4 is the start of the voting stage   
+                console.log("current state", currState)
+                game.voteSelectionCompletionListener();
+                gameRef.child("curr_story_card").once("value", function(snap) {
+                    let tempArray = [];
+                    tempArray.push(snap.val());
+                    sCardsArray = sCardsArray.concat(tempArray);
+                }).then(function() {
+                    cardSelectedRef.once("value", function(snap) {
                         let tempArray = [];
-                        tempArray.push(snap.val());
+                        tempArray = Object.values(snap.val())
                         sCardsArray = sCardsArray.concat(tempArray);
+                    })
+                }).then(function() {
+                    //shuffle for each player differently - to make consistent have to push to DB and pull down.
+                    // sCardsArray = cards.shuffleDeck(sCardsArray);
+                    gamePage.createCardDivs(game.nPlayers, true);
+                    console.log("sCardArray before for loop to display cards", sCardsArray)
+                    for (let i = sCardsArray.length - 1; i >= 0; i--) {
+                        cards.displaySpecificCard("#vote-card" + i, sCardsArray, i)
+                        if (i === 0) {
+                            cardSelectedRef.off("value");
+                        }
+                    }
+                    game.cardClickListener();
+                })
+            } else if (currState === 5) { //state of is the start of the scoring stage
+                voteSelectedRef.once("value", function(snap) {
+                    vCardsObj = snap.val();
+                }).then(function() {
+                    gameRef.once("value", function(snap) {
+                        sCardsObj = {
+                            [snap.val().curr_teller]: snap.val().curr_story_card
+                        }
                     }).then(function() {
                         cardSelectedRef.once("value", function(snap) {
-                            let tempArray = [];
-                            tempArray = Object.values(snap.val())
-                            sCardsArray = sCardsArray.concat(tempArray);
-                        })
-                    }).then(function() {
-                        //shuffle for each player differently - to make consistent have to push to DB and pull down.
-                        // sCardsArray = cards.shuffleDeck(sCardsArray);
-                        gamePage.createCardDivs(game.nPlayers, true);
-
-                        for (let i = sCardsArray.length - 1; i >= 0; i--) {
-                            cards.displaySpecificCard("#vote-card" + i, sCardsArray, i)
-                        }
-
-                        game.cardClickListener();
-                    })
-                    break;
-                case 5: //state of is the start of the scoring stage
-                    voteSelectedRef.once("value", function(snap) {
-                        vCardsObj = snap.val();
-                    }).then(function() {
-                        gameRef.once("value", function(snap) {
-                            sCardsObj = {
-                                [snap.val().curr_teller]: snap.val().curr_story_card
-                            }
-                        }).then(function() {
-                            cardSelectedRef.once("value", function(snap) {
-                                    sCardsObj = $.extend({}, sCardsObj, snap.val());
-                                })
-                                // console.log("State = 5", vCardsObj, sCardsObj)
-                            if (player.role === "storyTeller") {
-                                game.scoring(sCardsObj, vCardsObj);
-                            }
-                        })
-                    })
-                    break;
-                case 6: //round end restart round
-                    gameRef.once("value", function(snap) {
-                        let roundNum = snap.child("curr_round").val() || 1;
-                        let maxRounds = snap.child("max_rounds").val() || game.maxRounds;
-
-                        console.log(maxRounds, roundNum);
-
-                        if (maxRounds === roundNum) {
-                            gameRef.update({
-                                curr_state: 7
+                                sCardsObj = $.extend({}, sCardsObj, snap.val());
                             })
-                        } else {
-
-                            if (player.role === "storyTeller") {
-                                gameRef.once("value", function(snap) {
-                                    let currPlayOrder = snap.child("curr_play_order").val();
-                                    let newPlayOrder = game.playOrderUpdate(currPlayOrder);
-                                    let currRound = snap.val().curr_round || 0;
-
-                                    currRound++;
-
-                                    gameRef.update({
-                                        curr_play_order: newPlayOrder,
-                                        curr_state: 1,
-                                        curr_round: currRound
-                                    })
-                                }).then(function() {
-                                    cardSelectedRef.remove();
-                                    voteSelectedRef.remove();
-                                    game.roundEndAssignRoles();
-                                })
-                            }
+                            // console.log("State = 5", vCardsObj, sCardsObj)
+                        if (player.role === "storyTeller") {
+                            game.scoring(sCardsObj, vCardsObj);
                         }
                     })
-                    break;
-                case 7:
-                    break;
+                })
+
+            } else if (currState === 6) { //round end restart round
+                gameRef.once("value", function(snap) {
+                    let roundNum = snap.child("curr_round").val() || 1;
+                    let maxRounds = snap.child("max_rounds").val() || game.maxRounds;
+
+                    console.log(maxRounds, roundNum);
+
+                    if (maxRounds === roundNum) {
+                        gameRef.update({
+                            curr_state: 7
+                        })
+                    } else {
+
+                        if (player.role === "storyTeller") {
+                            gameRef.once("value", function(snap) {
+                                let currPlayOrder = snap.child("curr_play_order").val();
+                                let newPlayOrder = game.playOrderUpdate(currPlayOrder);
+                                let currRound = snap.val().curr_round || 1;
+
+                                currRound++;
+
+                                gameRef.update({
+                                    curr_play_order: newPlayOrder,
+                                    curr_state: 1,
+                                    curr_round: currRound
+                                })
+                            }).then(function() {
+                                cardSelectedRef.remove();
+                                voteSelectedRef.remove();
+                                game.roundEndAssignRoles();
+                            })
+                        }
+                    }
+                })
+            } else if (currState === 7) {
+
             }
+
         });
     },
 
     storyClickListener: function() {
         //click listener for current story 
+        console.log("storyClickListener");
         $(".submit").off().click(function(value) {
             event.preventDefault();
             let currStory = $("#storyteller-story").val().trim();
@@ -570,6 +579,8 @@ let game = {
     },
 
     cardClickListener: function() {
+        //click listener for cards
+        console.log("cardClickListener")
         $(".play-card, .vote-card").off().click(function() {
             if (player.role === "storyTeller" && game.currState === 1) {
                 // console.log($(this).siblings(".fahad-test").attr("card-value"))
