@@ -279,30 +279,32 @@ let game = {
 
     checkAndDeal: function(deckArray) {
         console.log("checkAndDeal");
-        userRef.once("value").then(function(snap) {
-            let userKeyArray = Object.keys(snap.val());
-            userKeyArray.forEach(function(key) {
-                playerHandRef.child(key).once("value", function(snap) {
-                        let currHand = [];
-                        let nCardsNeeded = game.nHandSize;
-                        if (snap.exists()) {
-                            let currHandSize = snap.val().length;
-                            currHand = snap.val();
-                            nCardsNeeded = nCardsNeeded - currHandSize;
-                            console.log("in the if statement for check and deal", currHand, nCardsNeeded)
-                        }
-                        currHand = currHand.concat(game.dealnCards(deckArray, nCardsNeeded));
-                        playerHandRef.update({
-                            [key]: currHand
-                        });
-                    })
-                    // console.log("inside the for each statement in check and deal", key)
+        // userRef.once("value").then(function(snap) {
+        // let userKeyArray = Object.keys(snap.val());
+        // userKeyArray.forEach(function(key) {
+        playerHandRef.child(player.key).once("value", function(snap) {
+                let currHand = [];
+                let nCardsNeeded = game.nHandSize;
+                if (snap.exists()) {
+                    let currHandSize = snap.val().length;
+                    currHand = snap.val();
+                    nCardsNeeded = nCardsNeeded - currHandSize;
+                    console.log("in the if statement for check and deal", currHand, nCardsNeeded)
+                }
+                currHand = currHand.concat(game.dealnCards(deckArray, nCardsNeeded));
+                playerHandRef.update({
+                    [player.key]: currHand
+                });
             })
-            game.dealPlayerHand();
+            // console.log("inside the for each statement in check and deal", key)
+            // })
+        game.dealPlayerHand();
+        if (player.role === "storyTeller") {
             gameRef.update({
                 curr_state: 1 //game start
             });
-        })
+        }
+        // })
         let currCards = $("#given-cards").children().length || 0
         console.log("currCards", currCards);
         gamePage.createCardDivs(game.nHandSize - currCards);
