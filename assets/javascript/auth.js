@@ -187,7 +187,8 @@ const auth = (function() {
             players: {
                 [userID]: {
                     key: userID,
-                    role: 'storyTeller'
+                    role: 'storyTeller',
+                    dateAdded: firebase.database.ServerValue.TIMESTAMP
                 }
             }
         })
@@ -200,7 +201,8 @@ const auth = (function() {
         game.child("players").update({
             [userID]: {
                 key: userID,
-                role: 'player'
+                role: 'player',
+                dateAdded: firebase.database.ServerValue.TIMESTAMP
             }
         })
 
