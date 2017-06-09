@@ -15,10 +15,6 @@
 
 <style>
     
-#final-results {
-    width: 50%;
-    margin: 0 auto;
-}
 
 </style>
 
@@ -34,7 +30,7 @@
         <div id="left-board" class="flex-item">
         </div>
         <div id="main-board" class="flex-item">
-            <h1>Results</h1>
+            <h1 class="gold">Results</h1>
             <div id="final-results" class="results-flex-container">
             </div>
         </div>
@@ -101,7 +97,7 @@
             score: 15
         };
 
-        var playerScores = [loser1, loser2, loser3, loser4, loser5];
+        var playerScores = [winner, loser1, loser2, loser3, loser4, loser5];
 
         playerScores.sort(); 
 
@@ -112,14 +108,14 @@
 
         console.log(playerScores);
 
-        var trophyImage = $('<img>').attr('src', 'assets/images/trophy.jpg').width('100px');
+        var trophyImage = $('<img>').attr('src', 'assets/images/trophy.png').attr('class','animated tada').width('140px');
 
         var winnersWell = $('<div>').attr('id','winner-div').attr('class','well flex-item');
         var scoresWell = $('<div>').attr('id','scores-div').attr('class','well');
         var scoresList = $('<ul>').attr('class','collection');
 
         function displayWinner() {
-            var x = $('<div>').html('<br>Congratulations<br> <h2>' + winner.name + '</h2>' + '<br>' + winner.score).prepend(trophyImage);
+            var x = $('<div>').html('<br>CONGRATULATIONS<br> <h3>' + winner.name + '</h3>' + '<h5 class="txt-lightblue">Score: ' + winner.score  + '</h5>').prepend(trophyImage);
             winnersWell.append(x);
         }
 
@@ -131,8 +127,8 @@
 
         function displayLosers() {
             for (var i = 0; i < playerScores.length; i++) {
-                var pScore = $('<span>').html(playerScores[i].score).attr('class','right');
-                var pName = $('<span>').html(playerScores[i].name).attr('class','center');
+                var pScore = $('<h5>').html(playerScores[i].score).attr('class','right');
+                var pName = $('<h5>').html(playerScores[i].name).attr('class','center');
                 var listItem = $('<li>').attr('class','collection-item avatar');
                 var listImg = $('<img>').attr('src', avatarObj.genAvatarURL(playerColors[i])).attr('class','circle');
                 listItem.append(listImg).append(pScore).append(pName);
@@ -143,7 +139,7 @@
         displayLosers();
         
 
-        $('#final-results').append(winnersWell).append(scoresWell);
+        $('#final-results').append(scoresWell).append(winnersWell);
 
 
     </script>

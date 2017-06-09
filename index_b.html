@@ -23,7 +23,7 @@
     <div class="flex-container">
         <div id="left-board" class="flex-item">
             <h3 class="gold">Scoreboard</h3>
-            <div id="points-table-wrapper">
+            <div id="points-table-wrapper" class="fadeIn animated">
                 <div class="score-flex-container">
                         <div id="p1-score" class="player-score-div" >  
                             <div class="player-bar">
@@ -134,9 +134,9 @@
             <div class="" id="center-panel">
                 <h2 class="gold">Current Game</h1>
                 <div class="row" id="story-text">
-                    <form id="story-form">
+                    <form id="story-form" class="white-transparent">
                         <ul class="story-form-wrapper">
-                            <li><input placeholder="" id="storyteller_story" type="text" class="validate"></li>
+                            <li><input placeholder="Tell your story" id="storyteller_story" type="text" class="validate"></li>
                             <li><input type="submit" value="Submit" class="submit"></li>
                         </ul>
                     </form>
@@ -346,10 +346,8 @@
 
         // Create an end game button 
         function endButton(){
-            var li = $('<li>');
-            var endBtn = $('<a>').html('End Game').attr('id', 'end-game-btn').attr('value', 'endgame');
-            li.append(endBtn)
-            $('#right-board').append(li);
+            var endBtn = $('<btn>').html('End Game').attr('id', 'end-game-btn').attr('value', 'endgame');
+            $('#right-board').append(endBtn);
         }
 
         endButton();
