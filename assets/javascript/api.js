@@ -7,6 +7,7 @@ let avatarObj = {
     eyesUsed: [],
     noseUsed: [],
     mouthUsed: [],
+    colors : ['#FF69B4', '#E6E6FA', '#FFA07A', '#66CDAA', '#DA70D6', '#FF6347'],
     getRandom: function(array) {
         return Math.floor(Math.random() * array.length);
     },

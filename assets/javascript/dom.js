@@ -250,22 +250,7 @@ const gamePage = (function() {
 
         main.append(centerPanel)
 
-        let storyText = $('<div>').attr('id', 'story-text').addClass('row');
-        let storyForm = $('<form>').attr('id', 'story-form')
-            .append($('<ul>').addClass('story-form-wrapper')
-                .append($('<li>')
-                    .append($('<input>', {
-                        id: 'storyteller-story',
-                        type: 'text',
-                        class: 'validate'
-                    }))
-                ).append($('<li>')
-                    .append($('<input>', {
-                        type: 'submit',
-                        class: 'submit'
-                    }))
-                )
-            );
+        let storyText = $('<div>').attr('id', 'story-text').addClass('row');        
 
         let chosenCards = $('<div>').attr('id', 'chosen-cards').addClass('row');
         let cardPanel = $('<div>').addClass('card-panel white-transparent').attr('id', 'chosen-cards-panel');
@@ -275,7 +260,7 @@ const gamePage = (function() {
         let chatRow = $('<div>').addClass('row');
         let gameTitle = $('<h2>').html('Current Game').addClass('gold');
 
-        centerPanel.append(gameTitle).append(storyText.append(storyForm));
+        centerPanel.append(gameTitle).append(storyText);
         centerPanel.append(chosenCards.append(cardPanel));
         centerPanel.append(givenCards);
         centerPanel.append(chatSectionRow);
@@ -313,18 +298,15 @@ const gamePage = (function() {
         rightBoard.append($('<div>').attr('id', 'view-players'))
     }
 
-    let addAvatar = function(name, id) {
-        for(let i = 0; i < playersArray.length; i++) {
-            let playerName = $('<div>').attr('class', 'player-name center').text(playersArray[i]);
-            let playerAvatar = $('<img>').attr('src', avatarObj.genAvatarURL(playerColors[i])).attr('class', 'circle responsive-img');
-            let playerScore = $('<div>').html(score).attr('class', 'animated fadeInUp');
-            let playerPoints = $('<div>').attr('class','circle responsive-img total-points').append(playerScore);
-            let playerCard = $('<div>').attr('id','player-card' + i).attr('class','player-card').append(playerAvatar).append(playerName).append(playerPoints);
-
-            playerCard.css('background-color', playerColors[i]);
+    let addAvatar = function(name, avatar, color, id) {
+            let playerName = $('<div>').addClass('player-name center').text(name);
+            let playerAvatar = $('<img>').attr('src', avatar).addClass('circle responsive-img');
+            let playerScore = $('<div>').text('0').addClass('animated fadeInUp points');
+            let playerPoints = $('<div>').addClass('circle responsive-img total-points').append(playerScore);
+            let playerCard = $('<div>').attr('id','player-card-' + id).addClass('player-card').append(playerAvatar).append(playerName).append(playerPoints);
+            playerCard.css('background-color', color);
         
             $('#view-players').append(playerCard);
-        }
     }
 
     let _endButton = function() {
@@ -335,13 +317,6 @@ const gamePage = (function() {
     }
 
     let _makeScoreBoard = function(players) {
-        let _makePlayerDiv = function(playerNum) {
-            let playerDiv = $('<div>').addClass('player-score-div').attr('id', 'p'+playerNum+'-score')
-            let playerBar = $('<div>').addClass('player-bar')
-            let playerProgress = $('<div>').addClass('player-progress').css('height','0px')
-            let playerLabel = $('<div>').addClass('player-label').text('P'+playerNum)
-            container.append(playerDiv.append(playerBar.append(playerProgress)).append(playerLabel))
-        }
 
         let _makeLines = function() {
             let ticks = $('<div>').attr('id', 'ticks')
@@ -356,17 +331,21 @@ const gamePage = (function() {
         wrapper.append(container)
         $('#left-board').append($('<h5>').text('Scoreboard').addClass('gold')).append(wrapper);
 
-        for (let i = 1; i <= players; i++){
-            _makePlayerDiv(i);
-        }
         _makeLines();
     }
 
-    let updateScoreBar = function(playerNum, points) {
-        let elem = $('#p'+playerNum+'-score .player-progress')
-        let h = elem.height();
-        h += 15*points;
-        elem.height(h)
+    let makeScoreboardPlayerDiv = function(id, color) {
+        let playerDiv = $('<div>').addClass('player-score-div').attr('id', 'score-'+id)
+        let playerBar = $('<div>').addClass('player-bar')
+        let playerProgress = $('<div>').addClass('player-progress').css({'height':'0px','background-color':color})
+        // let playerLabel = $('<div>').addClass('player-label').text('P'+playerNum)
+        $('#points-table-wrapper .score-flex-container').append(playerDiv.append(playerBar.append(playerProgress)))
+    }
+
+    let updateScore = function(id, points) {
+        let elem = $('#score-'+id+' .player-progress')
+        elem.height(15*points);
+        $('#player-card-'+id+' .points').text(points)
     }
 
     let removeAnimation = function(){
@@ -375,13 +354,44 @@ const gamePage = (function() {
         }, 2000)
     }
 
+    let updateStoryArea = function(method, curStory){ //curStory is optional
+        let textArea = $('#story-text');
+        textArea.empty()
+        if (method === 'player') {
+            textArea.append($('<h5>').text('Waiting for Story...'))
+        } else if (method === 'storyteller') {
+            let storyForm = $('<form>').attr('id', 'story-form')
+                .append($('<ul>').addClass('story-form-wrapper')
+                    .append($('<li>')
+                        .append($('<input>', {
+                            id: 'storyteller-story',
+                            type: 'text',
+                            class: 'validate'
+                        }))
+                    ).append($('<li>')
+                        .append($('<input>', {
+                            type: 'submit',
+                            class: 'submit'
+                        }))
+                    )
+                );
+            textArea.append(storyForm);
+        } else if (method === 'story') {
+           textArea.append($('<h5>').text('Story: '+curStory)) 
+        } else if (method === 'waiting') {
+            textArea.append($('<h5>').text('Waiting for enough players to join...')) 
+        }
+    }
+
     return {
         createPage: makeGamePage,
         cleanUpPage: cleanUpGamePage,
         createCardDivs: createCardDivs,
-        updateScoreBar: updateScoreBar,
+        updateScore: updateScore,
         addAvatar: addAvatar,
-        removeAnimation: removeAnimation
+        makeScoreboardPlayerDiv: makeScoreboardPlayerDiv,
+        removeAnimation: removeAnimation,
+        updateStoryArea: updateStoryArea
     }
 
 })()
@@ -414,7 +424,6 @@ const finalPage = (function(winner, playerArray) {
 
     let _displayLosers = function(losers) {
         console.log(losers)
-        let playerColors = ['#FF69B4', '#E6E6FA', '#FFA07A', '#66CDAA', '#DA70D6', '#FF6347'];
         for (let i = 0; i < losers.length; i++) {
             let pScore = $('<span>').html(losers[i].score).attr('class','right');
             let pName = $('<span>').html(losers[i].name).attr('class','center');
