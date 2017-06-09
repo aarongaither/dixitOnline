@@ -174,36 +174,66 @@ const auth = (function() {
         })
     }
 
-    let _makeGame = function(name, players, rounds) {
+    let _makeGame = function(gameName, players, rounds) {
         let userID = curUser().uid;
         let game = firebase.database().ref('/games').push()
         let gameID = game.key;
-        game.set({
-            gameID: gameID,
-            game_name: name,
-            max_players: players,
-            max_rounds: rounds,
-            curr_teller: userID,
-            players: {
-                [userID]: {
-                    key: userID,
-                    role: 'storyTeller',
-                    dateAdded: firebase.database.ServerValue.TIMESTAMP
+        let color = avatarObj.colors[0];
+        let avatar = avatarObj.genAvatarURL(color)
+        let name = '';
+        firebase.database().ref('/user_stats/'+userID).once('value', function(snap){
+            name = snap.val().display_name
+        }).then(function(){
+            game.set({
+                gameID: gameID,
+                game_name: gameName,
+                max_players: players,
+                max_rounds: rounds,
+                curr_teller: userID,
+                players: {
+                    [userID]: {
+                        key: userID,
+                        role: 'storyTeller',
+                        dateAdded: firebase.database.ServerValue.TIMESTAMP,
+                        color: color,
+                        avatar: avatar,
+                        name: name
+                    }
                 }
-            }
+            })
+            _gameInit(userID, gameID, players)
+        }).then(function(){
+            gamePage.makeScoreboardPlayerDiv(userID, color)
+            gamePage.addAvatar(name, avatar, color, userID)
         })
-        _gameInit(userID, gameID, players)
     }
 
     let _joinGame = function(gameID) {
         let userID = curUser().uid;
         let game = firebase.database().ref('/games/' + gameID);
-        game.child("players").update({
-            [userID]: {
-                key: userID,
-                role: 'player',
-                dateAdded: firebase.database.ServerValue.TIMESTAMP
-            }
+        let pCount = 0;
+        let color = '';
+        let avatar = '';
+        let name = '';
+        game.child('players').once('value', function(snap){
+            pCount = snap.numChildren()
+            color = avatarObj.colors[pCount];
+            avatar = avatarObj.genAvatarURL(color);
+        }).then(function(){
+            firebase.database().ref('/user_stats/'+userID).once('value', function(snap){
+                name = snap.val().display_name
+            }).then(function(){
+                game.child('players').update({
+                    [userID]: {
+                        key: userID,
+                        role: 'player',
+                        dateAdded: firebase.database.ServerValue.TIMESTAMP,
+                        color: color,
+                        avatar: avatar,
+                        name: name
+                    }
+                })
+            })
         })
 
         game.once('value', function(snap) {
@@ -217,8 +247,36 @@ const auth = (function() {
         chat.setGameListener(gameID);
         lobbyPage.cleanUpPage();
         lobbyListeners('off');
+        gameListeners('on', gameID);
         gamePage.createPage(players);
         game.startGame(gameID);
+    }
+
+    let gameListeners = function(method, gameID) {
+        _playerJoinListener(method, gameID)
+        // _scoreIncreaseListener()
+    }
+
+    let _playerJoinListener = function(method, gameID) {
+        let gamePlayers = firebase.database().ref('/games/' + gameID + '/players')
+        if (method === 'on') {
+            gamePlayers.on('child_added', function(snap) {
+                console.log(snap, snap.val())
+                _playerJoin(snap.val())
+            })
+        } else if (method === 'off') {
+            gamePlayers.off()
+        }
+    }
+
+    let _playerJoin = function(playerInfo) {
+        console.log(playerInfo)
+        let id = playerInfo.key;
+        let avatar = playerInfo.avatar;
+        let color = playerInfo.color;
+        let name = playerInfo.name;
+        gamePage.makeScoreboardPlayerDiv(id, color)
+        gamePage.addAvatar(name, avatar, color, id)
     }
 
     return {
@@ -227,6 +285,8 @@ const auth = (function() {
         signUp: signUp,
         signIn: signIn,
         errorHandler: errorHandler,
-        loginListeners: loginListeners
+        loginListeners: loginListeners,
+        lobbyListeners: lobbyListeners,
+        gameListeners: gameListeners
     }
 })()
