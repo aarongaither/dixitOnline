@@ -359,7 +359,7 @@ const gamePage = (function() {
         textArea.empty()
         if (method === 'player') {
             textArea.append($('<h5>').text('Waiting for Story...'))
-        } else if (method === 'storyteller') {
+        } else if (method === 'storyTeller') {
             let storyForm = $('<form>').attr('id', 'story-form')
                 .append($('<ul>').addClass('story-form-wrapper')
                     .append($('<li>')
