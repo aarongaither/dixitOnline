@@ -150,7 +150,7 @@ const lobbyPage = (function() {
         $('#left-board').empty();
         $('#right-board').empty();
 
-        main.append($('<h1>').text('Lobby'));
+        main.append($('<h1>').text('Lobby').addClass('gold'));
         let lobbyContainer = $('<div>').addClass('lobby-flex-container');
         let lobbyChatBoard = $('<div>').attr('id', 'lobby-chat-board').addClass('flex-item');
         let lobbyAside = $('<div>').attr('id', 'lobby-aside').addClass('flex-item');
@@ -158,21 +158,21 @@ const lobbyPage = (function() {
         lobbyContainer.append(lobbyAside).append(lobbyChatBoard);
         main.append(lobbyContainer);
 
-        let createBtn = $('<button>').attr('id', 'create-game-btn').attr('value', 'Submit').attr('class', '').text('Create New Game');
-        let btnWell = $('<div>').attr('class', 'well').append(createBtn);
-        let gamesWell = $('<div>').attr('id', 'games-listing').attr('class', 'well');
+        let createBtn = $('<button>').attr('id', 'create-game-btn').attr('value', 'Submit').attr('class', 'blue-btn').text('Create New Game');
+        let btnWell = $('<div>').attr('class', 'well white-transparent').append(createBtn);
+        let gamesWell = $('<div>').attr('id', 'games-listing').attr('class', 'well white-transparent');
 
         let gamesCollection = $('<ul>').attr('class', 'collection').attr('id', 'game-list');
-        let gamesTitle = $('<h3>').text('Join a Game');
+        let gamesTitle = $('<h5>').text('Join a Game');
 
         gamesWell.append(gamesCollection).prepend(gamesTitle);
 
         $('#lobby').append(btnWell).append(gamesWell);
 
-        let chatWell = $('<div>').attr('class', 'well left-align').attr('id', 'lobby-chat');
+        let chatWell = $('<div>').attr('class', 'well white-transparent left-align').attr('id', 'lobby-chat');
         let chatBox = $('<div>').attr('id', 'chat-box').css({'overflow-y':'scroll','height':'200px'});
         let chatMsg = $('<div>').attr('id', 'chat-messages');
-        let chatTitle = $('<h3>').text('Chat');
+        let chatTitle = $('<h5>').text('Chat');
 
         chatBox.append(chatMsg);
         chatWell.append(chatTitle).append(chatBox);
@@ -182,7 +182,7 @@ const lobbyPage = (function() {
         let chatFormDiv = $('<div>');
         let chatForm = $('<form>');
         let chatInput = $('<input>').attr('id', 'chat-input').attr('placeholder', 'Send a chat message');
-        let chatSubmit = $('<input>').attr('id', 'chat-submit').attr('type', 'Submit');
+        let chatSubmit = $('<input>').attr('id', 'chat-submit').attr('type', 'Submit').addClass('blue-btn');
 
         chatForm.append(chatInput).append(chatSubmit);
         chatFormDiv.append(chatForm);
@@ -268,13 +268,14 @@ const gamePage = (function() {
             );
 
         let chosenCards = $('<div>').attr('id', 'chosen-cards').addClass('row');
-        let cardPanel = $('<div>').addClass('card-panel white').attr('id', 'chosen-cards-panel');
+        let cardPanel = $('<div>').addClass('card-panel white-transparent').attr('id', 'chosen-cards-panel');
         let givenCards = $('<div>').attr('id', 'given-cards').addClass('row');
         let chatSectionRow = $('<div>').attr('id', 'chat-section-row').addClass('row');
         let chatForm = $('<form>').addClass('col s12');
         let chatRow = $('<div>').addClass('row');
+        let gameTitle = $('<h2>').html('Current Game').addClass('gold');
 
-        centerPanel.append(storyText.append(storyForm));
+        centerPanel.append(gameTitle).append(storyText.append(storyForm));
         centerPanel.append(chosenCards.append(cardPanel));
         centerPanel.append(givenCards);
         centerPanel.append(chatSectionRow);
@@ -291,11 +292,7 @@ const gamePage = (function() {
         let btnText = type ? 'vote' : 'play';
         for (let i = 0; i < qty; i++) {
             let cardBox = $('<div>').attr('class', 'col card-stock')
-            let newCard = $('<div>').attr('id', id + i).attr('class', 'cards-container').css({
-                'height': '150px',
-                'width': '100px',
-                'border': '2px solid black'
-            }).addClass('card-shadow');
+            let newCard = $('<div>').attr('id', id + i).attr('class', 'cards-container').addClass('card-shadow');
             let cardSubmitBtn = $('<button>').addClass(btnClass).text(btnText);
 
             // newCard.attr('class', 'animated fadeInRight');
@@ -312,7 +309,7 @@ const gamePage = (function() {
 
     let _makeAvatarArea = function() {
         let rightBoard = $('#right-board');
-        rightBoard.append($('<h3>').text('Players'))
+        rightBoard.append($('<h5>').text('Players').addClass('gold'))
         rightBoard.append($('<div>').attr('id', 'view-players'))
     }
 
@@ -357,7 +354,7 @@ const gamePage = (function() {
         let wrapper = $('<div>').attr('id', 'points-table-wrapper')
         let container = $('<div>').addClass('score-flex-container');
         wrapper.append(container)
-        $('#left-board').append($('<h3>').text('Scoreboard')).append(wrapper);
+        $('#left-board').append($('<h5>').text('Scoreboard').addClass('gold')).append(wrapper);
 
         for (let i = 1; i <= players; i++){
             _makePlayerDiv(i);

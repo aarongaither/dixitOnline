@@ -15,7 +15,6 @@ body {
   background-attachment: cover;
   background-repeat: no-repeat;
   background-position: bottom;
-
 }
 
 header {
@@ -31,13 +30,6 @@ footer {
 h1, h2, h3, h4, h5, h6 {
     color: #fff;
 }
-
-h1 { font-size: 2em; }
-h2 { font-size: 1.5em; }
-h3 { font-size: 1.17em; }
-h4 { font-size: 1.12em; }
-h5 { font-size: .83em; }
-h6 { font-size: .75em; }
 
 form input {
     margin-bottom: 10px;
@@ -96,6 +88,45 @@ nav {
   line-height: 1em;
   position: relative;
   z-index: auto
+}
+
+.blue-btn {
+  border-radius: 5px;
+  background: #fff;
+  text-transform: uppercase;
+  border-width: 1px;
+  border-style: none;
+  border-color: #fff;
+  border-image: initial;
+  padding: 10px;
+  background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+  font-size: .8em;
+
+}
+
+.gold-btn {
+  border-radius: 5px;
+  background: #fff;
+  text-transform: uppercase;
+  border-width: 1px;
+  border-style: none;
+  border-color: #fff;
+  border-image: initial;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-image: linear-gradient(to right, #efd100 0, #e2a233 38%, #f0c328 60%, #ffe13e 100%);
+  transition: 0.5s;
+  background-size: 200% auto;
+  box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+.blue-btn:hover,
+.gold-btn:hover {
+  background-position: right center; 
+  color: #fff;
 }
 
 .white-transparent {
@@ -227,7 +258,6 @@ nav .logo {
   padding: 10px;
   width: 100%;
   background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
-	font-weight: bold;
 	transition: 0.5s;
 	background-size: 200% auto;
 	box-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5);
@@ -251,7 +281,6 @@ nav .logo {
   padding: 10px;
   margin-bottom: 20px;
   width: 100%;
-  font-weight: bold;
   background-image: linear-gradient(to right, #efd100 0, #e2a233 38%, #f0c328 60%, #ffe13e 100%);
 	transition: 0.5s;
 	background-size: 200% auto;
@@ -459,14 +488,12 @@ nav .logo {
 }
 
 .well {
-	background: #ececec;
     border-radius: 10px;
     padding: 30px;
     margin-bottom: 20px;
 }
 
 .well-outline {
-    background: #ececec;
     border-radius: 10px;
     padding: 30px;
     margin-bottom: 20px;
@@ -638,12 +665,19 @@ font-weight: normal; color: #fff;}
 
 
 
-
-
 /* Page footer */
 
 .page-footer {
 	background-color: #7A91A0;
 
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
 }
 
