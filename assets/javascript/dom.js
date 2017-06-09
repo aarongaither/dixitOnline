@@ -255,7 +255,7 @@ const gamePage = (function() {
             .append($('<ul>').addClass('story-form-wrapper')
                 .append($('<li>')
                     .append($('<input>', {
-                        id: 'storyteller_story',
+                        id: 'storyteller-story',
                         type: 'text',
                         class: 'validate'
                     }))

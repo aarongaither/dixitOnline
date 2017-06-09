@@ -112,17 +112,18 @@ let game = {
             game.maxRounds = parseInt(snap.val().max_rounds, 10) || 2;
 
             //Start Game
-            userRef.on("value", function(userSnap) {
+            userRef.on("value", function start(userSnap) {
                 let numPlayers = userSnap.numChildren();
 
-                if (numPlayers == game.maxPlayers) {
+                if (numPlayers === game.maxPlayers) {
                     game.initGameListeners();
-                    cards.createDeck();
-                    cards.shuffleDeck(cards.oDeck);
-                    game.startGameAssignRoles();
-                    game.checkAndDeal(cards.sDeck);
-
-
+                    if (userSnap.val().role = "storyTeller") {
+                        cards.createDeck();
+                        cards.shuffleDeck(cards.oDeck);
+                        game.startGameAssignRoles();
+                        game.checkAndDeal(cards.sDeck);
+                    }
+                    userRef.off("value", start)
                 }
             })
         })
@@ -303,7 +304,7 @@ let game = {
             });
         })
         let currCards = $("#given-cards").children().length || 0
-        console.log("currCards",currCards);
+        console.log("currCards", currCards);
         gamePage.createCardDivs(game.nHandSize - currCards);
         game.storyClickListener();
         game.cardClickListener();
