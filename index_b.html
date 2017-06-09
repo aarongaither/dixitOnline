@@ -336,21 +336,29 @@
                 var delay = i * 100;
 
                 setTimeout(function() {
+                    var cardImg = $('<img>').css('height', '150px').attr('class','materialboxed round-card').attr('src', cardImages[i]);
                     var cardBox = $('<div>').attr('class', 'col card-stock');
                     var newCard = $('<div>').attr('id', 'card' + i).attr('class','card-shadow');
                     var cardSubmitBtn = $('<button>').attr('class', 'play-card').html('Play');
-                    var cardImg = $('<img>').css('height', '150px').attr('class','materialboxed round-card').attr('src', cardImages[i]);
-
+                    
+  
                     newCard.attr('class', 'animated fadeInRight').append(cardImg);
 
                     var cards = cardBox.append(newCard).append(cardSubmitBtn);
 
                     $('#given-cards').append(cards);
 
+                    cardImg.materialbox();
+
                 }, delay)
             }
-        }     
-
+        } 
+        var removeAnimation = function(){   
+        $('.animated').removeClass('fadeInRight');
+        // alert("removeAnimation");
+        };
+        setTimeout(removeAnimation, 2000)
+    
         dealing();
     </script>
 
@@ -363,16 +371,16 @@
         function dealing() {
             for (let i = 0; i < cardValues.length; i++) {
                 
-                var delay = i * 100;
-                
+                var delay = i * 100; 
 
                 setTimeout(function() {
-                    var img = $('<img>').attr('class','materialboxed round-card').css('height', '150px').attr('src', cardImages[i]); 
+                    var img = $('<img>').css('height', '150px').attr('class','materialboxed round-card').attr('src', cardImages[i]); 
                     var imgWrapper = $('<div>').attr('id', 'scard' + i).attr('class','card-shadow').append(img);
                     var cardVoteBtn = $('<button>').attr('class','vote-card').html('Vote');
                     var cardWrapper = $('<div>').attr('class', 'col card-stock').append(imgWrapper).append(cardVoteBtn); 
 
                     $('.card-panel').append(cardWrapper);
+                    img.materialbox();
 
                 }, delay)
             }
