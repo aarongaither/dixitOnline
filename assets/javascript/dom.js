@@ -144,7 +144,7 @@ const loginPage = (function() {
     }
 })()
 
-let lobbyPage = (function() {
+const lobbyPage = (function() {
     let makeLobbyPage = function() {
         let main = $('#main-board');
         $('#left-board').empty();
@@ -363,7 +363,6 @@ const gamePage = (function() {
             _makePlayerDiv(i);
         }
         _makeLines();
-
     }
 
     let updateScoreBar = function(playerNum, points) {
@@ -373,12 +372,19 @@ const gamePage = (function() {
         elem.height(h)
     }
 
+    let removeAnimation = function(){
+        setTimeout(function(){
+            $('.animated').removeClass('fadeInRight');
+        }, 2000)
+    }
+
     return {
         createPage: makeGamePage,
-        createCardDivs: createCardDivs,
         cleanUpPage: cleanUpGamePage,
+        createCardDivs: createCardDivs,
         updateScoreBar: updateScoreBar,
-        addAvatar: addAvatar
+        addAvatar: addAvatar,
+        removeAnimation: removeAnimation
     }
 
 })()
