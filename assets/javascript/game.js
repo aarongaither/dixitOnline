@@ -127,6 +127,11 @@ let game = {
                 }
             })
         })
+
+        let currOrder = [];
+
+        gameRef.update({})
+
         player.key = firebase.auth().currentUser.uid;
 
         //remove from DB on disconnect
@@ -137,13 +142,26 @@ let game = {
     },
 
     startGameAssignRoles: function() {
-        userRef.once("value").then(function(snap) {
+        userRef.orderByChild("dateAdded").once("value").then(function(snap) {
             let usersArray = snap.val();
             // console.log(usersArray);
             let userKeyArray = Object.keys(usersArray);
             // console.log(userKeyArray);
+
             gameRef.update({ curr_play_order: userKeyArray });
 
+            for (i = 0; i < userKeyArray.length; i++) {
+                if (i === 0) {
+                    userRef.child(userKeyArray[i]).update({
+                        role: "storyTeller"
+                    })
+                    gameRef.update({ curr_teller: userKeyArray[i] });
+                } else {
+                    userRef.child(userKeyArray[i]).update({
+                        role: "player"
+                    })
+                }
+            }
         })
     },
 
@@ -309,7 +327,7 @@ let game = {
         console.log("currCards", currCards);
         gamePage.createCardDivs(game.nHandSize - currCards);
         game.storyClickListener();
-        game.cardClickListener();
+        game.cardSelectionClickListener();
     },
 
     removeCard: function(player, card) {
@@ -492,7 +510,9 @@ let game = {
                 }).then(function() {
                     //shuffle for each player differently - to make consistent have to push to DB and pull down.
                     // sCardsArray = cards.shuffleDeck(sCardsArray);
-                    gamePage.createCardDivs(game.nPlayers, true);
+                    $("#chosen-cards-panel").empty();
+
+                    gamePage.createCardDivs(game.nPlayers, "vote");
                     console.log("sCardArray before for loop to display cards", sCardsArray)
                     for (let i = sCardsArray.length - 1; i >= 0; i--) {
                         cards.displaySpecificCard("#vote-card" + i, sCardsArray, i)
@@ -500,7 +520,7 @@ let game = {
                             cardSelectedRef.off("value");
                         }
                     }
-                    game.cardClickListener();
+                    game.cardVoteClickListener();
                 })
             } else if (currState === 5) { //state of is the start of the scoring stage
                 voteSelectedRef.once("value", function(snap) {
@@ -526,7 +546,7 @@ let game = {
                     let roundNum = snap.child("curr_round").val() || 1;
                     let maxRounds = snap.child("max_rounds").val() || game.maxRounds;
 
-                    console.log(maxRounds, roundNum);
+                    console.log("maxRounds|roundNum", maxRounds, roundNum);
 
                     if (maxRounds === roundNum) {
                         gameRef.update({
@@ -580,10 +600,10 @@ let game = {
         });
     },
 
-    cardClickListener: function() {
+    cardSelectionClickListener: function() {
         //click listener for cards
-        console.log("cardClickListener")
-        $(".play-card, .vote-card").off().click(function() {
+        console.log("cardSelectionClickListener")
+        $(".play-card").off().click(function() {
             if (player.role === "storyTeller" && game.currState === 1) {
                 // console.log($(this).siblings(".fahad-test").attr("card-value"))
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
@@ -608,7 +628,13 @@ let game = {
                 $(this).parent().remove();
                 //removing card from firebaseDB
                 game.removeCard(playerKey, cardSelection);
-            } else if (player.role === "player" && game.currState === 4) {
+            }
+        })
+    },
+
+    cardVoteClickListener: function() {
+        $(".vote-card").off().click(function() {
+            if (player.role === "player" && game.currState === 4) {
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
                 let playerKey = player.key;
                 if (cardSelection != player.selectedCard) {
