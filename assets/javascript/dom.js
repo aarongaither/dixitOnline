@@ -282,8 +282,6 @@ const gamePage = (function() {
 
         $('#nav-game').append('Game name'); 
 
-        let gameTitle = $('<h3>').html('Storyteller: <span id="storyteller">' + 'NAME HERE' + '</span>').addClass('gold');
-
         centerPanel.append(gameTitle).append(storyText);
         centerPanel.append(chosenCards.append(cardPanel));
         centerPanel.append(chatBtn.append(showBtn.append(chatIcon)).append(hideBtn.append(chatIcon)));
