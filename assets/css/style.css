@@ -36,7 +36,9 @@ form input {
     display: block;
 }
 
-
+.invisible {
+  visibility: hidden;
+}
 
 /* Theme colors */
 
@@ -760,7 +762,7 @@ textarea.materialize-textarea:focus:not([readonly]) {
 
 input:not([type]), 
 input[type=text], 
-input[type=number]:focus:not([readonly]),
+input[type=number],
 textarea.materialize-textarea {
   color: #fff;
 }
