@@ -406,13 +406,11 @@ const gamePage = (function() {
 
 })()
 
-
-const finalPage = (function(winner, playerArray) {
-    let testUnits
-
-    let makeFinalPage = function(winner, playerArray) {
+const finalPage = (function(playerArray) {
+    let makeFinalPage = function(playerArray) {
         let results = $('<div>').attr('id', 'final-results').addClass('results-flex-container')
         $('#main-board').append($('<h1>').text('Results')).append(results)
+        let returnButton = $('<div>').append($('<button>').text('Return to Lobby').attr('id', 'return'))
 
         let winnersWell = $('<div>').attr('id','winner-div').attr('class','well flex-item');
         let scoresWell = $('<div>').attr('id','scores-div').attr('class','well');
@@ -420,9 +418,13 @@ const finalPage = (function(winner, playerArray) {
         scoresWell.append(scoresList);
 
         $('#final-results').append(scoresWell).append(winnersWell);
+        
+        let sorted = playerArray.sort(function(a, b){
+            return parseFloat(b.score) - parseFloat(a.score);
+        })
 
-        _displayWinner(winner);
-        _displayLosers(playerArray)
+        _displayWinner(sorted[0]);
+        _displayLosers(sorted)
 
     }
 
@@ -438,7 +440,7 @@ const finalPage = (function(winner, playerArray) {
             let pScore = $('<h5>').html(losers[i].score).attr('class','right');
             let pName = $('<h5>').html(losers[i].name).attr('class','center');
             let listItem = $('<li>').attr('class','collection-item avatar');
-            let listImg = $('<img>').attr('src', avatarObj.genAvatarURL(playerColors[i])).attr('class','circle');
+            let listImg = $('<img>').attr('src', losers[i].avatar).attr('class','circle');
             listItem.append(listImg).append(pScore).append(pName);
             $('#scores-div .collection').append(listItem);
         };
@@ -456,22 +458,24 @@ const finalPage = (function(winner, playerArray) {
     }
 })()
 
-let testSet = {
-    winner : {
+let testSet = [{
         name: 'Margaret',
-        score: 32
-    },
-    losers : [{
+        score: 32,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
+    },{
         name: 'Aaron',
-        score: 20
+        score: 20,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Fahad',
-        score: 27
+        score: 27,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Mike',
-        score: 18
+        score: 18,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Lina',
-        score: 25
+        score: 25,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     }]
-}
