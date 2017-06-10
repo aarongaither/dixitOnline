@@ -262,15 +262,33 @@ const gamePage = (function() {
         let chosenCards = $('<div>').attr('id', 'chosen-cards').addClass('row');
         let cardPanel = $('<div>').addClass('card-panel white-transparent').attr('id', 'chosen-cards-panel');
         let givenCards = $('<div>').attr('id', 'given-cards').addClass('row');
+        let gameTitle = $('<h3>').html('Storyteller: <span>' + 'NAME HERE' + '</span>').addClass('gold');
+
         let chatSectionRow = $('<div>').attr('id', 'chat-section-row').addClass('row');
-        let chatForm = $('<form>').addClass('col s12');
+        let chatWell = $('<div>').addClass('game-well left-align white-transparent').attr('id', 'lobby-chat');
+        let chatTitle = $('<h5>').html('Chat').attr('id', 'chat-heading');
+        let chatForm = $('<form>');
+        let chatBox = $('<div>').attr('id', 'game-chat-box');
+        let chatMsg = $('<div>').attr('id', 'chat-messages');
+        let chatName = $('<div>').html('<span class="chat-name">' + 'MyUserName' + '<span> : ' + 'some really great msg');
         let chatRow = $('<div>').addClass('row');
+
+        let chatInput = $('<input>').attr('id', 'chat-input');
+        let chatSubmit = $('<input>').attr('id', 'chat-submit').attr('type', 'Submit').html('Send');
+        let chatBtn = $('<div>').addClass('row open-chat-button-row');
+        let showBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'show-text-button').attr('title','Click here to open chat');
+        let hideBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'hide-text-button').attr('title','Click here to close chat');
+        let chatIcon = $('<i>').addClass('material-icons').text('mode_edit');
+
+        $('#nav-game').append('Game name'); 
+
         let gameTitle = $('<h3>').html('Storyteller: <span id="storyteller">' + 'NAME HERE' + '</span>').addClass('gold');
 
         centerPanel.append(gameTitle).append(storyText);
         centerPanel.append(chosenCards.append(cardPanel));
+        centerPanel.append(chatBtn.append(showBtn.append(chatIcon)).append(hideBtn.append(chatIcon)));
         centerPanel.append(givenCards);
-        centerPanel.append(chatSectionRow);
+        centerPanel.append(chatSectionRow.append(chatWell.append(chatTitle).append(chatBox.append(chatName).append(chatMsg)).append(chatForm.append(chatInput).append(chatSubmit))));
 
         _makeAvatarArea();
         _makeScoreBoard(players);
@@ -406,13 +424,11 @@ const gamePage = (function() {
 
 })()
 
-
-const finalPage = (function(winner, playerArray) {
-    let testUnits
-
-    let makeFinalPage = function(winner, playerArray) {
+const finalPage = (function(playerArray) {
+    let makeFinalPage = function(playerArray) {
         let results = $('<div>').attr('id', 'final-results').addClass('results-flex-container')
         $('#main-board').append($('<h1>').text('Results')).append(results)
+        let returnButton = $('<div>').append($('<button>').text('Return to Lobby').attr('id', 'return'))
 
         let winnersWell = $('<div>').attr('id','winner-div').attr('class','well flex-item');
         let scoresWell = $('<div>').attr('id','scores-div').attr('class','well');
@@ -420,9 +436,13 @@ const finalPage = (function(winner, playerArray) {
         scoresWell.append(scoresList);
 
         $('#final-results').append(scoresWell).append(winnersWell);
+        
+        let sorted = playerArray.sort(function(a, b){
+            return parseFloat(b.score) - parseFloat(a.score);
+        })
 
-        _displayWinner(winner);
-        _displayLosers(playerArray)
+        _displayWinner(sorted[0]);
+        _displayLosers(sorted)
 
     }
 
@@ -438,7 +458,7 @@ const finalPage = (function(winner, playerArray) {
             let pScore = $('<h5>').html(losers[i].score).attr('class','right');
             let pName = $('<h5>').html(losers[i].name).attr('class','center');
             let listItem = $('<li>').attr('class','collection-item avatar');
-            let listImg = $('<img>').attr('src', avatarObj.genAvatarURL(playerColors[i])).attr('class','circle');
+            let listImg = $('<img>').attr('src', losers[i].avatar).attr('class','circle');
             listItem.append(listImg).append(pScore).append(pName);
             $('#scores-div .collection').append(listItem);
         };
@@ -456,22 +476,24 @@ const finalPage = (function(winner, playerArray) {
     }
 })()
 
-let testSet = {
-    winner : {
+let testSet = [{
         name: 'Margaret',
-        score: 32
-    },
-    losers : [{
+        score: 32,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
+    },{
         name: 'Aaron',
-        score: 20
+        score: 20,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Fahad',
-        score: 27
+        score: 27,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Mike',
-        score: 18
+        score: 18,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Lina',
-        score: 25
+        score: 25,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     }]
-}

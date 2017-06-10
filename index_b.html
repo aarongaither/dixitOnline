@@ -153,8 +153,8 @@
                     <!-- closing div for chosen cards -->
                 </div>
                 <div class="row open-chat-button-row">
-                <a class="btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip" id="show-text-button" title="Click here to open Chat"><i class="material-icons">mode_edit</i></a>
-                <a class="btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip" id="close-text-button" title="Click here to close Chat"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip" id="show-text-button" title="Click here to open Chat"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip" id="close-text-button" title="Click here to close Chat"><i class="material-icons">mode_edit</i></a>
                 </div>
                 <!-- Dealt Card Area -->
                 <div class="row" id="given-cards"> 
@@ -164,42 +164,21 @@
 
                 <!-- Pop up chat area-->
                 <div class="row" id="chat-section-row">
-
-                 
-                    
-                    <form class="col s12">
-                    
-                    <!-- <a class="btn-floating right btn-large waves-effect waves-light amber accent-3 masterTooltip" id="show-text-button" title="Click here to open Chat"><i class="material-icons">mode_edit</i></a>  --> 
-                        <div class="row">            
-
-                        <div class="game-well left-align white-transparent" id="lobby-chat">
-                            <h3 id="chat-heading">Chat</h3>
-                                <div id="game-chat-box">
-                                    <div id="chat-messages">
-                                        <div><span class="chat-name">Margaret: </span>Talking shit here</div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <form><input id="chat-input" placeholder="Send a chat message"><input id="chat-submit" type="Submit">
-                                    </form>
-                                </div>
+                    <div class="game-well left-align white-transparent" id="lobby-chat">
+                        <h3 id="chat-heading">Chat</h3>
+                        <div id="game-chat-box">
+                            <div id="chat-messages">
+                                <div><span class="chat-name">Margaret: </span>Talking shit here</div>
+                            </div>
                         </div>
-<!--                             <div class="input-field col s12" id="chat-display">
-                                <textarea id="pop-up-chat-display" class="materialize-textarea white"></textarea>
-                                    <label for="textarea1"></label>
-                            </div>
-                            <div class="input-field col s9 white-text">
-                                <input placeholder="Chat with other players here." id="pop-up-chat" type="text" class="validate">   
-                            </div>
-                            <div class="input-field col s3" id="chat-btn">
-                                <div class="btn amber accent-3">
-                                    <span>Send</span>
-                                </div>
-                            </div> -->
-                                
-                        </div> 
-                    </form>
+
+                        <div>
+                            <form>
+                                <input id="chat-input" placeholder="Send a chat message">
+                                <input id="chat-submit" type="Submit">
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
             <!-- Center Panel Closing Div -->
@@ -235,6 +214,9 @@
     <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
     <script type="text/javascript" src="assets/javascript/api.js"></script>
 <!--     <script type="text/javascript" src="assets/javascript/game.js"></script> -->
+
+
+
 <!-- Function for showing/hiding/closing pop up chat. -->
     <script type="text/javascript">
         $(function(){
