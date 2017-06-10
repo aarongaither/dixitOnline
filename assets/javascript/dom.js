@@ -258,17 +258,30 @@ const gamePage = (function() {
         let chosenCards = $('<div>').attr('id', 'chosen-cards').addClass('row');
         let cardPanel = $('<div>').addClass('card-panel white-transparent').attr('id', 'chosen-cards-panel');
         let givenCards = $('<div>').attr('id', 'given-cards').addClass('row');
-        let chatSectionRow = $('<div>').attr('id', 'chat-section-row').addClass('row');
-        let chatForm = $('<form>').addClass('col s12');
-        let chatRow = $('<div>').addClass('row');
         let gameTitle = $('<h3>').html('Storyteller: <span>' + 'NAME HERE' + '</span>').addClass('gold');
+
+        let chatSectionRow = $('<div>').attr('id', 'chat-section-row').addClass('row');
+        let chatWell = $('<div>').addClass('game-well left-align white-transparent').attr('id', 'lobby-chat');
+        let chatTitle = $('<h5>').html('Chat').attr('id', 'chat-heading');
+        let chatForm = $('<form>');
+        let chatBox = $('<div>').attr('id', 'game-chat-box');
+        let chatMsg = $('<div>').attr('id', 'chat-messages');
+        let chatName = $('<div>').html('<span class="chat-name">' + 'MyUserName' + '<span> : ' + 'some really great msg');
+        let chatRow = $('<div>').addClass('row');
+        let chatInput = $('<input>').attr('id', 'chat-input');
+        let chatSubmit = $('<input>').attr('id', 'chat-submit').attr('type', 'Submit').html('Send');
+        let chatBtn = $('<div>').addClass('row open-chat-button-row');
+        let showBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'show-text-button').attr('title','Click here to open chat');
+        let hideBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'hide-text-button').attr('title','Click here to close chat');
+        let chatIcon = $('<i>').addClass('material-icons').text('mode_edit');
 
         $('#nav-game').append('Game name'); 
 
         centerPanel.append(gameTitle).append(storyText);
         centerPanel.append(chosenCards.append(cardPanel));
+        centerPanel.append(chatBtn.append(showBtn.append(chatIcon)).append(hideBtn.append(chatIcon)));
         centerPanel.append(givenCards);
-        centerPanel.append(chatSectionRow);
+        centerPanel.append(chatSectionRow.append(chatWell.append(chatTitle).append(chatBox.append(chatName).append(chatMsg)).append(chatForm.append(chatInput).append(chatSubmit))));
 
         _makeAvatarArea();
         _makeScoreBoard(players);

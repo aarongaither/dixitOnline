@@ -556,11 +556,11 @@ nav .logo {
 }
 
 .game-well {
-  /*background: #ececec;*/
     border-radius: 5px;
-    padding: 30px;
+    padding: 20px;
     margin-bottom: 20px;
     margin-top: -25px;
+    width: 100%;
 }
 
 
