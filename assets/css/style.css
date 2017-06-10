@@ -477,16 +477,50 @@ nav .logo {
 /* Game chat  */
 
 #chat-section-row {
+      display: flex;
+    justify-content: center;
+    /* background-color: white; */
+    margin: 40px 100px 20px 100px;
+  /*width: 68%;*/
 	margin-bottom: 0px;
+}
+
+#game-chat-box {
+    background: #fff;
+    padding: 10px;
+    min-height: 100px;
+}
+
+#chat-heading {
+  margin-top: 0px;
 }
 
 #chat-btn {
 	margin: 10px 0px;
 }
 
+.open-chat-button-row {
+        /*display: flex;*/
+    /*justify-content: left;*/
+
+    /* background-color: white; */
+    margin: -10px 100px 20px 100px;
+  /*width: 68%;*/
+  margin-bottom: 0px;
+
+}
+
 
 #textarea1 {
 	    margin-bottom: 0px;
+}
+
+.game-well {
+  /*background: #ececec;*/
+    border-radius: 5px;
+    padding: 30px;
+    margin-bottom: 20px;
+    margin-top: -25px;
 }
 
 
@@ -635,6 +669,17 @@ nav .logo {
 #points #p6 {left: 125px; border-right: none;}
 #points tbody th {bottom: -1.75em; vertical-align: top;
 font-weight: normal; color: #fff;}
+
+.tooltip {
+  display:none;
+  position:absolute;
+  border:1px solid #333;
+  background-color:#161616;
+  border-radius:5px;
+  padding:10px;
+  color:#fff;
+  font-size:12px Arial;
+}
 
 
 

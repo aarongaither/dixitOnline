@@ -149,17 +149,40 @@
                     </div>
                     <!-- closing div for chosen cards -->
                 </div>
-                
+                <div class="row open-chat-button-row">
+                <a class="btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip" id="show-text-button" title="Click here to open Chat"><i class="material-icons">mode_edit</i></a>
+                <a class="btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip" id="close-text-button" title="Click here to close Chat"><i class="material-icons">mode_edit</i></a>
+                </div>
                 <!-- Dealt Card Area -->
-                <div class="row" id="given-cards">                
+                <div class="row" id="given-cards"> 
+                               
                 <!-- closing div for dealt cards -->
                 </div>
 
                 <!-- Pop up chat area-->
-                <div class="row" id="chat-section-row">   
+                <div class="row" id="chat-section-row">
+
+                 
+                    
                     <form class="col s12">
-                        <div class="row">
-                            <div class="input-field col s12" id="chat-display">
+                    
+                    <!-- <a class="btn-floating right btn-large waves-effect waves-light amber accent-3 masterTooltip" id="show-text-button" title="Click here to open Chat"><i class="material-icons">mode_edit</i></a>  --> 
+                        <div class="row">            
+
+                        <div class="game-well left-align white-transparent" id="lobby-chat">
+                            <h3 id="chat-heading">Chat</h3>
+                                <div id="game-chat-box">
+                                    <div id="chat-messages">
+                                        <div><span class="chat-name">Margaret: </span>Talking shit here</div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <form><input id="chat-input" placeholder="Send a chat message"><input id="chat-submit" type="Submit">
+                                    </form>
+                                </div>
+                        </div>
+<!--                             <div class="input-field col s12" id="chat-display">
                                 <textarea id="pop-up-chat-display" class="materialize-textarea white"></textarea>
                                     <label for="textarea1"></label>
                             </div>
@@ -170,8 +193,8 @@
                                 <div class="btn amber accent-3">
                                     <span>Send</span>
                                 </div>
-                            </div>
-                                <a class="btn-floating right btn-med waves-effect waves-light amber accent-3" id="show-text-button"><i class="material-icons">add</i></a>
+                            </div> -->
+                                
                         </div> 
                     </form>
                 </div>
@@ -209,16 +232,31 @@
     <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
     <script type="text/javascript" src="assets/javascript/api.js"></script>
 <!--     <script type="text/javascript" src="assets/javascript/game.js"></script> -->
-<!-- Function for showing pop up chat. -->
+<!-- Function for showing/hiding/closing pop up chat. -->
     <script type="text/javascript">
         $(function(){
+            $("#close-text-button").hide();
             $("#pop-up-chat").hide();
             $("#chat-btn").hide();
-            $("#pop-up-chat-display").hide();
-            $("#show-text-button").click (function()    {
-                $("#pop-up-chat-display").toggle();
-                $("#chat-btn").toggle();
-                $("#pop-up-chat").toggle();
+            $("#lobby-chat").hide();
+            // $("#pop-up-chat-display").hide();
+            $("#show-text-button").click (function(){
+                $("#given-cards").hide();
+                // $("#pop-up-chat-display").toggle();
+                $("#chat-btn").hide();
+                $("#pop-up-chat").show();
+                $(".game-well").show();
+                $("#show-text-button").hide();
+                $("#close-text-button").show().click(function(){
+                    $("#show-text-button").show();
+                    $("#close-text-button").hide();
+                    $("#given-cards").show();
+                // $("#pop-up-chat-display").toggle();
+                $("#chat-btn").hide();
+                $("#pop-up-chat").hide();
+                $(".game-well").hide();
+
+                });
             });
         });
             // Functions from Margaret
@@ -230,9 +268,35 @@
                 $('#player-one-progress').height(height);
                 console.log(height);
             }
+</script>
 
+
+<!-- Script for Tooltip -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+        // Tooltip only Text
+        $('.masterTooltip').hover(function(){
+                // Hover over code
+                var title = $(this).attr('title');
+                $(this).data('tipText', title).removeAttr('title');
+                $('<p class="tooltip"></p>')
+                .text(title)
+                .appendTo('body')
+                .fadeIn('slow');
+        }, function() {
+                // Hover out code
+                $(this).attr('title', $(this).data('tipText'));
+                $('.tooltip').remove();
+        }).mousemove(function(e) {
+                var mousex = e.pageX + 20; //Get X coordinates
+                var mousey = e.pageY + 10; //Get Y coordinates
+                $('.tooltip')
+                .css({ top: mousey, left: mousex })
+        });
+        });
+    </script>
     
-    // var player = function() {
+<!--     // var player = function() {
         // $('.player-1-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
         // $('.player-2-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
         // $('.player-3-avatar').append($('<img>').css({"height":"30px", "width":"25px"}).attr('src',avatarObj.genAvatarURL()));
@@ -240,11 +304,11 @@
            
     // };
 
-    // player();
+    // player(); -->
 
 
 
-    </script>
+    
     <!-- Materialize script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
 
