@@ -227,7 +227,6 @@ nav .logo {
     min-height: 200px;
 }
 
-
 #player-login {
 	text-align: center;
 }
@@ -482,8 +481,17 @@ nav .logo {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 20%; /* Could be more or less, depending on screen size */
+    width: 50%; /* Could be more or less, depending on screen size */
+    border-radius: 5px;
 }
+
+
+#login-well h2,
+#sign-up-well h2 {
+  color: #152b39;
+  text-align: left;
+}
+
 
 /* The Close Button */
 .close {
@@ -512,6 +520,14 @@ nav .logo {
     margin-bottom: 20px;
 }
 
+.modal-content input:not([type]), 
+.modal-content input[type=text], 
+.modal-content input[type=number],
+.modal-content input[type=email],
+.modal-content input[type=password],
+.modal-content textarea.materialize-textarea {
+  color: #444;
+}
 
 
 /* Game chat  */
@@ -755,6 +771,8 @@ font-weight: normal; color: #fff;}
 input:not([type]):focus:not([readonly]),
 input[type=text]:focus:not([readonly]),
 input[type=number]:focus:not([readonly]),
+input[type=email]:focus:not([readonly]),
+input[type=password]:focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
   border-bottom: 1px solid #039be5;
   box-shadow: 0 1px 0 0 #039be5;
@@ -763,6 +781,8 @@ textarea.materialize-textarea:focus:not([readonly]) {
 input:not([type]), 
 input[type=text], 
 input[type=number],
+input[type=email],
+input[type=password],
 textarea.materialize-textarea {
   color: #fff;
 }
