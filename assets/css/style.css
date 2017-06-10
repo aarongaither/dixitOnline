@@ -327,18 +327,36 @@ nav .logo {
 
 .card-small {
   height: 120px;
-  width: 80px;
+  width: 75px;
+  display: block;
+  position: relative;
 }
 
 .card-large {
   height: 150px;
-  width: 100px;
+  width: 95px;
+  display: block;
+  position: relative;
 
 }
 
 .cards-container {
-      background-image: url("../cards/back.jpg");
     background-size: 100%;
+    margin-bottom: 10px;
+}
+
+.cards-container::after {
+  border-radius: 5px;
+  content: "";
+  background-color: white;
+  /*background: url(../cards/back.jpg);*/
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1; 
 }
 
 .card-panel {
