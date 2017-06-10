@@ -268,9 +268,11 @@ const gamePage = (function() {
         _makeAvatarArea();
         _endButton();
         _makeScoreBoard(players);
+        _createCardDivs(6);
+        _createCardDivs(players, 'vote')
     }
 
-    let createCardDivs = function(qty, type) {
+    let _createCardDivs = function(qty, type) {
         let cardDiv = type ? $('#chosen-cards-panel') : $('#given-cards');
         let id = type ? 'vote-card' : 'card';
         let btnClass = type ? 'vote-card' : 'play-card';
@@ -387,7 +389,6 @@ const gamePage = (function() {
     return {
         createPage: makeGamePage,
         cleanUpPage: cleanUpGamePage,
-        createCardDivs: createCardDivs,
         updateScore: updateScore,
         addAvatar: addAvatar,
         makeScoreboardPlayerDiv: makeScoreboardPlayerDiv,
