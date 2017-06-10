@@ -264,7 +264,7 @@ const auth = (function() {
 
     let gameListeners = function(method, gameID) {
         _playerJoinListener(method, gameID)
-        // _scoreIncreaseListener()
+        _storyTellerChangeListener(gameID)
     }
 
     let _playerJoinListener = function(method, gameID) {
@@ -276,6 +276,17 @@ const auth = (function() {
         } else if (method === 'off') {
             gamePlayers.off()
         }
+    }
+
+    let _storyTellerChangeListener = function(gameID) {        
+        firebase.database().ref('/games/'+gameID+'/curr_teller').on('value', function(snap){
+            let teller = snap.val();
+            firebase.database().ref('/games/'+gameID+'/players/'+teller).once('value', function(snap){
+                let name = snap.val().name
+                gamePage.updateStoryteller(name);
+            })
+
+        })
     }
 
     let _playerJoin = function(playerInfo, gameID) {
