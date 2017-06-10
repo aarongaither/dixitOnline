@@ -585,7 +585,7 @@ nav .logo {
 	margin-bottom: 0px;
 }
 
-#game-chat-box {
+.game-chat-box {
     background: #fff;
     padding: 10px;
     min-height: 100px;
