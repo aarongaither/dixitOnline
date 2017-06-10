@@ -151,7 +151,6 @@ const lobbyPage = (function() {
         $('#right-board').empty();
 
         $('#nav-img').append($('<img>').attr('height', '44').attr('src', 'assets/images/dixitlogo.png').addClass('logo'));
-        $('#nav-player').append('Player name'); 
 
         main.append($('<h1>').text('Lobby').addClass('gold'));
         let lobbyContainer = $('<div>').addClass('lobby-flex-container');
@@ -238,14 +237,19 @@ const lobbyPage = (function() {
         let itemGameId = $('<div>').attr('id', 'list-game-id');
         let itemGameBtn = $('<button>').attr('href', '#!').attr('class','secondary-content join').attr('gameID', gameID).text('Join');
         let clear = $('<div>').attr('class', 'clearfix');
-
         $('#game-list').append(item.append(itemGameName).append(itemGameId.append(itemGameBtn)).append(clear));
+    }
+
+
+    let updatePlayerName = function(name) {
+        $('#nav-player').text(name);
     }
 
     return {
         createPage: makeLobbyPage,
         cleanUpPage: cleanUpLobbyPage,
-        makeGameListItem: makeGameListItem
+        makeGameListItem: makeGameListItem,
+        updatePlayerName: updatePlayerName
     }
 })()
 
@@ -272,6 +276,7 @@ const gamePage = (function() {
         let chatMsg = $('<div>').attr('id', 'chat-messages');
         let chatName = $('<div>').html('<span class="chat-name">' + 'MyUserName' + '<span> : ' + 'some really great msg');
         let chatRow = $('<div>').addClass('row');
+
         let chatInput = $('<input>').attr('id', 'chat-input');
         let chatSubmit = $('<input>').attr('id', 'chat-submit').attr('type', 'Submit').html('Send');
         let chatBtn = $('<div>').addClass('row open-chat-button-row');
@@ -279,7 +284,7 @@ const gamePage = (function() {
         let hideBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'hide-text-button').attr('title','Click here to close chat');
         let chatIcon = $('<i>').addClass('material-icons').text('mode_edit');
 
-        $('#nav-game').append('Game name'); 
+        $('#nav-game').append('Game name');
 
         centerPanel.append(gameTitle).append(storyText);
         centerPanel.append(chosenCards.append(cardPanel));
@@ -298,12 +303,12 @@ const gamePage = (function() {
         let id = type ? 'vote-card' : 'card';
         let btnClass = type ? 'vote-card' : 'play-card';
         let btnText = type ? 'vote' : 'play';
+        let cardClass = type ? 'card-large' : 'card-small';
         for (let i = 0; i < qty; i++) {
             let cardBox = $('<div>').attr('class', 'col card-stock')
-            let newCard = $('<div>').attr('id', id + i).attr('class', 'cards-container').addClass('card-shadow');
+            let newCard = $('<div>').attr('id', id + i).attr('class', 'cards-container').addClass('card-shadow '+cardClass);
             let cardSubmitBtn = $('<button>').addClass(btnClass).text(btnText);
 
-            // newCard.attr('class', 'animated fadeInRight');
             let cards = cardBox.append(newCard).append(cardSubmitBtn);
             cardDiv.append(cards);
         }
@@ -332,13 +337,6 @@ const gamePage = (function() {
             $('#view-players').append(playerCard);
     }
 
-    // let _endButton = function() {
-    //     let li = $('<li>');
-    //     let endBtn = $('<a>').html('End Game').attr('id', 'end-game-btn').attr('value', 'endgame');
-    //     li.append(endBtn);
-    //     $('#right-board').append(li);
-    // }
-
     let _makeScoreBoard = function(players) {
 
         let _makeLines = function() {
@@ -361,7 +359,6 @@ const gamePage = (function() {
         let playerDiv = $('<div>').addClass('player-score-div').attr('id', 'score-'+id)
         let playerBar = $('<div>').addClass('player-bar')
         let playerProgress = $('<div>').addClass('player-progress').css({'height':'0px','background-color':color})
-        // let playerLabel = $('<div>').addClass('player-label').text('P'+playerNum)
         $('#points-table-wrapper .score-flex-container').append(playerDiv.append(playerBar.append(playerProgress)))
     }
 
@@ -375,6 +372,10 @@ const gamePage = (function() {
         setTimeout(function(){
             $('.animated').removeClass('fadeInRight');
         }, 2000)
+    }
+
+    let updateGameName = function(gameName) {
+        $('#nav-game').text(gameName)
     }
 
     let updateStoryArea = function(method, curStory){ //curStory is optional
@@ -407,6 +408,10 @@ const gamePage = (function() {
         }
     }
 
+    let updateStoryteller = function(tellerName){
+        $('#storyteller').text(tellerName);
+    }
+
     return {
         createPage: makeGamePage,
         cleanUpPage: cleanUpGamePage,
@@ -414,18 +419,18 @@ const gamePage = (function() {
         addAvatar: addAvatar,
         makeScoreboardPlayerDiv: makeScoreboardPlayerDiv,
         removeAnimation: removeAnimation,
-        updateStoryArea: updateStoryArea
+        updateStoryArea: updateStoryArea,
+        updateGameName: updateGameName,
+        updateStoryteller: updateStoryteller
     }
 
 })()
 
-
-const finalPage = (function(winner, playerArray) {
-    let testUnits
-
-    let makeFinalPage = function(winner, playerArray) {
-        let results = $('<div>').attr('id', 'final-results').addClass('results-flex-container')
-        $('#main-board').append($('<h1>').text('Results').attr('class','gold')).append(results)
+const finalPage = (function(playerArray) {
+    let makeFinalPage = function(playerArray) {
+        let results = $('<div>').attr('id', 'final-results').addClass('results-flex-container gold')
+        $('#main-board').append($('<h1>').text('Results')).append(results)
+        let returnButton = $('<div>').append($('<button>').text('Return to Lobby').attr('id', 'return'))
 
         let winnersWell = $('<div>').attr('id','winner-div').attr('class','well flex-item');
         let scoresWell = $('<div>').attr('id','scores-div').attr('class','well');
@@ -433,9 +438,13 @@ const finalPage = (function(winner, playerArray) {
         scoresWell.append(scoresList);
 
         $('#final-results').append(scoresWell).append(winnersWell);
+        
+        let sorted = playerArray.sort(function(a, b){
+            return parseFloat(b.score) - parseFloat(a.score);
+        })
 
-        _displayWinner(winner);
-        _displayLosers(playerArray)
+        _displayWinner(sorted[0]);
+        _displayLosers(sorted)
 
     }
 
@@ -451,7 +460,7 @@ const finalPage = (function(winner, playerArray) {
             let pScore = $('<h5>').html(losers[i].score).attr('class','right');
             let pName = $('<h5>').html(losers[i].name).attr('class','center');
             let listItem = $('<li>').attr('class','collection-item avatar');
-            let listImg = $('<img>').attr('src', avatarObj.genAvatarURL(playerColors[i])).attr('class','circle');
+            let listImg = $('<img>').attr('src', losers[i].avatar).attr('class','circle');
             listItem.append(listImg).append(pScore).append(pName);
             $('#scores-div .collection').append(listItem);
         };
@@ -469,22 +478,24 @@ const finalPage = (function(winner, playerArray) {
     }
 })()
 
-let testSet = {
-    winner : {
+let testSet = [{
         name: 'Margaret',
-        score: 32
-    },
-    losers : [{
+        score: 32,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
+    },{
         name: 'Aaron',
-        score: 20
+        score: 20,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Fahad',
-        score: 27
+        score: 27,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Mike',
-        score: 18
+        score: 18,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     },{
         name: 'Lina',
-        score: 25
+        score: 25,
+        avatar: "https://api.adorable.io/avatars/face/eyes2/nose3/mouth7/FFA07A"
     }]
-}
