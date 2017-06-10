@@ -67,7 +67,8 @@ let cards = {
 let player = {
     role: "",
     key: "",
-    selectedCard: ""
+    selectedCard: "",
+    selectedCardDiv:""
 }
 
 let game = {
@@ -274,7 +275,7 @@ let game = {
             userRef.once("value").then(function(snap) {
                 let userKeyArray = Object.keys(snap.val());
                 userKeyArray.forEach(function(key) {
-                    playerHandRef.child(key).on("value", function(snap) {
+                    playerHandRef.child(key).once("value", function(snap) {
                             let currHand = [];
                             let nCardsNeeded = game.nHandSize;
                             if (snap.exists()) {
@@ -295,7 +296,7 @@ let game = {
         }
         let currCards = $("#given-cards").children().length || 0
         console.log("currCards", currCards);
-        gamePage.createCardDivs(game.nHandSize - currCards);
+        // gamePage.createCardDivs(game.nHandSize - currCards);
     },
 
     removeCard: function(player, card) {
@@ -467,6 +468,9 @@ let game = {
                     game.cardSelectionClickListener();
                     game.storyBoardUpdateListener(player.role);
                     break;
+                case 2:
+                    game.cardSelectionClickListener();
+                    break;
                 case 3:
                     game.cardSelectionCompletionListener();
                     gameRef.child("curr_story").once("value", function(snap) {
@@ -490,7 +494,7 @@ let game = {
                         //shuffle for each player differently - to make consistent have to push to DB and pull down.
                         // sCardsArray = cards.shuffleDeck(sCardsArray);
                         $("#chosen-cards-panel").empty();
-                        gamePage.createCardDivs(game.nPlayers, "vote");
+                        // gamePage.createCardDivs(game.nPlayers, "vote");
                         console.log("sCardArray before for loop to display cards", sCardsArray)
                         for (let i = sCardsArray.length - 1; i >= 0; i--) {
                             cards.displaySpecificCard("#vote-card" + i, sCardsArray, i)
@@ -516,6 +520,7 @@ let game = {
                                 // console.log("State = 5", vCardsObj, sCardsObj)
                             if (player.role === "storyTeller") {
                                 game.scoring(sCardsObj, vCardsObj);
+                                game.checkAndDeal(cards.sDeck);
                             }
                         })
                     })
@@ -614,6 +619,8 @@ let game = {
             if (player.role === "storyTeller" && game.currState === 1) {
                 // console.log($(this).siblings(".fahad-test").attr("card-value"))
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
+                let cardSelectionDiv = $(this).siblings(".cards-container").attr("id");
+                player.cardSelectionDiv = cardSelectionDiv;
                 gameRef.update({
                     curr_story_card: cardSelection
                 })
@@ -621,11 +628,13 @@ let game = {
                         curr_state: 2 //move onto story telling
                     })
                     //removing card from DOM
-                $(this).parent().remove();
+                $(this).siblings(".cards-container").empty();
                 //removing card from firebaseDB
                 game.removeCard(player.key, cardSelection);
             } else if (player.role === "player" && game.currState === 3) {
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
+                let cardSelectionDiv = $(this).siblings(".cards-container").attr("id");
+                player.cardSelectionDiv = cardSelectionDiv;
                 let playerKey = player.key;
                 cardSelectedRef.update({
                     [playerKey]: cardSelection
@@ -634,14 +643,7 @@ let game = {
                 //removing card from firebaseDB
                 game.removeCard(playerKey, cardSelection);
                 //removing card from DOM
-                $(this).siblings(".cards-container").replaceWith(
-                    function(){
-                        playerHandRef.child(player.key).once("value",function(){
-                            let currHand = snap.val()
-                            let newCard = 
-                        })
-                    }
-                    );
+                $(this).siblings(".cards-container").empty();
             }
         })
     },
