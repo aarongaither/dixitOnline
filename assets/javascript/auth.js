@@ -215,6 +215,7 @@ const auth = (function() {
             gamePage.makeScoreboardPlayerDiv(userID, color)
             gamePage.addAvatar(name, avatar, color, userID)
             gamePage.updateGameName(gameName)
+            gamePage.updateStoryteller(name);
         })
     }
 
