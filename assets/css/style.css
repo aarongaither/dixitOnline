@@ -136,12 +136,34 @@ nav .logo {
 .nav-flex-container {
   display: flex;
   flex-direction: row;
-  height: 100%;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   border-bottom: 1px solid #000;
 }
 
+#nav-player {
+  width: 200px;
+  flex-grow: 1;
+  padding-right: 40px;
+  text-align: right;
+}
+
+#nav-game {
+  width: 200px;
+  flex-grow: 1;
+  padding-left: 40px;
+  text-align: left;
+}
+
+#nav-img {
+  flex-grow: 2;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-text {
+  
+}
 
 /* Flex box for main game board */
 
@@ -307,6 +329,8 @@ nav .logo {
 	border-radius: 5px;
   display: flex;
   flex-direction: row;
+  border: 1px solid rgba(0, 0, 0, 1);
+  box-shadow: inset 1px 1px 5px #000;
 }
 
 .card-stock {
@@ -315,7 +339,7 @@ nav .logo {
 }
 
 .round-card {
-	border-radius: 5px;
+	border-radius: 5%;
 	margin-bottom: 10px;
 }
 
@@ -349,7 +373,7 @@ nav .logo {
 	margin: 10px 0px;
 	padding: 5px;
 	border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2); 
 }
 .player-card img {
 	max-height: 40px;
@@ -490,16 +514,50 @@ nav .logo {
 /* Game chat  */
 
 #chat-section-row {
+      display: flex;
+    justify-content: center;
+    /* background-color: white; */
+    margin: 40px 100px 20px 100px;
+  /*width: 68%;*/
 	margin-bottom: 0px;
+}
+
+#game-chat-box {
+    background: #fff;
+    padding: 10px;
+    min-height: 100px;
+}
+
+#chat-heading {
+  margin-top: 0px;
 }
 
 #chat-btn {
 	margin: 10px 0px;
 }
 
+.open-chat-button-row {
+        /*display: flex;*/
+    /*justify-content: left;*/
+
+    /* background-color: white; */
+    margin: -10px 100px 20px 100px;
+  /*width: 68%;*/
+  margin-bottom: 0px;
+
+}
+
 
 #textarea1 {
 	    margin-bottom: 0px;
+}
+
+.game-well {
+  /*background: #ececec;*/
+    border-radius: 5px;
+    padding: 30px;
+    margin-bottom: 20px;
+    margin-top: -25px;
 }
 
 
@@ -649,6 +707,17 @@ nav .logo {
 #points tbody th {bottom: -1.75em; vertical-align: top;
 font-weight: normal; color: #fff;}
 
+.tooltip {
+  display:none;
+  position:absolute;
+  border:1px solid #333;
+  background-color:#161616;
+  border-radius:5px;
+  padding:10px;
+  color:#fff;
+  font-size:12px Arial;
+}
+
 
 /* Materialize form styling and overwrites */
 
@@ -682,6 +751,7 @@ font-weight: normal; color: #fff;}
 
 input:not([type]):focus:not([readonly]),
 input[type=text]:focus:not([readonly]),
+input[type=number]:focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
   border-bottom: 1px solid #039be5;
   box-shadow: 0 1px 0 0 #039be5;
@@ -689,6 +759,7 @@ textarea.materialize-textarea:focus:not([readonly]) {
 
 input:not([type]), 
 input[type=text], 
+input[type=number]:focus:not([readonly]),
 textarea.materialize-textarea {
   color: #fff;
 }
