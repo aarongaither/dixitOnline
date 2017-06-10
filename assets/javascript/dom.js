@@ -475,8 +475,8 @@ const gamePage = (function() {
 
 const finalPage = (function(playerArray) {
     let makeFinalPage = function(playerArray) {
-        let results = $('<div>').attr('id', 'final-results').addClass('results-flex-container gold')
-        $('#main-board').append($('<h1>').text('Results')).append(results)
+        let results = $('<div>').attr('id', 'final-results').addClass('results-flex-container')
+        $('#main-board').append($('<h1>').text('Results').attr('class','gold')).append(results).append(returnButton);
         let returnButton = $('<div>').append($('<button>').text('Return to Lobby').attr('id', 'return'))
 
         let winnersWell = $('<div>').attr('id','winner-div').attr('class','well flex-item');
