@@ -221,6 +221,17 @@ nav .logo {
 	min-height: 100%;
 }
 
+#list-game-name {
+  width: 75%;
+  word-wrap: break-word;
+  float: left;
+}
+
+#list-game-id {
+  width: 25%;
+  float: right;
+}
+
 #chat-box {
 	background: #fff;
 	padding: 10px;
@@ -375,8 +386,6 @@ nav .logo {
   margin: 0px 20px 20px 20px;
 
 }
-
-
 
 .card-shadow {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
