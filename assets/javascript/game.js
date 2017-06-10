@@ -493,6 +493,7 @@ let game = {
                     $("#chosen-cards").find(".card-stock").removeClass("invisible");
                     if(player.role === "player"){
                         $(".play-card").addClass("invisible");
+                        $(".vote-card").removeClass("invisible");
                     } else if(player.role === "storyTeller"){
                         $(".play-card").addClass("invisible")
                         $(".vote-card").addClass("invisible")
@@ -582,7 +583,7 @@ let game = {
                     }
                     break;
                 case 7:
-                    let resultsObj = {};
+                    let resultsObj = [];
                     userRef.orderByChild("curr_score").once("value", function(snap) {
                         let userArray = snap.val()
                         let userKeyArray = Object.keys(userArray);
@@ -593,7 +594,7 @@ let game = {
                                 avatar: userArray[userKeyArray[i]].avatar
                             };
                             console.log(tempObj)
-                            resultsObj = $.extend([], resultsObj, tempObj);
+                            resultsObj.push(tempObj);
                         }
                         console.log("state 7", resultsObj);
                     }).then(function() {
@@ -656,6 +657,7 @@ let game = {
                 //removing card from DOM
                 $(this).siblings(".cards-container").empty();
             }
+            $(".play-card").addClass("invisible");
         })
     },
 
@@ -671,6 +673,7 @@ let game = {
                     })
                 }
             }
+            $(".vote-card").addClass("invisible");
         })
     }
 };
