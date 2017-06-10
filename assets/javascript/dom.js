@@ -67,7 +67,7 @@ const loginPage = (function() {
             id: "user-password",
             name: "user-password",
             placeholder: "Password",
-            type: "text",
+            type: "password",
             minlength: '6'
         })
 
@@ -76,7 +76,7 @@ const loginPage = (function() {
             id: "user-password2",
             name: "user-password2",
             placeholder: "Confirm Password",
-            type: "text",
+            type: "password",
             minlength: '6'
         })
 
@@ -114,7 +114,7 @@ const loginPage = (function() {
             id: "user-password-login",
             name: "user-password-login",
             placeholder: "Password",
-            type: "text",
+            type: "password",
         })
 
         let submitLogin = $('<input>').attr({
@@ -203,14 +203,14 @@ const lobbyPage = (function() {
                 id: 'players',
                 placeholder: 'Number of players',
                 type: 'number',
-                min: '4',
+                min: '2',
                 max: '6'
             })
             let gameRounds = $('<input>', {
                 id: 'rounds',
                 placeholder: 'Rounds to play',
                 type: 'number',
-                min: '6',
+                min: '1',
                 max: '10'
             })
             let gameSubmit = $('<input>').attr('id', 'game-submit').attr('type', 'Submit');
