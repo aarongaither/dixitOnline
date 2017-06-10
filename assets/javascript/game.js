@@ -50,9 +50,9 @@ let cards = {
         return tArray;
     },
 
-    displaySpecificCard: function(div, array, pos) {
+    displaySpecificCard: function(div, array, pos, height) {
         $(div).empty();
-        $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card animated fadeInRight").attr("height", "150")).attr("card-value", array[pos]);
+        $(div).append($.cloudinary.image(array[pos] + '.jpg', { crop: 'fill' }).attr("class", "materialboxed round-card animated fadeInRight").attr("height", height)).attr("card-value", array[pos]);
         $(".materialboxed").materialbox();
     },
 
@@ -68,7 +68,7 @@ let player = {
     role: "",
     key: "",
     selectedCard: "",
-    selectedCardDiv:""
+    selectedCardDiv: ""
 }
 
 let game = {
@@ -260,7 +260,7 @@ let game = {
                 for (let i = playerHand.length - 1; i >= 0; i--) {
                     let delay = i * 100;
                     setTimeout(function() {
-                        cards.displaySpecificCard("#card" + i, playerHand, i)
+                        cards.displaySpecificCard("#card" + i, playerHand, i, "120")
                             // console.log(playerHand[i]);
                     }, delay)
                 }
@@ -464,12 +464,13 @@ let game = {
             switch (currState) {
                 case 1:
                     game.dealPlayerHand();
-                    game.storyClickListener();
+                    // game.storyClickListener();
                     game.cardSelectionClickListener();
                     game.storyBoardUpdateListener(player.role);
                     break;
                 case 2:
                     game.cardSelectionClickListener();
+                    game.storyClickListener();
                     break;
                 case 3:
                     game.cardSelectionCompletionListener();
@@ -493,11 +494,11 @@ let game = {
                     }).then(function() {
                         //shuffle for each player differently - to make consistent have to push to DB and pull down.
                         // sCardsArray = cards.shuffleDeck(sCardsArray);
-                        $("#chosen-cards-panel").empty();
+                        // $("#chosen-cards-panel").empty();
                         // gamePage.createCardDivs(game.nPlayers, "vote");
                         console.log("sCardArray before for loop to display cards", sCardsArray)
                         for (let i = sCardsArray.length - 1; i >= 0; i--) {
-                            cards.displaySpecificCard("#vote-card" + i, sCardsArray, i)
+                            cards.displaySpecificCard("#vote-card" + i, sCardsArray, i, "150")
                             if (i === 0) {
                                 cardSelectedRef.off("value");
                             }
@@ -560,12 +561,19 @@ let game = {
                             }
                         }
                     })
+
+                    for (var i = game.nPlayers - 1; i >= 0; i--) {
+                        console.log("state 6", i)
+                        $("#chosen-cards").find("#vote-card"+i).empty()
+                    }
+
+
                     break;
                 case 7:
                     let winnerObj = {};
                     let loserObj = {};
                     userRef.orderByChild("curr_score").once("value", function(snap) {
-                        let userArray = snap.val();
+                        let userArray = snap.val()
                         let userKeyArray = Object.keys(userArray);
                         for (let i = userKeyArray.length - 1; i >= 0; i--) {
                             if (i === 0) {

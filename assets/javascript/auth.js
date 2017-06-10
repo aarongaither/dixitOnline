@@ -3,6 +3,7 @@ const auth = (function() {
         if (user) {
             loginPage.cleanUpPage();
             lobbyPage.createPage();
+            _setPlayerName();
             chat.setGameListener('lobby', true)
             loginListeners('off')
             lobbyListeners('on')
@@ -14,6 +15,14 @@ const auth = (function() {
             loginListeners('on');
         }
     });
+
+    let _setPlayerName = function () {
+        let userID = curUser().uid;
+        firebase.database().ref('/user_stats/'+userID).once('value', function(snap){
+            name = snap.val().display_name
+            lobbyPage.updatePlayerName(name)
+        })
+    }
 
     let loginListeners = function(method) {
         _loginBtnListener(method)
@@ -145,7 +154,7 @@ const auth = (function() {
             // Handle Errors here.
             console.log('Auth err:', error.code, error.message);
             errorHandler(error.code);
-        });
+        })
     }
 
     let errorHandler = function(error) {
@@ -205,6 +214,7 @@ const auth = (function() {
         }).then(function(){
             gamePage.makeScoreboardPlayerDiv(userID, color)
             gamePage.addAvatar(name, avatar, color, userID)
+            gamePage.updateGameName(gameName)
         })
     }
 
@@ -254,23 +264,37 @@ const auth = (function() {
 
     let gameListeners = function(method, gameID) {
         _playerJoinListener(method, gameID)
-        // _scoreIncreaseListener()
+        _storyTellerChangeListener(gameID)
     }
 
     let _playerJoinListener = function(method, gameID) {
         let gamePlayers = firebase.database().ref('/games/' + gameID + '/players')
         if (method === 'on') {
             gamePlayers.on('child_added', function(snap) {
-                console.log(snap, snap.val())
-                _playerJoin(snap.val())
+                _playerJoin(snap.val(),gameID)
             })
         } else if (method === 'off') {
             gamePlayers.off()
         }
     }
 
-    let _playerJoin = function(playerInfo) {
-        console.log(playerInfo)
+    let _storyTellerChangeListener = function(gameID) {        
+        firebase.database().ref('/games/'+gameID+'/curr_teller').on('value', function(snap){
+            let teller = snap.val();
+            firebase.database().ref('/games/'+gameID+'/players/'+teller).once('value', function(snap){
+                let name = snap.val().name
+                gamePage.updateStoryteller(name);
+            })
+
+        })
+    }
+
+    let _playerJoin = function(playerInfo, gameID) {
+        let gameName;
+        firebase.database().ref('/games/' + gameID).once('value', function(snap){
+            gameName = snap.val().game_name
+            gamePage.updateGameName(gameName)
+        });
         let id = playerInfo.key;
         let avatar = playerInfo.avatar;
         let color = playerInfo.color;

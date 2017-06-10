@@ -325,6 +325,21 @@ nav .logo {
     border-image: linear-gradient(top, #efd100 0, #e2a233 38%, #f0c328 60%, #fff1a3 86%, #ffe13e 100%);
 }
 
+.card-small {
+  height: 120px;
+  width: 80px;
+}
+
+.card-large {
+  height: 150px;
+  width: 100px;
+
+}
+
+.cards-container {
+      background-image: url("../cards/back.jpg");
+    background-size: 100%;
+}
 
 .card-panel {
 	margin-bottom: 0px;
@@ -360,6 +375,8 @@ nav .logo {
   margin: 0px 20px 20px 20px;
 
 }
+
+
 
 .card-shadow {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
