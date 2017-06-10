@@ -20,7 +20,7 @@ let cards = {
     sDeck: [], //shuffled deck
     createDeck: function() {
         let array = [];
-        for (i = 1; i < 99; i++) {
+        for (i = 1; i < 98; i++) {
             if (i < 10) {
                 array.push("card_0000" + i);
             } else {
@@ -462,24 +462,41 @@ let game = {
             let currState = snap.val();
             let sCardsArray = [];
             switch (currState) {
-                case 1:
+                case 1: //game start story teller to pick a card
                     game.dealPlayerHand();
-                    // game.storyClickListener();
                     game.cardSelectionClickListener();
                     game.storyBoardUpdateListener(player.role);
+                    $("#chosen-cards").find(".card-stock").addClass("invisible");
+                    if (player.role === "player") {
+                        $(".play-card").addClass("invisible");
+                    } else if (player.role === "storyTeller"){
+                        $(".play-card").removeClass("invisible");
+                    }
                     break;
-                case 2:
+                case 2: //storyteller to tell a story
                     game.cardSelectionClickListener();
                     game.storyClickListener();
                     break;
-                case 3:
+                case 3: //players to choose cards
                     game.cardSelectionCompletionListener();
                     gameRef.child("curr_story").once("value", function(snap) {
                         game.storyBoardUpdateListener("story", snap.val())
                     })
+                    if(player.role === "player"){
+                        $(".play-card").removeClass("invisible");
+                    } else if(player.role === "storyTeller"){
+                        $(".play-card").addClass("invisible")
+                    }
                     break;
                 case 4: //state 4 is the start of the voting stage   
                     console.log("current state", currState)
+                    $("#chosen-cards").find(".card-stock").removeClass("invisible");
+                    if(player.role === "player"){
+                        $(".play-card").addClass("invisible");
+                    } else if(player.role === "storyTeller"){
+                        $(".play-card").addClass("invisible")
+                        $(".vote-card").addClass("invisible")
+                    }
                     game.voteSelectionCompletionListener();
                     gameRef.child("curr_story_card").once("value", function(snap) {
                         let tempArray = [];
@@ -493,9 +510,6 @@ let game = {
                         })
                     }).then(function() {
                         //shuffle for each player differently - to make consistent have to push to DB and pull down.
-                        // sCardsArray = cards.shuffleDeck(sCardsArray);
-                        // $("#chosen-cards-panel").empty();
-                        // gamePage.createCardDivs(game.nPlayers, "vote");
                         console.log("sCardArray before for loop to display cards", sCardsArray)
                         for (let i = sCardsArray.length - 1; i >= 0; i--) {
                             cards.displaySpecificCard("#vote-card" + i, sCardsArray, i, "150")
@@ -564,38 +578,27 @@ let game = {
 
                     for (var i = game.nPlayers - 1; i >= 0; i--) {
                         console.log("state 6", i)
-                        $("#chosen-cards").find("#vote-card"+i).empty()
+                        $("#chosen-cards").find("#vote-card" + i).empty()
                     }
-
-
                     break;
                 case 7:
-                    let winnerObj = {};
-                    let loserObj = {};
+                    let resultsObj = {};
                     userRef.orderByChild("curr_score").once("value", function(snap) {
                         let userArray = snap.val()
                         let userKeyArray = Object.keys(userArray);
                         for (let i = userKeyArray.length - 1; i >= 0; i--) {
-                            if (i === 0) {
-                                let tempObj = {
-                                    name: userArray[userKeyArray[i]].name,
-                                    score: userArray[userKeyArray[i]].curr_score
-                                };
-                                console.log(tempObj)
-                                winnerObj = $.extend(winnerObj, tempObj);
-                            } else {
-                                let tempObj = {
-                                    name: userArray[userKeyArray[i]].name,
-                                    score: userArray[userKeyArray[i]].curr_score
-                                };
-                                console.log(tempObj)
-                                loserObj = $.extend([], loserObj, tempObj);
-                            }
+                            let tempObj = {
+                                name: userArray[userKeyArray[i]].name,
+                                score: userArray[userKeyArray[i]].curr_score,
+                                avatar: userArray[userKeyArray[i]].avatar
+                            };
+                            console.log(tempObj)
+                            resultsObj = $.extend([], resultsObj, tempObj);
                         }
-                        console.log("state 7", winnerObj, loserObj);
+                        console.log("state 7", resultsObj);
                     }).then(function() {
                         gamePage.cleanUpPage();
-                        finalPage.createPage(winnerObj, loserObj);
+                        finalPage.createPage(resultsObj);
                     })
                     break;
             }
