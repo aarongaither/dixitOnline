@@ -272,9 +272,9 @@ const gamePage = (function() {
         let chatWell = $('<div>').addClass('game-well left-align white-transparent').attr('id', 'lobby-chat');
         let chatTitle = $('<h5>').html('Chat').attr('id', 'chat-heading');
         let chatForm = $('<form>');
-        let chatBox = $('<div>').attr('id', 'game-chat-box');
+        let chatBox = $('<div>').attr('id', 'chat-box').addClass('game-chat-box');
         let chatMsg = $('<div>').attr('id', 'chat-messages');
-        let chatName = $('<div>').html('<span class="chat-name">' + 'MyUserName' + '<span> : ' + 'some really great msg');
+        // let chatName = $('<div>').html('<span class="chat-name">' + 'MyUserName' + '<span> : ' + 'some really great msg');
         let chatRow = $('<div>').addClass('row');
 
         let chatInput = $('<input>').attr('id', 'chat-input');
@@ -282,21 +282,68 @@ const gamePage = (function() {
         let chatBtn = $('<div>').addClass('row open-chat-button-row');
         let showBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'show-text-button').attr('title','Click here to open chat');
         let hideBtn = $('<a>').addClass('btn-floating right btn-med waves-effect waves-light amber accent-3 masterTooltip').attr('id', 'hide-text-button').attr('title','Click here to close chat');
-        let chatIcon = $('<i>').addClass('material-icons').text('mode_edit');
-
+        let chatIconShow = $('<i>').addClass('material-icons').text('mode_edit');
+        let chatIconHide = $('<i>').addClass('material-icons').text('mode_edit');
         $('#nav-game').append('Game name');
 
         centerPanel.append(gameTitle).append(storyText);
         centerPanel.append(chosenCards.append(cardPanel));
-        centerPanel.append(chatBtn.append(showBtn.append(chatIcon)).append(hideBtn.append(chatIcon)));
+        centerPanel.append(chatBtn.append(showBtn.append(chatIconShow)).append(hideBtn.append(chatIconHide)));
         centerPanel.append(givenCards);
-        centerPanel.append(chatSectionRow.append(chatWell.append(chatTitle).append(chatBox.append(chatName).append(chatMsg)).append(chatForm.append(chatInput).append(chatSubmit))));
+        centerPanel.append(chatSectionRow.append(chatWell.append(chatTitle).append(chatBox.append(chatMsg)).append(chatForm.append(chatInput).append(chatSubmit))));
 
         _makeAvatarArea();
         _makeScoreBoard(players);
         _createCardDivs(6);
         _createCardDivs(players, 'vote')
+
+        $(function(){
+            $("#hide-text-button").hide();
+            $("#pop-up-chat").hide();
+            $("#chat-btn").hide();
+            $("#lobby-chat").hide();
+            // $("#pop-up-chat-display").hide();
+            $("#show-text-button").click (function(){
+                $("#given-cards").hide();
+                // $("#pop-up-chat-display").toggle();
+                $("#chat-btn").hide();
+                $("#pop-up-chat").show();
+                $(".game-well").show();
+                $("#show-text-button").hide();
+                $("#hide-text-button").show().click(function(){
+                    $("#show-text-button").show();
+                    $("#hide-text-button").hide();
+                    $("#given-cards").show();
+                // $("#pop-up-chat-display").toggle();
+                $("#chat-btn").hide();
+                $("#pop-up-chat").hide();
+                $(".game-well").hide();
+
+                });
+            });
+        });
+
+        $('.masterTooltip').hover(function(){
+                // Hover over code
+                var title = $(this).attr('title');
+                $(this).data('tipText', title).removeAttr('title');
+                $('<p class="tooltip"></p>')
+                .text(title)
+                .appendTo('body')
+                .fadeIn('slow');
+        }, function() {
+                // Hover out code
+                $(this).attr('title', $(this).data('tipText'));
+                $('.tooltip').remove();
+        }).mousemove(function(e) {
+                var mousex = e.pageX + 20; //Get X coordinates
+                var mousey = e.pageY + 10; //Get Y coordinates
+                $('.tooltip')
+                .css({ top: mousey, left: mousex })
+        });
     }
+
+
 
     let _createCardDivs = function(qty, type) {
         let cardDiv = type ? $('#chosen-cards-panel') : $('#given-cards');
