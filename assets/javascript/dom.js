@@ -266,7 +266,7 @@ const gamePage = (function() {
         let chosenCards = $('<div>').attr('id', 'chosen-cards').addClass('row');
         let cardPanel = $('<div>').addClass('card-panel white-transparent').attr('id', 'chosen-cards-panel');
         let givenCards = $('<div>').attr('id', 'given-cards').addClass('row');
-        let gameTitle = $('<h3>').html('Storyteller: <span>' + 'NAME HERE' + '</span>').addClass('gold');
+        let gameTitle = $('<h3>').html('Storyteller: <span id="storyteller">' + 'NAME HERE' + '</span>').addClass('gold');
 
         let chatSectionRow = $('<div>').attr('id', 'chat-section-row').addClass('row');
         let chatWell = $('<div>').addClass('game-well left-align white-transparent').attr('id', 'lobby-chat');
