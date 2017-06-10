@@ -366,7 +366,8 @@ const gamePage = (function() {
                         .append($('<input>', {
                             id: 'storyteller-story',
                             type: 'text',
-                            class: 'validate'
+                            class: 'validate',
+                            placeholder: 'Tell a story'
                         }))
                     ).append($('<li>')
                         .append($('<input>', {
