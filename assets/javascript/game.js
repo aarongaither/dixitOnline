@@ -354,14 +354,24 @@ let game = {
         })
     },
 
-    userStatUpdate:function(userID){
-        userStatRef = firebase.database().ref("/user_stats")
+    userStatUpdate: function(userID) {
+        let userStatRef = firebase.database().ref("/user_stats")
+        let currGamePoints = 0;
 
-        userStatRef.child(userID).once("value").then(function(snap){
-            let gamesPlayed = snap.val().games_played;
-            gamesPlayed++;
-            userStatRef.child(userID).update({
-                games_played:gamesPlayed
+        userRef.child(userID).once("value", function(snap) {
+            currGamePoints = snap.val().curr_score;
+            console.log("currGamePoints", currGamePoints)
+        }).then(function () {
+            userStatRef.child(userID).once("value", function(snap) {
+                let gamesPlayed = snap.val().games_played;
+                let totalPoints = snap.val().points;
+                gamesPlayed++;
+                totalPoints+=currGamePoints;
+                console.log("gamesPlayed|totalPoints|currGamePoints", gamesPlayed, totalPoints, currGamePoints)
+                userStatRef.child(userID).update({
+                    games_played: gamesPlayed,
+                    points: totalPoints
+                })
             })
         })
     },
@@ -602,6 +612,7 @@ let game = {
                     let userKeyArray = Object.keys(userArray);
                     for (let i = userKeyArray.length - 1; i >= 0; i--) {
                         let tempObj = {
+                            key : userKeyArray[i],
                             name: userArray[userKeyArray[i]].name,
                             score: userArray[userKeyArray[i]].curr_score,
                             avatar: userArray[userKeyArray[i]].avatar
