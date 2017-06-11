@@ -354,6 +354,18 @@ let game = {
         })
     },
 
+    userStatUpdate:function(userID){
+        userStatRef = firebase.database().ref("/user_stats")
+
+        userStatRef.child(userID).once("value").then(function(snap){
+            let gamesPlayed = snap.val().games_played;
+            gamesPlayed++;
+            userStatRef.child(userID).update({
+                games_played:gamesPlayed
+            })
+        })
+    },
+
     initGameListeners: function() {
         if (game.currState === 0) {
             // console.log("initGameListeners");
@@ -601,6 +613,7 @@ let game = {
                 }).then(function() {
                     gamePage.cleanUpPage();
                     finalPage.createPage(resultsObj);
+                    game.userStatUpdate(player.key);
                 })
             }
         });
