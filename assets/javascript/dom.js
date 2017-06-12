@@ -491,6 +491,15 @@ const finalPage = (function(playerArray) {
             return parseFloat(b.score) - parseFloat(a.score);
         })
 
+        let userStatRef = firebase.database().ref("/user_stats");
+        userStatRef.child(sorted[0].key).once("value", function(snap){
+            let gamesWon = snap.val().games_won;
+            gamesWon++;
+            userStatRef.child(sorted[0].key).update({
+                games_won: gamesWon
+            })
+        })
+
         _displayWinner(sorted[0]);
         _displayLosers(sorted)
 
