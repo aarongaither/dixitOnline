@@ -16,9 +16,9 @@ const auth = (function() {
         }
     });
 
-    let _setPlayerName = function() {
+    let _setPlayerName = function () {
         let userID = curUser().uid;
-        firebase.database().ref('/user_stats/' + userID).once('value', function(snap) {
+        firebase.database().ref('/user_stats/'+userID).once('value', function(snap){
             name = snap.val().display_name
             lobbyPage.updatePlayerName(name)
         })
@@ -119,8 +119,10 @@ const auth = (function() {
 
     let _gamesListListener = function(method) {
         if (method === 'on') {
-            firebase.database().ref('/games').orderByChild("curr_state").equalTo(0).on('value', function(snap) {
-                lobbyPage.makeGameListItem(snap)
+            firebase.database().ref('/games').orderByChild("curr_state").equalTo(0).on('child_added', function(snap) {
+                let gameID = snap.val().gameID;
+                let gameName = snap.val().game_name;
+                lobbyPage.makeGameListItem(gameName, gameID)
             })
         } else if (method === 'off') {
             firebase.database().ref('/games').off('child_added')
@@ -188,9 +190,9 @@ const auth = (function() {
         let color = avatarObj.colors[0];
         let avatar = avatarObj.genAvatarURL(color)
         let name = '';
-        firebase.database().ref('/user_stats/' + userID).once('value', function(snap) {
+        firebase.database().ref('/user_stats/'+userID).once('value', function(snap){
             name = snap.val().display_name
-        }).then(function() {
+        }).then(function(){
             game.set({
                 gameID: gameID,
                 game_name: gameName,
@@ -210,7 +212,7 @@ const auth = (function() {
                 }
             })
             _gameInit(userID, gameID, players)
-        }).then(function() {
+        }).then(function(){
             gamePage.makeScoreboardPlayerDiv(userID, color)
             gamePage.addAvatar(name, avatar, color, userID)
             gamePage.updateGameName(gameName)
@@ -225,14 +227,14 @@ const auth = (function() {
         let color = '';
         let avatar = '';
         let name = '';
-        game.child('players').once('value', function(snap) {
+        game.child('players').once('value', function(snap){
             pCount = snap.numChildren()
             color = avatarObj.colors[pCount];
             avatar = avatarObj.genAvatarURL(color);
-        }).then(function() {
-            firebase.database().ref('/user_stats/' + userID).once('value', function(snap) {
+        }).then(function(){
+            firebase.database().ref('/user_stats/'+userID).once('value', function(snap){
                 name = snap.val().display_name
-            }).then(function() {
+            }).then(function(){
                 game.child('players').update({
                     [userID]: {
                         key: userID,
@@ -271,17 +273,17 @@ const auth = (function() {
         let gamePlayers = firebase.database().ref('/games/' + gameID + '/players')
         if (method === 'on') {
             gamePlayers.on('child_added', function(snap) {
-                _playerJoin(snap.val(), gameID)
+                _playerJoin(snap.val(),gameID)
             })
         } else if (method === 'off') {
             gamePlayers.off()
         }
     }
 
-    let _storyTellerChangeListener = function(gameID) {
-        firebase.database().ref('/games/' + gameID + '/curr_teller').on('value', function(snap) {
+    let _storyTellerChangeListener = function(gameID) {        
+        firebase.database().ref('/games/'+gameID+'/curr_teller').on('value', function(snap){
             let teller = snap.val();
-            firebase.database().ref('/games/' + gameID + '/players/' + teller).once('value', function(snap) {
+            firebase.database().ref('/games/'+gameID+'/players/'+teller).once('value', function(snap){
                 let name = snap.val().name
                 gamePage.updateStoryteller(name);
             })
@@ -291,7 +293,7 @@ const auth = (function() {
 
     let _playerJoin = function(playerInfo, gameID) {
         let gameName;
-        firebase.database().ref('/games/' + gameID).once('value', function(snap) {
+        firebase.database().ref('/games/' + gameID).once('value', function(snap){
             gameName = snap.val().game_name
             gamePage.updateGameName(gameName)
         });

@@ -4,6 +4,8 @@ let mainGameRef = database.ref("/games")
 let gameRef = "";
 //will hold the shuffled deck which will decrease as cards are dealt
 let cardRef = "";
+//will hold the used cards
+let usedCardRef = "";
 //will hold users as they connect to the site
 let userRef = "";
 // let connectedRef = database.ref(".info/connected");
@@ -94,6 +96,7 @@ let game = {
         //setting the ref to the particular instance of a game
         gameRef = database.ref("/games/" + gameID);
         cardRef = gameRef.child("cards");
+        usedCardRef = gameRef.child("used_cards");
         userRef = gameRef.child("players");
         playerHandRef = gameRef.child("player_hand")
         cardSelectedRef = gameRef.child("card_selection")
@@ -657,6 +660,7 @@ let game = {
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
                 let cardSelectionDiv = $(this).siblings(".cards-container").attr("id");
                 player.cardSelectionDiv = cardSelectionDiv;
+                game.usedCardUpdate(cardSelection);
                 gameRef.update({
                     curr_story_card: cardSelection
                 })
@@ -671,6 +675,7 @@ let game = {
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
                 let cardSelectionDiv = $(this).siblings(".cards-container").attr("id");
                 player.cardSelectionDiv = cardSelectionDiv;
+                game.usedCardUpdate(cardSelection);
                 let playerKey = player.key;
                 cardSelectedRef.update({
                     [playerKey]: cardSelection
@@ -699,7 +704,17 @@ let game = {
             }
             $(".vote-card").addClass("invisible");
         })
+    },
+
+    usedCardUpdate: function(usedCard){
+        usedCardRef.once("value",function(snap){
+            let cardArray = snap.val()||[];
+            cardArray.push(usedCard);
+            usedCardRef.set(cardArray);
+        })
     }
+
+
 };
 
 
