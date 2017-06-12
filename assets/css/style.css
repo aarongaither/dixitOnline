@@ -87,7 +87,7 @@ form input {
   display: inline-block;
   line-height: 1em;
   position: relative;
-  z-index: auto
+  z-index: auto;
   padding-bottom: 5px;
 }
 
