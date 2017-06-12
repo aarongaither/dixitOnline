@@ -119,7 +119,7 @@ const auth = (function() {
 
     let _gamesListListener = function(method) {
         if (method === 'on') {
-            firebase.database().ref('/games').on('child_added', function(snap) {
+            firebase.database().ref('/games').orderByChild("curr_state").equalTo(0).on('child_added', function(snap) {
                 let gameID = snap.val().gameID;
                 let gameName = snap.val().game_name;
                 lobbyPage.makeGameListItem(gameName, gameID)
@@ -199,6 +199,7 @@ const auth = (function() {
                 max_players: players,
                 max_rounds: rounds,
                 curr_teller: userID,
+                curr_state: 0,
                 players: {
                     [userID]: {
                         key: userID,

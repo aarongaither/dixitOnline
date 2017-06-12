@@ -115,13 +115,13 @@ let game = {
                     game.checkAndDeal(cards.sDeck);
                     // game.storyBoardUpdateListener(player.role);
                     userRef.off("value", start)
+                    gameRef.update({
+                        curr_state: 1
+                    })
                 }
             })
-        }).then(function() {
-            gameRef.update({
-                curr_state: 1
-            })
         })
+        
         player.key = firebase.auth().currentUser.uid;
         //remove from DB on disconnect
         // userRef.child(key).onDisconnect().remove();
