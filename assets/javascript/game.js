@@ -4,6 +4,8 @@ let mainGameRef = database.ref("/games")
 let gameRef = "";
 //will hold the shuffled deck which will decrease as cards are dealt
 let cardRef = "";
+//will hold the used cards
+let usedCardRef = "";
 //will hold users as they connect to the site
 let userRef = "";
 // let connectedRef = database.ref(".info/connected");
@@ -20,7 +22,7 @@ let cards = {
     sDeck: [], //shuffled deck
     createDeck: function() {
         let array = [];
-        for (i = 1; i < 98; i++) {
+        for (i = 1; i < 20; i++) { //original deck size98
             if (i < 10) {
                 array.push("card_0000" + i);
             } else {
@@ -94,6 +96,7 @@ let game = {
         //setting the ref to the particular instance of a game
         gameRef = database.ref("/games/" + gameID);
         cardRef = gameRef.child("cards");
+        usedCardRef = gameRef.child("used_cards");
         userRef = gameRef.child("players");
         playerHandRef = gameRef.child("player_hand")
         cardSelectedRef = gameRef.child("card_selection")
@@ -115,13 +118,13 @@ let game = {
                     game.checkAndDeal(cards.sDeck);
                     // game.storyBoardUpdateListener(player.role);
                     userRef.off("value", start)
+                    gameRef.update({
+                        curr_state: 1
+                    })
                 }
             })
-        }).then(function() {
-            gameRef.update({
-                curr_state: 1
-            })
         })
+
         player.key = firebase.auth().currentUser.uid;
         //remove from DB on disconnect
         // userRef.child(key).onDisconnect().remove();
@@ -238,7 +241,6 @@ let game = {
 
     dealnCards: function(deckArray, nCards) {
         let hand = [];
-
         for (let i = 0; i < nCards; i++) {
             hand.push(deckArray[0]);
             deckArray.splice(0, 1);
@@ -288,7 +290,6 @@ let game = {
                         })
                         // console.log("inside the for each statement in check and deal", key)
                 })
-
             })
         }
         let currCards = $("#given-cards").children().length || 0
@@ -361,12 +362,12 @@ let game = {
         userRef.child(userID).once("value", function(snap) {
             currGamePoints = snap.val().curr_score;
             console.log("currGamePoints", currGamePoints)
-        }).then(function () {
+        }).then(function() {
             userStatRef.child(userID).once("value", function(snap) {
                 let gamesPlayed = snap.val().games_played;
                 let totalPoints = snap.val().points;
                 gamesPlayed++;
-                totalPoints+=currGamePoints;
+                totalPoints += currGamePoints;
                 console.log("gamesPlayed|totalPoints|currGamePoints", gamesPlayed, totalPoints, currGamePoints)
                 userStatRef.child(userID).update({
                     games_played: gamesPlayed,
@@ -497,6 +498,7 @@ let game = {
                 //storyteller to tell a story
                 game.cardSelectionClickListener();
                 game.storyClickListener();
+                game.usedCardListener();
             } else if (currState === 3) {
                 //players to choose cards
                 game.cardSelectionCompletionListener();
@@ -612,7 +614,7 @@ let game = {
                     let userKeyArray = Object.keys(userArray);
                     for (let i = userKeyArray.length - 1; i >= 0; i--) {
                         let tempObj = {
-                            key : userKeyArray[i],
+                            key: userKeyArray[i],
                             name: userArray[userKeyArray[i]].name,
                             score: userArray[userKeyArray[i]].curr_score,
                             avatar: userArray[userKeyArray[i]].avatar
@@ -657,6 +659,7 @@ let game = {
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
                 let cardSelectionDiv = $(this).siblings(".cards-container").attr("id");
                 player.cardSelectionDiv = cardSelectionDiv;
+                game.usedCardUpdate(cardSelection);
                 gameRef.update({
                     curr_story_card: cardSelection
                 })
@@ -671,6 +674,7 @@ let game = {
                 let cardSelection = $(this).siblings(".cards-container").attr("card-value");
                 let cardSelectionDiv = $(this).siblings(".cards-container").attr("id");
                 player.cardSelectionDiv = cardSelectionDiv;
+                game.usedCardUpdate(cardSelection);
                 let playerKey = player.key;
                 cardSelectedRef.update({
                     [playerKey]: cardSelection
@@ -698,6 +702,38 @@ let game = {
                 }
             }
             $(".vote-card").addClass("invisible");
+        })
+    },
+
+    usedCardUpdate: function(usedCard) {
+        usedCardRef.once("value", function(snap) {
+            let cardArray = snap.val() || [];
+            cardArray.push(usedCard);
+            usedCardRef.set(cardArray);
+        })
+    },
+
+    usedCardListener: function() {
+        cardRef.on("value", function(cardSnap) {
+            let currDeckSize = cardSnap.val().length;
+            let currDeckArray = cardSnap.val();
+            let nPlayers = 0;
+            let usedDeckArray = [];
+            let newDeck = [];
+            userRef.once("value", function(playerSnap) {
+                nPlayers = playerSnap.numChildren();
+            }).then(function() {
+                if (currDeckSize < nPlayers) {
+                    usedCardRef.once("value", function(usedSnap) {
+                        usedDeckArray = usedSnap.val();
+                    }).then(function() {
+                        newDeck = currDeckArray.concat(usedDeckArray);
+                        cards.shuffleDeck(newDeck);
+                    }).then(function() {
+                        usedCardRef.set([]);
+                    })
+                }
+            })
         })
     }
 };

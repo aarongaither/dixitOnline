@@ -119,10 +119,10 @@ const auth = (function() {
 
     let _gamesListListener = function(method) {
         if (method === 'on') {
-            firebase.database().ref('/games').on('child_added', function(snap) {
+            firebase.database().ref('/games').orderByChild("curr_state").equalTo(0).on('child_added', function(snap) {
                 let gameID = snap.val().gameID;
                 let gameName = snap.val().game_name;
-                lobbyPage.makeGameListItem(gameName, gameID)
+                lobbyPage.makeGameListItem(gameName, gameID);
             })
         } else if (method === 'off') {
             firebase.database().ref('/games').off('child_added')
@@ -199,6 +199,7 @@ const auth = (function() {
                 max_players: players,
                 max_rounds: rounds,
                 curr_teller: userID,
+                curr_state: 0,
                 players: {
                     [userID]: {
                         key: userID,
@@ -249,6 +250,7 @@ const auth = (function() {
 
         game.once('value', function(snap) {
             let players = snap.val().max_players;
+            // console.log("join-game", players);
             _gameInit(userID, gameID, players)
         })
     }
@@ -282,8 +284,10 @@ const auth = (function() {
     let _storyTellerChangeListener = function(gameID) {        
         firebase.database().ref('/games/'+gameID+'/curr_teller').on('value', function(snap){
             let teller = snap.val();
+            // console.log("storyTeller", teller);
             firebase.database().ref('/games/'+gameID+'/players/'+teller).once('value', function(snap){
                 let name = snap.val().name
+                console.log("storyTeller name", name);
                 gamePage.updateStoryteller(name);
             })
 
